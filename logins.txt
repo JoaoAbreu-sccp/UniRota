@@ -1,0 +1,11 @@
+administrador
+adm@gmail.com
+adm123
+
+aluno
+aluno@gmail.com
+aluno123
+
+motorista
+motorista@gmail.com
+moto123
