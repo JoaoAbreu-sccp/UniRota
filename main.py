@@ -41,3 +41,5 @@ while True:
 
     if opc == 3:
         break
+if linhas[posicao_tipo] == "administrador":
+    print("teste")
