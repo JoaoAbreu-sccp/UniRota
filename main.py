@@ -43,3 +43,9 @@ while True:
         break
 if linhas[posicao_tipo] == "administrador":
     print("teste")
+
+if linhas[posicao_tipo] == "aluno":
+    print("Aluno entrou")
+
+if linhas[posicao_tipo] == "motorista":
+    print("motorista entrou")
