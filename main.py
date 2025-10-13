@@ -42,7 +42,47 @@ while True:
     if opc == 3:
         break
 if linhas[posicao_tipo] == "administrador":
-    print("adm entrou")
+    while True:
+        print(f'''
+Bem vindo, {linhas[posicao_senha+1]}
+[1] Lista de Alunos
+[2] Editar Universidades
+[3] Editar Alunos
+[4] Acompanhar Rota
+[5] Adicionar Aviso
+[6] Sair''')
+        opc = int(input("opc = "))
+        if opc == 1:
+            screen.clear()
+            print('''
+Lista de Alunos:
+
+1- fulano
+2- beltrano
+
+[1] Voltar''')
+            opc = int(input("opc = "))
+            sleep(2)
+            screen.clear()
+        elif opc == 2:
+            screen.clear()
+            print("editar uni")
+        elif opc == 3:
+            screen.clear()
+            print("editar aluno")
+        elif opc == 4:
+            screen.clear()
+            print("acompanhar rota")
+        elif opc == 5:
+            screen.clear()
+            print("adicionar aviso")
+        elif opc == 6:
+            break
+        else:
+            screen.clear()
+            print("Selecione uma opção valida...")
+            sleep(2)
+
 
 if linhas[posicao_tipo] == "aluno":
     print("Aluno entrou")
