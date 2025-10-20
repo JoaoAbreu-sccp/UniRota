@@ -43,14 +43,9 @@ while True:
         break
 if linhas[posicao_tipo] == "administrador":
     while True:
-        print(f'''
-Bem vindo, {linhas[posicao_senha+1]}
-[1] Lista de Alunos
-[2] Editar Universidades
-[3] Editar Alunos
-[4] Acompanhar Rota
-[5] Adicionar Aviso
-[6] Sair''')
+        screen.clear()
+        print(f"Bem vindo, {linhas[posicao_senha+1]}")
+        screen.menuADM()
         opc = int(input("opc = "))
         if opc == 1:
             screen.clear()
@@ -73,7 +68,7 @@ Bem vindo, {linhas[posicao_senha+1]}
                     else:
                         print()
             opc = int(input("\nDigite [1] para voltar:  "))
-            sleep(2)
+            sleep(0.5)
             screen.clear()
         elif opc == 2:
             screen.clear()
