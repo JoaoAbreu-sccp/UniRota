@@ -1,4 +1,4 @@
-from functions import loginverify, screen
+from functions import GeralDef, screen
 from time import sleep
 
 
@@ -33,7 +33,7 @@ while True:
     if opc == 2:
         email = input("Digite o email cadastrado: ")
         if email.endswith("@gmail.com"):
-            loginverify.PasswordReset(email)
+            GeralDef.PasswordReset(email)
         else:
             print("Insira um email válido")
         sleep(2)
@@ -80,8 +80,25 @@ if linhas[posicao_tipo] == "administrador":
             screen.clear()
             print("acompanhar rota")
         elif opc == 5:
-            screen.clear()
-            print("adicionar aviso")
+            while True:
+                screen.clear()
+                print('''
+[1]: Criar Aviso
+[2]: Visualizar Avisos
+[3]: Voltar''')
+                opc = int(input("opc = "))
+                if opc == 1:
+                    GeralDef.CreateNotice()
+                elif opc == 2:
+                    avisos = open("avisos.txt", "r", encoding="utf-8")
+                    linhasavisos = avisos.read().splitlines()
+                    avisos.close()
+                    screen.clear()
+                    for aviso in linhasavisos:
+                        print(aviso)
+                    voltar = str(input("\nDigite [1] para voltar: "))
+                elif opc == 3:
+                    break
         elif opc == 6:
             break
         else:
