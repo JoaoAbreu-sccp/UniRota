@@ -1,4 +1,4 @@
-from functions import loginverify, screen
+from functions import GeralDef, screen
 from time import sleep
 
 
@@ -33,7 +33,7 @@ while True:
     if opc == 2:
         email = input("Digite o email cadastrado: ")
         if email.endswith("@gmail.com"):
-            loginverify.PasswordReset(email)
+            GeralDef.PasswordReset(email)
         else:
             print("Insira um email válido")
         sleep(2)
@@ -42,7 +42,7 @@ while True:
     if opc == 3:
         break
 if linhas[posicao_tipo] == "administrador":
-    print("teste")
+    print("Adm entrou")
 
 if linhas[posicao_tipo] == "aluno":
     print("Aluno entrou")

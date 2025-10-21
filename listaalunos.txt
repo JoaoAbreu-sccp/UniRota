@@ -1,0 +1,13 @@
+Eduardo
+IFBA
+Garagem Brasileiro
+Posto Pajet
+True
+True
+
+João
+Unopar
+-
+Centro de Cultura
+False
+True
