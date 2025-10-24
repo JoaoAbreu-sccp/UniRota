@@ -18,3 +18,9 @@ def menuADM():
 [4]: Acompanhar Rota
 [5]: Adicionar Aviso
 [6]: Sair''')
+    
+def menuMOT():
+    print('''
+[1]: Lista de Alunos
+[2]: Atualizar Rota
+[3]: Adicionar Aviso''')
