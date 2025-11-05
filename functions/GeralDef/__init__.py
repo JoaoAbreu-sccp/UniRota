@@ -54,20 +54,3 @@ def CreateNotice():
 
         print("Aviso salvo com sucesso")
 
-def MostrarLista():
-    print(f'{"Nome":<20}{"Universidade":<20}{"Embarque Ida":<25}{"Desembarque Volta":<25}{"Conf. Ida":<12}{"Conf. Volta":<12}')
-    
-    with open("listaalunos.txt", "r", encoding="utf-8") as arquivo:
-        lin = arquivo.read().splitlines()
-    
-    lin = [linha for linha in lin if linha.strip() != ""]
-
-    for l in range(0, len(lin), 6):
-        nome = lin[l]
-        uni = lin[l + 1]
-        emb = lin[l + 2]
-        desemb = lin[l + 3]
-        ida = lin[l + 4]
-        vol = lin[l + 5]
-
-        print(f'{nome:<20}{uni:<20}{emb:<25}{desemb:<25}{ida:<12}{vol:<12}')
