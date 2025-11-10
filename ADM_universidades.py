@@ -1,22 +1,34 @@
 from time import sleep
+import os
+
 
 def carregar_universidades():
     lista_universidades = []
-    try:
-        with open("lista_universidades.txt", "r") as f:
-            conteudo = f.read().strip()
-            if conteudo:
-                blocos = conteudo.split("---")
-                for bloco in blocos:
-                    linhas = [x.strip() for x in bloco.splitlines() if x.strip()]
-                    if len(linhas) >= 3:
-                        lista_universidades.append({
-                            "nome": linhas[0],
-                            "cnpj": linhas[1],
-                            "endereco": linhas[2]
-                        })
-    except FileNotFoundError:
-        pass
+
+    # Verifica existência do arquivo
+    if not os.path.exists("lista_universidades.txt"):
+        return lista_universidades
+
+    # Lê o conteúdo
+    with open("lista_universidades.txt", "r") as f:
+        conteudo = f.read().strip()
+
+    # Arquivo vazio → lista vazia
+    if not conteudo:
+        return lista_universidades
+
+    # Divide em blocos
+    blocos = conteudo.split("---")
+
+    for bloco in blocos:
+        linhas = [x.strip() for x in bloco.splitlines() if x.strip()]
+        if len(linhas) >= 3:
+            lista_universidades.append({
+                "nome": linhas[0],
+                "cnpj": linhas[1],
+                "endereco": linhas[2]
+            })
+
     return lista_universidades
 
 
@@ -30,71 +42,119 @@ def cadastrar_universidade():
     nome = input("Nome: ").strip()
     cnpj = input("CNPJ: ").strip()
     endereco = input("Endereço: ").strip()
-    if nome and cnpj and endereco:
-        lista_universidades = carregar_universidades()
-        lista_universidades.append({"nome": nome, "cnpj": cnpj, "endereco": endereco})
-        salvar_universidades(lista_universidades)
-        print(f"\n✅ Universidade '{nome}' cadastrada com sucesso!")
-    else:
-        print("❌ Todos os campos são obrigatórios.")
+
+    if not nome or not cnpj or not endereco:
+        print("Todos os campos são obrigatórios.")
+        sleep(2)
+        return
+
+    lista_universidades = carregar_universidades()
+
+    lista_universidades.append({
+        "nome": nome,
+        "cnpj": cnpj,
+        "endereco": endereco
+    })
+
+    salvar_universidades(lista_universidades)
+
+    print(f"\n:Universidade '{nome}' cadastrada com sucesso!")
     sleep(2)
 
 
 def listar_universidades():
     lista_universidades = carregar_universidades()
+
     print("\n=== UNIVERSIDADES CADASTRADAS ===\n")
+
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
-    else:
-        for i, u in enumerate(lista_universidades, 1):
-            print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
+        input("\nPressione ENTER para continuar...")
+        return
+
+    for i, u in enumerate(lista_universidades, 1):
+        print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
+
     input("\nPressione ENTER para continuar...")
 
 
 def editar_universidade():
     lista_universidades = carregar_universidades()
+
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
         sleep(2)
         return
 
     listar_universidades()
-    try:
-        i = int(input("\nDigite o número da universidade: ")) - 1
-        if 0 <= i < len(lista_universidades):
-            u = lista_universidades[i]
-            novo_nome = input(f"Novo nome ({u['nome']}): ").strip() or u['nome']
-            novo_cnpj = input(f"Novo CNPJ ({u['cnpj']}): ").strip() or u['cnpj']
-            novo_endereco = input(f"Novo Endereço ({u['endereco']}): ").strip() or u['endereco']
-            lista_universidades[i] = {"nome": novo_nome, "cnpj": novo_cnpj, "endereco": novo_endereco}
-            salvar_universidades(lista_universidades)
-            print("✅ Universidade atualizada com sucesso!")
-        else:
-            print("❌ Número inválido.")
-    except ValueError:
-        print("❌ Entrada inválida.")
+
+    entrada = input("\nDigite o número da universidade: ").strip()
+
+    # Verifica se é número
+    if not entrada.isdigit():
+        print("Entrada inválida.")
+        sleep(2)
+        return
+
+    i = int(entrada) - 1
+
+    # Verifica intervalo
+    if not (0 <= i < len(lista_universidades)):
+        print("Número inválido.")
+        sleep(2)
+        return
+
+    u = lista_universidades[i]
+
+    novo_nome = input(f"Novo nome ({u['nome']}): ").strip() or u['nome']
+    novo_cnpj = input(f"Novo CNPJ ({u['cnpj']}): ").strip() or u['cnpj']
+    novo_endereco = input(f"Novo Endereço ({u['endereco']}): ").strip() or u['endereco']
+
+    lista_universidades[i] = {
+        "nome": novo_nome,
+        "cnpj": novo_cnpj,
+        "endereco": novo_endereco
+    }
+
+    salvar_universidades(lista_universidades)
+
+    print("Universidade atualizada com sucesso!")
     sleep(2)
 
 
 def excluir_universidade():
     lista_universidades = carregar_universidades()
+
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
         sleep(2)
         return
 
     listar_universidades()
-    try:
-        i = int(input("\nDigite o número para excluir: ")) - 1
-        if 0 <= i < len(lista_universidades):
-            confirm = input(f"Excluir '{lista_universidades[i]['nome']}'? (s/n): ").lower()
-            if confirm == "s":
-                nome = lista_universidades[i]["nome"]
-                del lista_universidades[i]
-                salvar_universidades(lista_universidades)
-                print(f"✅ '{nome}' excluída com sucesso!")
-        else:
-            print("❌ Número inválido.")
-    except ValueError:
-        print("❌ Entrada inválida.")
+
+    entrada = input("\nDigite o número para excluir: ").strip()
+
+    # Verifica se é número
+    if not entrada.isdigit():
+        print("Entrada inválida.")
+        sleep(2)
+        return
+
+    i = int(entrada) - 1
+
+    # Valida intervalo
+    if not (0 <= i < len(lista_universidades)):
+        print("Número inválido.")
+        sleep(2)
+        return
+
+    confirm = input(f"Excluir '{lista_universidades[i]['nome']}'? (s/n): ").lower()
+
+    if confirm == "s":
+        nome = lista_universidades[i]["nome"]
+        del lista_universidades[i]
+        salvar_universidades(lista_universidades)
+        print(f"'{nome}' excluída com sucesso!")
+
     sleep(2)
+
