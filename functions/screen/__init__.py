@@ -18,13 +18,3 @@ def menuADM():
 [4]: Acompanhar Rota
 [5]: Adicionar Aviso
 [6]: Sair''')
-    
-
-def menuUniversidades():
-    print('''
-==== GERENCIAR UNIVERSIDADES ====
-[1]: Cadastrar Universidade
-[2]: Listar Universidades
-[3]: Editar Universidade
-[4]: Excluir Universidade
-[0]: Voltar''')

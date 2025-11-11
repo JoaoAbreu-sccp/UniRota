@@ -45,46 +45,6 @@ if linhas[posicao_tipo] == "administrador":
     print("Admin logado!")
     sleep(2)
 
-    from ADM_universidades import (
-        cadastrar_universidade,
-        listar_universidades,
-        editar_universidade,
-        excluir_universidade
-    )
-
-    while True:
-        screen.clear()
-        screen.menuADM()
-        opc = input("Opção: ")
-
-        if opc == "2":  # Editar universidades
-            while True:
-                screen.clear()
-                screen.menuUniversidades()
-                subopc = input("Opção: ")
-
-                if subopc == "1":
-                    cadastrar_universidade()
-                elif subopc == "2":
-                    listar_universidades()
-                elif subopc == "3":
-                    editar_universidade()
-                elif subopc == "4":
-                    excluir_universidade()
-                elif subopc == "0":
-                    break
-                else:
-                    print("Opção inválida!")
-                    sleep(1)
-
-        elif opc == "6":  # Sair do painel ADM
-            print("Saindo do painel do administrador...")
-            sleep(1)
-            break
-        else:
-            print("Função ainda não implementada ou opção inválida.")
-            sleep(1)
-            break
 
 if linhas[posicao_tipo] == "aluno":
     print("Aluno entrou")
