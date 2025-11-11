@@ -27,3 +27,5 @@ def menuUniversidades():
 [3]: Editar Universidade
 [4]: Excluir Universidade
 [0]: Voltar''')
+    
+    

@@ -146,3 +146,4 @@ if linhas[posicao_tipo] == "aluno":
 
 if linhas[posicao_tipo] == "motorista":
     print("motorista entrou")
+    

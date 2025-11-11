@@ -214,5 +214,3 @@ def excluir_universidade():
         print(f"'{nome}' excluída com sucesso!")
 
     sleep(2)
-
-
