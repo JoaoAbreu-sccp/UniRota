@@ -1,5 +1,10 @@
 from functions import GeralDef, screen
 from time import sleep
+from functions.GeralDef import (
+    cadastrar_universidade,
+    listar_universidades,
+    editar_universidade,
+    excluir_universidade)
 
 
 while True:
@@ -72,7 +77,33 @@ if linhas[posicao_tipo] == "administrador":
             screen.clear()
         elif opc == 2:
             screen.clear()
-            print("editar uni")
+            print("Adm entrou")
+            while True:
+                screen.clear()
+                screen.menuUniversidades()
+                subopc = input("Opção: ")
+
+                if subopc == "1":
+                    cadastrar_universidade()
+
+                elif subopc == "2":
+                    listar_universidades()
+
+                elif subopc == "3":
+                    editar_universidade()
+
+                elif subopc == "4":
+                    excluir_universidade()
+
+                elif subopc == "0":
+                    # volta ao menu ADM
+                    break
+
+                else:
+                    print("Opção inválida!")
+                    sleep(1)
+
+                          
         elif opc == 3:
             screen.clear()
             print("editar aluno")
@@ -99,7 +130,10 @@ if linhas[posicao_tipo] == "administrador":
                     voltar = str(input("\nDigite [1] para voltar: "))
                 elif opc == 3:
                     break
-        elif opc == 6:
+        elif opc == 6:  # Sair do painel ADM
+            print("Saindo do painel do administrador...")
+            sleep(1)
+            # Volta para menu() automaticamente após sair do loop do ADM
             break
         else:
             screen.clear()
@@ -112,3 +146,4 @@ if linhas[posicao_tipo] == "aluno":
 
 if linhas[posicao_tipo] == "motorista":
     print("motorista entrou")
+    
