@@ -77,33 +77,7 @@ if linhas[posicao_tipo] == "administrador":
             screen.clear()
         elif opc == 2:
             screen.clear()
-            print("Adm entrou")
-            while True:
-                screen.clear()
-                screen.menuUniversidades()
-                subopc = input("Opção: ")
-
-                if subopc == "1":
-                    cadastrar_universidade()
-
-                elif subopc == "2":
-                    listar_universidades()
-
-                elif subopc == "3":
-                    editar_universidade()
-
-                elif subopc == "4":
-                    excluir_universidade()
-
-                elif subopc == "0":
-                    # volta ao menu ADM
-                    break
-
-                else:
-                    print("Opção inválida!")
-                    sleep(1)
-
-                          
+            print("Adm entrou")         
         elif opc == 3:
             screen.clear()
             print("editar aluno")
