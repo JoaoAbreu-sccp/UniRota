@@ -1,11 +1,5 @@
 from functions import GeralDef, screen
 from time import sleep
-from functions.GeralDef import (
-    cadastrar_universidade,
-    listar_universidades,
-    editar_universidade,
-    excluir_universidade)
-
 
 while True:
     logins = open("logins.txt")
@@ -123,10 +117,10 @@ if linhas[posicao_tipo] == "administrador":
                     voltar = str(input("\nDigite [1] para voltar: "))
                 elif opc == 3:
                     break
-        elif opc == 7:  # Sair do painel ADM
+        elif opc == 7:
             print("Saindo do painel do administrador...")
             sleep(1)
-            # Volta para menu() automaticamente após sair do loop do ADM
+            
             break
         else:
             screen.clear()
