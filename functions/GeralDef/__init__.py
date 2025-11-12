@@ -214,3 +214,267 @@ def excluir_universidade():
         print(f"'{nome}' excluída com sucesso!")
 
     sleep(2)
+
+
+def Editar_usuário(tipo_de_usuario_editado):
+    alteracao_aluno = False
+    alteracao_motoristas = False
+    from time import sleep
+    with open("logins.txt", "r", encoding="utf-8") as f:
+        linhas = f.read().splitlines()
+        linhas_limpa = [linha for linha in linhas if linha != ""]
+        alunos = []
+        motoristas = []
+
+        for c, linha in enumerate(linhas_limpa):
+            if linha=='aluno':
+                alunos.append(linhas_limpa[c:c+11])
+            if linha=='motorista':
+                motoristas.append(linhas_limpa [c:c+8])
+
+    if tipo_de_usuario_editado=='aluno':            
+        if not alunos:
+            print("Não há nenhum aluno cadastrados!")
+        else:
+            print("\nAlunos cadastrados:")
+        for i, aluno in enumerate(alunos):
+            nome = aluno[3]
+            print(f"[{i+1}] - {nome}")
+
+        indice = int(input("\nDigite o número do aluno que deseja editar: "))-1
+        aluno = alunos[indice]
+
+        cpf_formatado=f"{aluno[7][:3]}.{aluno[7][3:6]}.{aluno[7][6:9]}-{aluno[7][9:]}"
+        telefone_formatado=f"({aluno[8][:2]}){aluno[8][2:7]}-{aluno[8][7:]}"
+        data_formatada=f"{aluno[9][:2]}/{aluno[9][2:4]}/{aluno[9][4:]}"
+
+        print("\nInformações atuais:")
+        print(f'''1 - Nome: {aluno[3]}
+2 - Instituição: {aluno[4]}
+3 - Ponto de embarque: {aluno[5]}
+4 - Ponto de desembarque: {aluno[6]}
+5 - Cpf: {cpf_formatado}
+6 - Telefone: {telefone_formatado}
+7 - Data de nascimento {data_formatada}''')
+
+        campo=0
+        lista=["nome", "Instituição", "Ponto de Embarque", "Ponto de Desembarque", "Cpf", "Telefone", "Data de nascimento" ]
+        while True:
+            try:
+                campo = int(input("\nQual campo deseja editar (1-7)? "))
+                if 1 <= campo <= 7:
+                    novo_valor = input(f"Digite o novo valor para {aluno[campo-1]}: ")
+                    aluno[campo + 2] = novo_valor
+                    alunos[indice] = aluno
+                    alteracao_aluno = True
+                    break
+                else: 
+                    print("Por favor insira um número entre 1 e 7!")
+            except ValueError:
+                print("Por favor digite um número inteiro válido!")
+
+    if tipo_de_usuario_editado=='motorista':            
+        if not motoristas:
+            print("Não há nenhum motorista cadastrados!")
+        else:
+            print("\nMotoristas cadastrados:")
+        for i, motorista in enumerate(motoristas):
+            nome = motorista[3]
+            print(f"[{i+1}] - {nome}")
+
+        indice = int(input("\nDigite o número do motorista que deseja editar: "))-1
+        motorista = motoristas[indice]
+
+        cpf_formatado=f"{motorista[4][:3]}.{motorista[4][3:6]}.{motorista[4][6:9]}-{motorista[4][9:]}"
+        telefone_formatado=f"({motorista[5][:2]}){motorista[5][2:7]}-{motorista[5][7:]}"
+        data_formatada=f"{motorista[6][:2]}/{motorista[6][2:4]}/{motorista[6][4:]}"
+
+        print("\nInformações atuais:")
+        print(f'''1 - Nome: {motorista[3]}
+2 - Cpf: {cpf_formatado}
+3 - Telefone: {telefone_formatado}
+4 - Data de Nascimento {data_formatada}''')
+        
+        while True:
+            try:
+                campo = int(input("\nQual campo deseja editar (1-4)? "))
+
+                if 1 <= campo <= 4:
+                    novo_valor = input(f"Digite o novo valor para {motorista[campo-1]}: ")
+                    motorista[campo + 2] = novo_valor
+                    motoristas[indice] = motorista
+                    alteracao_motoristas = True
+                    break
+                else: 
+                    print("Por favor insira um número entre 1 e 4!")
+            except ValueError:
+                print("Por favor digite um número inteiro válido!")
+
+    if alteracao_aluno:
+        inicio = linhas_limpa.index(aluno[0])
+        linhas_limpa[inicio:inicio+len(aluno)] = aluno
+
+        with open("logins.txt", "w", encoding="utf-8") as f:
+            for i, linha in enumerate(linhas_limpa):
+                f.write(linha + "\n")
+                if linha =="-":
+                    f.write("\n")
+
+            print("\nInformação atualizada com sucesso!")
+        sleep(3)
+
+    if alteracao_motoristas:
+        inicio = linhas_limpa.index(motorista[0])
+        linhas_limpa[inicio:inicio+len(motorista)] = motorista
+
+        with open("logins.txt", "w", encoding="utf-8") as f:
+            for i, linha in enumerate(linhas_limpa):
+                f.write(linha + "\n")
+                if linha =="-":
+                    f.write("\n")
+
+
+        print("\nInformação atualizada com sucesso!")
+        sleep(3)
+
+def Adicionar_usuario(tipo_de_usuário_adicionado):
+
+    adicao_aluno=False
+    adicao_motorista=False
+
+    with open("logins.txt", "r", encoding="utf-8") as f:
+        linhas = f.read().splitlines()
+        linhas_limpa = [linha for linha in linhas if linha != ""]
+        alunos = []
+        motoristas = []
+
+    lista=["nome", "Instituição", "Ponto de Embarque", "Ponto de Desembarque", "Cpf", "Telefone", "Data de nascimento" ]
+    
+    if tipo_de_usuário_adicionado=='aluno':
+        for posição in linhas_limpa:
+            posição=="motorista"
+            indice=linhas_limpa.index(posição)
+
+        novo_usuario=[]
+        novo_usuario.append("aluno")
+        email=input("Digite o email do aluno: ")
+        novo_usuario.append(email)
+        novo_usuario.append("aluno123")
+        nome=input("Digite o nome do aluno: ")
+        novo_usuario.append(nome)
+        Instituição=input("Digite a instituição do aluno: ")
+        novo_usuario.append(Instituição)
+        Ponto_de_Embarque=input("Digite o ponto de embarque do aluno: ")
+        novo_usuario.append(Ponto_de_Embarque)
+        Ponto_de_Desembarque=input("Digite o ponto de desembarque do aluno: ")
+        novo_usuario.append(Ponto_de_Desembarque)
+        Cpf=input("Digite o cpf do aluno: ")
+        novo_usuario.append(Cpf)
+        Telefone=input("Digite o telefone do aluno: ")
+        novo_usuario.append(Telefone)
+        Data_de_nascimento=input("Digte a data de nascimento do aluno: ")
+        novo_usuario.append(Data_de_nascimento)
+        novo_usuario.append("-")
+        adicao_aluno=True
+
+    elif tipo_de_usuário_adicionado=="motorista":
+
+        novo_usuario=[]
+        novo_usuario.append("motorista")
+        email=input("Digite o email do motorista")
+        novo_usuario.append(email)
+        novo_usuario.append("moto123")
+        nome=input("Digite o nome do motorista: ")
+        novo_usuario.append(nome)
+        Cpf=input("Digite o cpf do motorista: ")
+        novo_usuario.append(Cpf)
+        Telefone=input("Digite o cpf do motorista: ")
+        novo_usuario.append(Cpf)
+        Data_de_nascimento("Digite a da nascimento do motorista: ")
+        novo_usuario.append(Data_de_nascimento)
+        novo_usuario.append("-")
+        adicao_motorista=True
+
+    linhas_limpa.extend(novo_usuario)
+
+    if adicao_aluno:
+        with open("logins.txt", "w", encoding="utf-8") as f:
+            for i, linha in enumerate(linhas_limpa):
+                f.write(linha + "\n")
+                if linha =="-":
+                    f.write("\n")
+
+    if adicao_motorista:
+        with open("logins.txt", "w", encoding="utf-8") as f:
+            for i, linha in enumerate(linhas_limpa):
+                f.write(linha + "\n")
+                if linha =="-":
+                    f.write("\n")
+
+
+def Sua_conta(tipo_de_login):
+    from random import randint
+    with open ("logins.txt", "r+", encoding="utf-8") as f:
+        linhas = [linha.strip() for linha in f.readlines()]
+        
+        indície=linhas.index(tipo_de_login)
+        print(f'''
+    Login {tipo_de_login}
+
+Nome: {linhas[indície+3]}
+Data de Nascimento: {linhas[indície+6]}
+Cpf: {linhas[indície+4]}
+Telefone: {linhas[indície+5]}
+              ''')
+        while True:
+            opc=int(input('''
+[1] Alterar Telefone
+[0] Voltar: 
+                    
+Digite: '''))
+            
+            if opc==1:
+                print("O código de acesso foi enviado para seu número")
+                codigo_reset = f"{randint(0, 999999):06}"
+
+                with open("codigo.txt", "w", encoding="utf-8") as reset:
+                    reset.write(codigo_reset + "\n")
+
+                with open("codigo.txt", "r", encoding="utf-8") as reset:
+                    codigoreset = reset.read().strip() 
+                
+                codigo=input("Digte: ")
+                if codigo == codigoreset:
+                    linhas[indície + 5] = input("Digite seu novo telefone: ")
+                
+                    with open("logins.txt", "w", encoding="utf-8") as logins:
+                        logins.writelines([linha + "\n" for linha in linhas])
+
+                    print("Telefone alteraqdo com sucesso! ")
+                else:
+                    print("Codigo incorreto! ")
+            elif opc==0:
+                break
+
+def Credenciais(tipo_de_login):
+    with open ("logins.txt", "r+", encoding="utf-8") as f:
+        linhas = [linha.strip() for linha in f.readlines()]
+        
+        indície=linhas.index(tipo_de_login)
+
+        senha=linhas[indície+2]
+        while True:
+            confirmar_senha=input("Por favor insira sua senha para entrar neste campo: ")
+            if confirmar_senha==senha:
+                print(f"Senha atual: {senha}")
+                opc=int(input('''
+[1] Alterar senha
+[0] Voltar
+
+Digite: '''))
+                if opc==1:
+                    PasswordReset(linhas[indície+1])
+                if opc==0:
+                    break
+            else:
+                print("Senha incorreta! ")
