@@ -22,8 +22,9 @@ def menuADM():
 [0]: Sair''')
     
 def menuUniversidades():
-    print('''
-==== GERENCIAR UNIVERSIDADES ====
+    print(f'''-------------------------
+ GERENCIAR UNIVERSIDADES 
+-------------------------
 [1]: Cadastrar Universidade
 [2]: Listar Universidades
 [3]: Editar Universidade

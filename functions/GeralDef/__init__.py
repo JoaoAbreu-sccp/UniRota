@@ -1,3 +1,4 @@
+from time import sleep
 def PasswordReset(email):
     from random import randint
     logins = open("logins.txt")
@@ -55,26 +56,20 @@ def CreateNotice():
         print("Aviso salvo com sucesso")
 
 
-from time import sleep
-
 def carregar_universidades():
     
     import os
     lista_universidades = []
-
-    # Verifica existência do arquivo
+    
     if not os.path.exists("lista_universidades.txt"):
         return lista_universidades
 
-    # Lê o conteúdo
     with open("lista_universidades.txt", "r") as f:
         conteudo = f.read().strip()
 
-    # Arquivo vazio → lista vazia
     if not conteudo:
         return lista_universidades
 
-    # Divide em blocos
     blocos = conteudo.split("---")
 
     for bloco in blocos:
@@ -83,17 +78,14 @@ def carregar_universidades():
             lista_universidades.append({
                 "nome": linhas[0],
                 "cnpj": linhas[1],
-                "endereco": linhas[2]
-            })
+                "endereco": linhas[2]})
 
     return lista_universidades
-
 
 def salvar_universidades(lista_universidades):
     with open("lista_universidades.txt", "w") as f:
         for u in lista_universidades:
             f.write(f"{u['nome']}\n{u['cnpj']}\n{u['endereco']}\n---\n")
-
 
 def cadastrar_universidade():
     nome = input("Nome: ").strip()
@@ -110,8 +102,7 @@ def cadastrar_universidade():
     lista_universidades.append({
         "nome": nome,
         "cnpj": cnpj,
-        "endereco": endereco
-    })
+        "endereco": endereco})
 
     salvar_universidades(lista_universidades)
 
@@ -122,19 +113,18 @@ def cadastrar_universidade():
 def listar_universidades():
     lista_universidades = carregar_universidades()
 
-    print("\n=== UNIVERSIDADES CADASTRADAS ===\n")
+    print('''\n---------------------------
+ UNIVERSIDADES CADASTRADAS
+---------------------------\n''')
 
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
         input("\nPressione ENTER para continuar...")
         return
-
     for i, u in enumerate(lista_universidades, 1):
         print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
 
     input("\nPressione ENTER para continuar...")
-
-
 def editar_universidade():
     lista_universidades = carregar_universidades()
 
@@ -147,15 +137,12 @@ def editar_universidade():
 
     entrada = input("\nDigite o número da universidade: ").strip()
 
-    # Verifica se é número
     if not entrada.isdigit():
         print("Entrada inválida.")
         sleep(2)
         return
 
     i = int(entrada) - 1
-
-    # Verifica intervalo
     if not (0 <= i < len(lista_universidades)):
         print("Número inválido.")
         sleep(2)
@@ -170,18 +157,14 @@ def editar_universidade():
     lista_universidades[i] = {
         "nome": novo_nome,
         "cnpj": novo_cnpj,
-        "endereco": novo_endereco
-    }
-
+        "endereco": novo_endereco}
     salvar_universidades(lista_universidades)
 
     print("Universidade atualizada com sucesso!")
     sleep(2)
 
-
 def excluir_universidade():
     lista_universidades = carregar_universidades()
-
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
         sleep(2)
@@ -190,8 +173,6 @@ def excluir_universidade():
     listar_universidades()
 
     entrada = input("\nDigite o número para excluir: ").strip()
-
-    # Verifica se é número
     if not entrada.isdigit():
         print("Entrada inválida.")
         sleep(2)
@@ -199,7 +180,6 @@ def excluir_universidade():
 
     i = int(entrada) - 1
 
-    # Valida intervalo
     if not (0 <= i < len(lista_universidades)):
         print("Número inválido.")
         sleep(2)
