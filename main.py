@@ -19,6 +19,7 @@ while True:
             if linhas[posicao_senha] == senha:
                 posicao_tipo = linhas.index(email)-1
                 print(f"Entrando como {linhas[posicao_tipo]}")
+                tipo_de_usuario=linhas[posicao_tipo]
                 break
             else:
                 print("Email ou senha incorretos...")
@@ -66,6 +67,41 @@ if linhas[posicao_tipo] == "administrador":
                         print(f"{info:20}", end=' | ')
                     else:
                         print()
+                        
+                csv_gerado = False
+
+            while True:
+                if not csv_gerado:
+                    opc_1 = int(input('''\n[1]: Exportar para CSV\n[0]: Sair\n\nDigite: '''))
+                else:
+                    opc_1 = int(input("\n[0]: Sair\n\nDigite: "))
+
+                if opc_1==1:
+                    screen.clear()
+                    print("Exportando...")
+                    sleep(0.2)
+                    with open("alunos_exportados.csv", "w", newline="", encoding="cp1252") as csvfile:
+                        writer = csv.writer(csvfile)
+                        writer.writerow(["Nome", "Instituição", "P. Embarque", "P. Desembarque", "Conf. Ida", "Conf. Volta"])
+
+                        for i in range(0, len(linhasalunos), 7):
+                            bloco = linhasalunos[i:i+7]
+                            if len(bloco) >= 6:
+                                    writer.writerow(bloco[:6])
+
+                        print("Exportado com sucesso para 'alunos_exportados.csv'!")
+                        csv_gerado=True
+                        sleep(1)
+                        
+                elif opc_1 == 0:
+                    print("Saindo...")
+                    sleep(0.5)
+                    break
+
+                else:
+                    print("Opção inválida! Tente novamente.")
+            sleep(0.5)
+
             opc = int(input("\nDigite [1] para voltar:  "))
             sleep(0.5)
             screen.clear()
