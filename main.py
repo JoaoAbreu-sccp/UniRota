@@ -19,6 +19,7 @@ while True:
             if linhas[posicao_senha] == senha:
                 posicao_tipo = linhas.index(email)-1
                 print(f"Entrando como {linhas[posicao_tipo]}")
+                tipo_de_usuario=linhas[posicao_tipo]
                 break
             else:
                 print("Email ou senha incorretos...")
