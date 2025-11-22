@@ -136,15 +136,10 @@ if linhas[posicao_tipo] == "administrador":
                     voltar = str(input("\nDigite [1] para voltar: "))
                 elif opc == 3:
                     break
-        elif opc == 6:
-            print("Saindo do painel do administrador...")
-            sleep(1)
-            
-            break
-        else:
-            screen.clear()
-            print("Selecione uma opção valida...")
-            sleep(2)
+                else:
+                    screen.clear()
+                    print("Selecione uma opção valida...")
+                    sleep(2)
 
         elif opc == 7:
             while True:
@@ -158,9 +153,9 @@ if linhas[posicao_tipo] == "administrador":
                     break
                 else:
                     print("Por favor insira uma opção valida! ")
-            breaka
+            break
         else:
-            screen.clear()1
+            screen.clear()
     
             print("Selecione uma opção valida...")
             sleep(2)
