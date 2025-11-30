@@ -2,8 +2,17 @@ True
 Garagem do Brasileiro
 Estrada para o Aeroporto, 50 - Cidade Alta, Porto Seguro - BA, 45810-000
 True
-Posta Pajet
+Posto Pajet
 Av. Adno Musser (BR-367) em Porto Seguro
-False
-Banco do Brasileiro
+True
+Banco do Brasil
 Av. dos Navegantes, 49-17, no Centro da cidade, com CEP 45810-123
+True
+Centro de Cultura
+R. 15 de novembro, s/n - Pacatá, Porto Seguro - BA 45810-000
+False
+Drogasil
+Avenida dos trabalhadores, 1503 - Olhos d'agua, Porto seguro - BA, 45810-000
+False
+Praça São Sebastião
+Rua São Sebastião, número 458, no bairro do Pequi, com CEP 45810-000

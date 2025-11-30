@@ -91,40 +91,40 @@ if posicao_tipo is not None:
                     arq = arquivo.read().splitlines()
 
                 print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<40} | {'Endereço':<50}")
-                print("-" * 105)
+                print("-" * 140)
 
                 for i in range(0, len(arq), 3):
                     ponto = arq[i + 1].strip()
                     end = arq[i + 2]
                     
-                    if i + 2 < len(arq):
-                        check = arq[i].strip()
-                    else:
-                        check = ""
+                    check = arq[i].strip()
+                   
+                    print()
+                    print(f"{i // 3 + 1:<3} | {check:<11} | {ponto:<40} | {end:<50}")
 
-                    if check == "":
-                        print(f"{i // 3 + 1:<3} | {'/':<11} | {ponto:<40} | {end:<50}")
-                        newcheck = input("Check [True|False]: ").strip()
-                        print()
+                    if check == "False":
+                        mod = input("Deseja modificar o check [s/n]: ")
 
-                        arq[i] = newcheck
-
-                        with open("rota.txt", "w") as rota:
-                            rota.write("\n".join(arq))
-                    else:
-                        print()
-                        print(f"{i // 3 + 1:<3} | {check:<11} | {ponto:<40} | {end:<50}")
-
-                        if check == "False":
-                            mod = input("Deseja modificar o check [s/n]: ")
-
-                        
-                            if mod == "s":
-                                newcheck = input("Novo Check [True|False]: ").strip()
-                                arq[i] = newcheck
                     
-                with open("rota.txt", "w") as rota:
-                    rota.write("\n".join(arq))
+                        if mod == "s":
+                            newcheck = input("Novo Check [True]: ").strip()
+
+                            confirm = input("Tem certeza? [s/n]: ")
+                            if confirm == "s":
+                                arq[i] = newcheck
+                                print("-" * 140)
+
+                            else:
+                                print("-" * 140)
+
+                        else:
+                            print("-" * 140)
+
+                    else:
+                        print("-" * 140)
+
+                    with open("rota.txt", "w") as rota:
+                        rota.write("\n".join(arq))
 
                 print("\nRota atualizada com sucesso")
 
