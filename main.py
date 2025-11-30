@@ -10,7 +10,7 @@ while True:
 
     
     screen.menu()
-    opc = int(input("opc = "))
+    opc = int(input("\nEscolha a opção: "))
     screen.clear()
 
     if opc == 1:
@@ -71,13 +71,13 @@ user_cache = {
 
 
 dados_aluno = {
-    "Nome": "Pedro Henrique Souza Oliveira",
-    "Data de nascimento": "16/01/2005",
-    "E-mail": "Pesouza544@gmail.com",
+    "Nome": "Eduardo Moreira Santos Barreto",
+    "Data de nascimento": "01/04/2005",
+    "E-mail": "202511240025@ifba.edu.br",
     "Faculdade": "Ifba",
-    "CPF": "945.325.321.-29",
-    "RG": "1212563-23",
-    "Telefone": "+55 73 9 98612778"
+    "CPF": "000.000.000-00",
+    "RG": "0000000-00",
+    "Telefone": "+55 (73) 9 4002-8922"
 }
 
 
@@ -233,6 +233,17 @@ def cancelarcheckin():
         input("\nPressione ENTER para voltar...")  
         clear()
 
+def acompanharota():
+    pasta_da_rota = os.path.dirname(os.path.abspath(__file__))
+    caminho_rota = os.path.join(pasta_da_rota, "rota.txt")
+    rota = open(caminho_rota, "r", encoding="utf-8")
+    linhasrotas = rota.read().splitlines()
+    rota.close()
+    for rota in linhasrotas:
+        print(rota)
+    voltar = str(input("\nDigitet [1] para voltar: "))
+    clear()
+
 while True: 
     paginainicial()
     try:
@@ -257,7 +268,7 @@ while True:
         elif opcao01 == 4:
             clear()
             cabecalho("ACOMPANHAR ROTA")
-            print("calma pai")
+            acompanharota()
             sleep(2)
             clear()
 
