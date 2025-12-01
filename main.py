@@ -158,10 +158,7 @@ if linhas[posicao_tipo] == "administrador":
             sleep(1)
             
             break
-        else:
-            screen.clear()
-            print("Selecione uma opção valida...")
-            sleep(2)
+
 
         elif opc == 8:
             while True:
@@ -180,6 +177,7 @@ if linhas[posicao_tipo] == "administrador":
             screen.clear()
             print("Selecione uma opção valida...")
             sleep(2)
+
 if linhas[posicao_tipo] == "aluno":
     print("Aluno entrou")
 
