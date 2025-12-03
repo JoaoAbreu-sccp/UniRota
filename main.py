@@ -1,11 +1,10 @@
+import pprint
+from turtle import Screen
 from functions import GeralDef, screen
 from time import sleep
 from datetime import datetime
 import csv
 import os
-import sys
-
-
 
 
 screen.clear()
@@ -54,10 +53,9 @@ while True:
             print("Insira um email válido")
         sleep(2)
         screen.clear()
-
-    elif opc == 3:
-        print("Saindo do sistema... Até logo!")
-        sys.exit()
+    elif opc == 0:
+        breakpoint
+        break
     
     else:
         print("Selecione uma opçao valida")
@@ -136,7 +134,23 @@ while True:
                     screen.clear()
                 elif opc == 2:
                     screen.clear()
-                    print("Editar Universidades")
+                    while True:
+                        screen.clear()
+                        screen.menuUniversidades()
+                        subopc = input("Opção: ")
+                        if subopc == "1":
+                            GeralDef.cadastrar_universidade()
+                        elif subopc == "2":
+                            GeralDef.listar_universidades()
+                        elif subopc == "3":
+                            GeralDef.editar_universidade()
+                        elif subopc == "4":
+                            GeralDef.excluir_universidade()
+                        elif subopc == "0":
+                            break
+                        else:
+                            print("Opção inválida!")
+                            sleep(1)
                 elif opc == 3:
                     screen.clear()
                     opc_1 = screen.editar_usuário_menu("aluno")
@@ -158,19 +172,42 @@ while True:
                         GeralDef.Editar_usuário("motorista")
                 elif opc == 5:
                     screen.clear()
-                    print("Acompanhar Rota")
+                    opc=screen.rota()
+                    if opc==1:
+                        GeralDef.mostrar_rota()
+                        passar=input("Pressione [ENTER] para voltar\n")
+                    elif opc==2:
+                        GeralDef.adicionar_ponto()
+                        print ("Rota alterado com sucesso")
+                        sleep(0.5)
+                        print("Imprimindo nova rota")
+                        sleep(0.7)
+                        screen.clear()
+                        sleep(0.3)
+                        GeralDef.mostrar_rota()
+                    elif opc==3:
+                        GeralDef.remover_ponto()
+                        print ("Rota alterado com sucesso")
+                        sleep(0.5)
+                        print("Imprimindo nova rota")
+                        sleep(0.7)
+                        screen.clear()
+                        sleep(0.3)
+                        GeralDef.mostrar_rota()
+                    
                 elif opc == 6:
                     while True:
                         screen.clear()
                         print(
                             """
-            -------------------------
-                 Adicionar Aviso 
-            -------------------------
+-------------------------
+     Adicionar Aviso 
+-------------------------
 
-            [1]: Criar Aviso
-            [2]: Visualizar Avisos
-            [3]: Voltar"""
+[1]: Criar Aviso
+[2]: Visualizar Avisos
+[3]: Voltar
+"""
                             )
                         opc = int(input("opc = "))
                         if opc == 1:
@@ -205,6 +242,7 @@ while True:
                 elif opc==0:
                     print("saindo...")
                     sleep(2)
+                    screen.clear()
                     break
                 else:
                     screen.clear()
