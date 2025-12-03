@@ -3,7 +3,10 @@ from time import sleep
 from datetime import datetime
 import csv
 import os
+<<<<<<< HEAD
 import sys
+=======
+>>>>>>> 0fa3fa8ffbbe2310d7004eefc745a26526bcd050
 
 
 screen.clear()
@@ -52,10 +55,16 @@ while True:
             print("Insira um email válido")
         sleep(2)
         screen.clear()
+<<<<<<< HEAD
     elif opc == 3:
         print("Saindo do sistema... Até logo!")
         sys.exit()
         
+=======
+    elif opc == 0:
+        breakpoint
+        break
+>>>>>>> 0fa3fa8ffbbe2310d7004eefc745a26526bcd050
     
     else:
         print("Selecione uma opçao valida")
