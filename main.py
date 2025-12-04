@@ -3,10 +3,7 @@ from time import sleep
 from datetime import datetime
 import csv
 import os
-<<<<<<< HEAD
 import sys
-=======
->>>>>>> 0fa3fa8ffbbe2310d7004eefc745a26526bcd050
 
 
 screen.clear()
@@ -22,11 +19,13 @@ while True:
     screen.menu()
     while True:
         try:
-            opc = int(input("opc = "))
+            opc = int(input("\nEscolha uma opção(1-3): "))
             if 0 <= opc <= 6:
                 break
             else:
-                print("Por favor insira uma opção valida! ")
+                print("\nPor favor, insira uma opção valida!")
+                input("\nPressione ENTER para voltar...") 
+
         except ValueError:
             print("Por favor digite um número inteiro!")
     screen.clear()
@@ -55,20 +54,16 @@ while True:
             print("Insira um email válido")
         sleep(2)
         screen.clear()
-<<<<<<< HEAD
     elif opc == 3:
         print("Saindo do sistema... Até logo!")
         sys.exit()
         
-=======
-    elif opc == 0:
-        breakpoint
-        break
->>>>>>> 0fa3fa8ffbbe2310d7004eefc745a26526bcd050
     
     else:
-        print("Selecione uma opçao valida")
-        sleep(1)
+        print("Selecione uma opção válida!")
+        input("\nPressione ENTER para voltar...")
+        screen.clear()
+        
     
     if tipo_de_usuario is not None:
 
@@ -219,6 +214,7 @@ while True:
                     sleep(2)
 
         elif linhas[posicao_tipo] == "aluno":
+            screen.clear()
             pontoembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
             pontodesembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
 
@@ -237,7 +233,7 @@ while True:
                 "Nome": "Eduardo Moreira Santos Barreto",
                 "Data de nascimento": "01/04/2005",
                 "E-mail": "202511240025@ifba.edu.br",
-                "Faculdade": "Ifba",
+                "Faculdade":"Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)",
                 "CPF": "000.000.000-00",
                 "RG": "0000000-00",
                 "Telefone": "+55 (73) 9 4002-8922"
@@ -268,7 +264,7 @@ Bem vindo ao painel do aluno
 
                 print("\nDefina o ponto de EMBARQUE (IDA): ")
                 for i, pontos in enumerate(pontoembarque):
-                    print(f"[{i+1}] - {pontos}") 
+                    print(f"\n[{i+1}] - {pontos}") 
 
                 escolha_ida = 0
 
@@ -283,7 +279,7 @@ Bem vindo ao painel do aluno
 
                 user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] 
 
-                ida = input(f"Deseja confirmar o embarque na IDA no ponto {user_cache["Ponto de embarque"]}? [s/n]: ").lower()
+                ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache["Ponto de embarque"]}? [s/n]: ").lower()
                 if ida.startswith('s'):
                     user_cache["Embarque na ida"] = "Sim"
                 else:
@@ -295,7 +291,7 @@ Bem vindo ao painel do aluno
 
                 print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
                 for i, pontos in enumerate(pontodesembarque):
-                    print(f"[{i+1}] - {pontos}")
+                    print(f"\n[{i+1}] - {pontos}")
 
                 escolha_volta = 0
 
@@ -371,24 +367,72 @@ Bem vindo ao painel do aluno
                 avisos.close()         
                 for aviso in linhasavisos:
                     print(aviso)
-                voltar = str(input("\nDigite [1] para voltar: "))
+                voltar = input("\nPressione ENTER para voltar...") 
                 screen.clear()
 
             def cancelarcheckin():
-                if user_cache["Horário"] != "":
-                            print(f"Olá, você tem um check-in confirmado no dia {user_cache['Horário']}.")
+                if user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim" and user_cache["Embarque na volta"] == "Sim":
+                    print(f"Olá, você tem um check-in IDA e VOLTA confirmados no dia {user_cache['Horário']}.")
+
+                    print("\nDeseja realizar alguma alteração?")
+
+                    print("\n[1] Cancelar apenas a IDA")
+                    print("[2] Cancelar apenas a VOLTA")
+                    print("[3] Cancelar AMBOS (Ida e Volta")
+                    print("[4] Não cancelar nada")
+
+
+                    escolha_cancelar = str(input("\nEscolha uma opção(1-4): "))
+
+                    if escolha_cancelar == "1":
+                        screen.clear()
+                        user_cache["Embarque na ida"] = "Não"
+                        print("\nA IDA foi cancelada, a VOLTA permanece agendada.")
+                        input("\nPressione ENTER para voltar...") 
+                    elif escolha_cancelar == "2":
+                        screen.clear()
+                        user_cache["Embarque na volta"] = "Não"
+                        print("\nA VOLTA foi cancelada, a IDA permanace agendada.")
+                        input("\nPressione ENTER para voltar...") 
+                    elif escolha_cancelar == "3":
+                        screen.clear()
+                        user_cache["Embarque na ida"] = "Não" 
+                        user_cache["Embarque na volta"] = "Não"
+                        user_cache["Horário"] = ""
+                        print("\nIDA e VOLTA foram cancelados")
+                        input("\nPressione ENTER para voltar...") 
+                    elif escolha_cancelar == "4":
+                        screen.clear()
+                        print("\nNenhuma alteração foi feita.")
+                        input("\nPressione ENTER para voltar...") 
+                        
+                elif user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim":
+                            print(f"Olá, você tem um check-in somente IDA confirmado no dia {user_cache['Horário']}.")
                             escolha = input("Deseja cancelar? [s/n]: ")
                             if escolha == "s":
                                 user_cache["Horário"] = ""
                                 print("Seu check-in foi cancelado com sucesso!")
-                                sleep(1.5)
+                                input("\nPressione ENTER para voltar...") 
                                 screen.clear()
                             elif escolha == "n":
                                 print("Certo! Voltando para o menu principal...")
-                                sleep(2)
+                                input("\nPressione ENTER para voltar...") 
                                 screen.clear()
 
-
+                elif user_cache["Horário"] != "" and user_cache["Embarque na volta"] == "Sim":
+                    print(f"Olá, você tem um check-in somente VOLTA confirmado no dia {user_cache['Horário']}.")
+                    escolha = input("Deseja cancelar? [s/n]: ")
+                    if escolha == "s":
+                     user_cache["Horário"] = ""
+                     print("Seu check-in foi cancelado com sucesso!")
+                     input("\nPressione ENTER para voltar...") 
+                     screen.clear()
+                    elif escolha == "n":
+                     print("Certo! Voltando para o menu principal...")
+                     input("\nPressione ENTER para voltar...") 
+                     screen.clear()
+                    else:
+                        print("\nOpção inválida.")
 
                 else:
                     print("Você não tem nenhum check-in confirmado para cancelar.")
@@ -403,7 +447,7 @@ Bem vindo ao painel do aluno
                 rota.close()
                 for rota in linhasrotas:
                     print(rota)
-                voltar = str(input("\nDigitet [1] para voltar: "))
+                voltar = str(input("\nDigite ENTER para voltar..."))
                 screen.clear()
 
             while True: 
