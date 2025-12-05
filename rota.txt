@@ -7,10 +7,10 @@ Av. Adno Musser (BR-367) em Porto Seguro
 True
 Banco do Brasil
 Av. dos Navegantes, 49-17, no Centro da cidade, com CEP 45810-123
-True
+False
 Centro de Cultura
 R. 15 de novembro, s/n - Pacatá, Porto Seguro - BA 45810-000
-sim
+False
 Drogasil
 Avenida dos trabalhadores, 1503 - Olhos d'agua, Porto seguro - BA, 45810-000
 False

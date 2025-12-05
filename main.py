@@ -575,39 +575,57 @@ Bem vindo ao painel do aluno
                     print()
                     with open("rota.txt") as arquivo:
                         arq = arquivo.read().splitlines()
-                    print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<25} | {'Endereço':<50}")
-                    print("-" * 105)
-                    for i in range(0, len(arq), 3):
-                        ponto = arq[i + 1].strip()
-                        end = arq[i + 2]
 
-                        if i + 2 < len(arq):
+                    while True:
+                        print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<30} | {'Endereço':<40}")
+                        print("-" * 130)
+                        
+                        for i in range(0, len(arq), 3):
+                            ponto = arq[i + 1].strip()
+                            end = arq[i + 2]
                             check = arq[i].strip()
-                        else:
-                            check = ""
-                        if check == "":
-                            print(f"{i // 3 + 1:<3} | {'/':<11} | {ponto:<25} | {end:<50}")
-                            newcheck = input("Check [True|False]: ").strip()
-                            print()
-                            arq[i] = newcheck
-                            with open("rota.txt", "w") as rota:
-                                rota.write("\n".join(arq))
-                        else:
-                            print()
-                            print(f"{i // 3 + 1:<3} | {check:<11} | {ponto:<25} | {end:<50}")
-                            if check == "False":
-                                mod = input("Deseja modificar o check [s/n]: ")
+                        
+                            print(f"{i // 3 + 1:<3} | {check:<11} | {ponto:<30} | {end:<40}")
+                            print("-" * 130)
 
-                                if mod == "s":
-                                    newcheck = input("Novo Check [True|False]: ").strip()
-                                    arq[i] = newcheck
+                        print()
+                        
+                        print("[1]: Dar Check\n[2]: Remover Check\n[3]: Sair")
+                        print("=" * 50)
+                        opcao = int(input("Escolha uma opção (1-3): "))
+                        if opcao == 1:
+                            print("=" * 50)
+                            check_novo = int(input("Digite o número do ponto para dar check: "))
+                            print("=" * 50)
+                            comfirm = input("Tem certeza? [s/n] ")
+                            if comfirm == "s":
+                                arq[(check_novo - 1) * 3] = "True"
+                                print("\nRota atualizada com sucesso")
+                        
+                        elif opcao == 2:
+                            print("=" * 50)
+                            check_novo = int(input("Digite o número do ponto para remover o check: "))
+                            print("=" * 50)
+                            comfirm = input("Tem certeza? [s/n] ")
+                            if comfirm == "s":
+                                arq[(check_novo - 1) * 3] = "False"
+                                print("\nRota atualizada com sucesso")
 
-                    with open("rota.txt", "w") as rota:
-                        rota.write("\n".join(arq))
-                    print("\nRota atualizada com sucesso")
-                    opc = int(input("\nDigite [1] para voltar:  "))
-                    sleep(0.5)
-                    screen.clear()
+                        elif opcao == 3:
+                            sleep(0.5)
+                            screen.clear()
+                            break
+                        
+                        else:
+                            print("Erro! Tente novamente. ): ")
+
+                        with open("rota.txt", "w") as rota:
+                            rota.write("\n".join(arq))
+                        
+                        voltar = str(input("\nDigite [1] para voltar: "))
+                        sleep(0.5)
+                        screen.clear()
+
                 elif opc == 3:
                     while True:
                         screen.clear()
