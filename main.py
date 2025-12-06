@@ -210,7 +210,7 @@ while True:
 
 [1]: Criar Aviso
 [2]: Visualizar Avisos
-[3]: Voltar
+[0]: Voltar
 """
                             )
                         opc = int(input("opc = "))
@@ -224,7 +224,7 @@ while True:
                             for aviso in linhasavisos:
                                 print(aviso)
                             voltar = str(input("\nDigite [1] para voltar: "))
-                        elif opc == 3:
+                        elif opc == 0:
                             break
                         else:
                             screen.clear()
