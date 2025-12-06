@@ -54,7 +54,7 @@ while True:
             print("Insira um email válido")
         sleep(2)
         screen.clear()
-    elif opc == 3:
+    elif opc == 0:
         print("Saindo do sistema... Até logo!")
         sys.exit()
         
