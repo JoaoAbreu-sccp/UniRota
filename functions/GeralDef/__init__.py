@@ -469,6 +469,7 @@ def cadastrar_universidade():
 
 
 def listar_universidades():
+    screen.clear()
     lista_universidades = carregar_universidades()
 
     print('''\n---------------------------
@@ -667,7 +668,7 @@ def confirmarpartida(pontoembarque):
     
     user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] # -1 para ajustar o índice
     
-    ida = input(f"Deseja confirmar o embarque na IDA no ponto {user_cache["Ponto de embarque"]}? [s/n]: ").lower()
+    ida = input(f"Deseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
     if ida.startswith('s'):
         user_cache["Embarque na ida"] = "Sim"
     else:
@@ -694,7 +695,7 @@ def confirmarpartida(pontoembarque):
     
     user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
     
-    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache["Ponto de desembarque"]}? [s/n]: ").lower()
+    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
     if volta.startswith('s'):
         user_cache["Embarque na volta"] = "Sim"
     else:

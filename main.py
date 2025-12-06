@@ -19,7 +19,7 @@ while True:
     screen.menu()
     while True:
         try:
-            opc = int(input("\nEscolha uma opção(1-3): "))
+            opc = int(input("\nEscolha uma opção: "))
             if 0 <= opc <= 6:
                 break
             else:
@@ -319,7 +319,7 @@ Bem vindo ao painel do aluno
 
                 user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] 
 
-                ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache["Ponto de embarque"]}? [s/n]: ").lower()
+                ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
                 if ida.startswith('s'):
                     user_cache["Embarque na ida"] = "Sim"
                 else:
@@ -346,7 +346,7 @@ Bem vindo ao painel do aluno
 
                 user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
 
-                volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache["Ponto de desembarque"]}? [s/n]: ").lower()
+                volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
                 if volta.startswith('s'):
                     user_cache["Embarque na volta"] = "Sim"
                 else:
