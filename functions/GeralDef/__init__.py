@@ -106,7 +106,7 @@ def cadastrar_universidade():
 
     salvar_universidades(lista_universidades)
 
-    print(f"\n:Universidade '{nome}' cadastrada com sucesso!")
+    print(f"\nUniversidade '{nome}' cadastrada com sucesso!")
     sleep(2)
 
 
@@ -119,12 +119,11 @@ def listar_universidades():
 
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
-        input("\nPressione ENTER para continuar...")
         return
     for i, u in enumerate(lista_universidades, 1):
         print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
+        input("\nPressione ENTER para VOLTAR...")
 
-    input("\nPressione ENTER para continuar...")
 def editar_universidade():
     lista_universidades = carregar_universidades()
 
@@ -133,18 +132,20 @@ def editar_universidade():
         sleep(2)
         return
 
-    listar_universidades()
+    for i, u in enumerate(lista_universidades, 1):
+        print(f"{"---"*}")
+        print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
 
-    entrada = input("\nDigite o número da universidade: ").strip()
+    entrada = input("\nDigite o número da universidade para EDITAR: ").strip()
 
     if not entrada.isdigit():
-        print("Entrada inválida.")
+        print("Entrada inválida!")
         sleep(2)
         return
 
     i = int(entrada) - 1
     if not (0 <= i < len(lista_universidades)):
-        print("Número inválido.")
+        print("Número inválido!")
         sleep(2)
         return
 
@@ -166,22 +167,23 @@ def editar_universidade():
 def excluir_universidade():
     lista_universidades = carregar_universidades()
     if not lista_universidades:
-        print("Nenhuma universidade cadastrada.")
+        print("Nenhuma Universidade cadastrada.")
         sleep(2)
         return
 
-    listar_universidades()
-
-    entrada = input("\nDigite o número para excluir: ").strip()
+    for i, u in enumerate(lista_universidades, 1):
+        print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
+        
+    entrada = input("\nDigite o número da Universidade para EXCLUIR: ").strip()
     if not entrada.isdigit():
-        print("Entrada inválida.")
+        print("Entrada inválida!")
         sleep(2)
         return
 
     i = int(entrada) - 1
 
     if not (0 <= i < len(lista_universidades)):
-        print("Número inválido.")
+        print("Número inválido!")
         sleep(2)
         return
 
