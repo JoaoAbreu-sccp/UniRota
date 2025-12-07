@@ -694,7 +694,7 @@ Deseja realizar o check-in?
                     screen.clear()
                     print("Rota")
                     print()
-                    with open("rota.txt") as arquivo:
+                    with open("rota.txt","r", encoding="utf-8") as arquivo:
                         arq = arquivo.read().splitlines()
 
                     while True:
@@ -711,41 +711,57 @@ Deseja realizar o check-in?
 
                         print()
                         
-                        print("[1]: Dar Check\n[2]: Remover Check\n[3]: Sair")
+                        print("[1]: Dar Check ✅\n[2]: Remover Check ❌\n[3]: Sair 🚪")
                         print("=" * 50)
-                        opcao = int(input("Escolha uma opção (1-3): "))
-                        if opcao == 1:
-                            print("=" * 50)
-                            check_novo = int(input("Digite o número do ponto para dar check: "))
-                            print("=" * 50)
-                            comfirm = input("Tem certeza? [s/n] ")
-                            if comfirm == "s":
-                                arq[(check_novo - 1) * 3] = "True"
-                                print("\nRota atualizada com sucesso")
-                        
-                        elif opcao == 2:
-                            print("=" * 50)
-                            check_novo = int(input("Digite o número do ponto para remover o check: "))
-                            print("=" * 50)
-                            comfirm = input("Tem certeza? [s/n] ")
-                            if comfirm == "s":
-                                arq[(check_novo - 1) * 3] = "False"
-                                print("\nRota atualizada com sucesso")
-
-                        elif opcao == 3:
+                        try:
+                            opcao = int(input("Escolha uma opção (1-3): "))
+                        except ValueError:
+                            print("Entrada inválida. Digite um número inteiro")
                             sleep(0.5)
                             screen.clear()
-                            break
-                        
                         else:
-                            print("Erro! Tente novamente. ): ")
+                            if opcao == 1:
+                                print("=" * 50)
+                                try:
+                                    check_novo = int(input("Digite o número do ponto para dar check: "))
+                                except ValueError:
+                                    print("Digite um número inteiro válido.")
+                                else:
+                                    print("=" * 50)
+                                    comfirm = input("Tem certeza? [s/n] ")
+                                    if comfirm == "s":
+                                        arq[(check_novo - 1) * 3] = "✅"
+                                        print("\nRota atualizada com sucesso")
+                                    
+                            
+                            elif opcao == 2:
+                                print("=" * 50)
+                                try:
+                                    check_novo = int(input("Digite o número do ponto para remover o check: "))
+                                    print("=" * 50)
+                                except ValueError:
+                                    print("Entrada inválida. Digite um número inteiro")
+                                else:
+                                    comfirm = input("Tem certeza? [s/n] ")
+                                    if comfirm == "s":
+                                        arq[(check_novo - 1) * 3] = "❌"
+                                        print("\nRota atualizada com sucesso")
+                                        
 
-                        with open("rota.txt", "w") as rota:
-                            rota.write("\n".join(arq))
+                            elif opcao == 3:
+                                sleep(0.5)
+                                screen.clear()
+                                break
+                            
+                            else:
+                                print("Opção inválida! Tente novamente.")
+
+                            with open("rota.txt", "w", encoding="utf-8") as rota:
+                                rota.write("\n".join(arq))
                         
-                        voltar = str(input("\nDigite [1] para voltar: "))
-                        sleep(0.5)
-                        screen.clear()
+                            voltar = str(input("\nDigite [1] para voltar: "))
+                            sleep(0.5)
+                            screen.clear()
 
                 elif opc == 3:
                     while True:
