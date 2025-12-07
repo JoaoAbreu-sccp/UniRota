@@ -133,7 +133,7 @@ def editar_universidade():
         return
 
     for i, u in enumerate(lista_universidades, 1):
-        print(f"{"---"*}")
+        print(f"{"---"*35}")
         print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
 
     entrada = input("\nDigite o número da universidade para EDITAR: ").strip()
