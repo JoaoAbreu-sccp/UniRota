@@ -792,6 +792,490 @@ def confirmarpartida(pontoembarque):
     
     input("\nPressione ENTER para voltar à página inicial...")
     clear()
+
+
+
+def cabecalho(texto="página inicial"):
+                print(f"------------------------------{texto}------------------------------")
+                print()
+
+def paginainicial():
+                print('''
+Bem vindo ao painel do aluno
+
+[1]: Confirmar Check-in
+[2]: Cancelar Check-in          
+[3]: Dados pessoais
+[4]: Acompanhar rota
+[5]: Visualizar Avisos          
+[0]: Sair      
+                      ''')
+
+def confirmarpartida():
+                
+                from datetime import datetime
+
+                pontoembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
+                pontodesembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
+
+                user_cache = {
+                "Ponto de embarque": "",
+                "Embarque na ida": "Não", 
+                "Ponto de desembarque": "",
+                "Embarque na volta": "Não",
+                "Horário": "", 
+            }
+                
+                dados_aluno = {
+                "Nome": "Eduardo Moreira Santos Barreto",
+                "Data de nascimento": "01/04/2005",
+                "E-mail": "202511240025@ifba.edu.br",
+                "Faculdade":"Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)",
+                "CPF": "000.000.000-00",
+                "RG": "0000000-00",
+                "Telefone": "+55 (73) 9 4002-8922"
+            }
+
+
+
+
+
+
+                screen.clear()
+                cabecalho("CONFIRMAR PARTIDA")
+                print('''
+Deseja realizar o check-in?
+
+[1]: Confirmar Check-in somente IDA
+[2]: Confirmar Check-in somente VOLTA      
+[3]: Confirmar Check-in IDA e VOLTA
+[0]: Voltar                      
+                      ''')
+
+                escolha_checkin = str(input("\nEscolha uma opção: ")) 
+
+                if escolha_checkin == "3":
+                    print("\nDefina o ponto de EMBARQUE (IDA): ")
+                    for i, pontos in enumerate(pontoembarque):
+                        print(f"\n[{i+1}] - {pontos}") 
+
+                    escolha_ida = 0
+
+                    while not (1 <= escolha_ida <= len(pontoembarque)):
+                        try:
+                            escolha_ida = int(input(f'\nEscolha o ponto de embarque (1-{len(pontoembarque)}): '))
+                            if not (1 <= escolha_ida <= len(pontoembarque)):
+                                print("Opção inválida. Tente novamente.")
+                        except ValueError:
+                            print("Entrada inválida. Digite um número.")
+
+
+                    user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] 
+
+                    ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
+                    if ida.startswith('s'):
+                        user_cache["Embarque na ida"] = "Sim"
+                    else:
+                        user_cache["Embarque na ida"] = "Não"
+
+                    screen.clear()
+                    cabecalho("CONFIRMAR PARTIDA")
+
+
+                    print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
+                    for i, pontos in enumerate(pontodesembarque):
+                        print(f"\n[{i+1}] - {pontos}")
+
+                    escolha_volta = 0
+
+                    while not (1 <= escolha_volta <= len(pontodesembarque)):
+                        try:
+                            escolha_volta = int(input(f'\nEscolha o ponto de desembarque (1-{len(pontodesembarque)}): '))
+                            if not (1 <= escolha_volta <= len(pontodesembarque)):
+                                print("Opção inválida. Tente novamente.")
+                        except ValueError:
+                            print("Entrada inválida. Digite um número.")
+
+
+                    user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
+
+                    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
+                    if volta.startswith('s'):
+                        user_cache["Embarque na volta"] = "Sim"
+                    else:
+                        user_cache["Embarque na volta"] = "Não"
+                    screen.clear()
+
+
+
+                    if user_cache["Embarque na ida"] == "Não" and user_cache["Embarque na volta"] == "Não":
+                        cabecalho("CHECK-IN CANCELADO")
+                        print("Nenhum registro foi salvo.")
+
+                    else:
+                        checkin = datetime.now()
+                        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
+
+
+                        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
+
+                        print(f"Check-in realizado no dia {checkin_formatado}")
+
+                        if user_cache["Embarque na ida"] == "Sim":
+                            print(f"IDA: CONFIRMADA✅")
+                            print(f"Ponto de embarque: {user_cache['Ponto de embarque']}\n")
+                            user_cache["Horário"] = checkin_formatado
+                        else:
+                            print(f"STATUS IDA: CANCELADA❌\n")
+
+
+                        if user_cache["Embarque na volta"] == "Sim":
+                            print(f"VOLTA: CONFIRMADA✅")
+                            print(f"Ponto de desembarque: {user_cache['Ponto de desembarque']}\n")
+                            user_cache["Horário"] = checkin_formatado
+                        else:
+                            print(f"STATUS VOLTA: CANCELADA❌\n")
+
+
+                        input("\nPressione ENTER para voltar à página inicial...")
+                        screen.clear()
+
+                elif escolha_checkin == "1":
+                    screen.clear()
+                    cabecalho("CONFIRMAR PARTIDA (SOMENTE IDA)")
+
+                    print("\nDefina o ponto de EMBARQUE (IDA): ")
+                    for i, pontos in enumerate(pontoembarque):
+                        print(f"\n[{i+1}] - {pontos}") 
+
+                    escolha_ida = 0
+
+                    while not (1 <= escolha_ida <= len(pontoembarque)):
+                        try:
+                            escolha_ida = int(input(f'\nEscolha o ponto de embarque (1-{len(pontoembarque)}): '))
+                            if not (1 <= escolha_ida <= len(pontoembarque)):
+                                print("Opção inválida. Tente novamente.")
+                        except ValueError:
+                            print("Entrada inválida. Digite um número.")
+
+
+                    user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] 
+
+                    ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
+                    if ida.startswith('s'):
+                        user_cache["Embarque na ida"] = "Sim"
+                    else:
+                        user_cache["Embarque na ida"] = "Não"
+                    
+                    
+                    user_cache["Embarque na volta"] = "Não"
+                    user_cache["Ponto de desembarque"] = "" 
+
+                    screen.clear()
+
+                    if user_cache["Embarque na ida"] == "Não":
+                        cabecalho("CHECK-IN CANCELADO")
+                        print("Nenhum registro foi salvo.")
+
+                    else:
+                        checkin = datetime.now()
+                        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
+
+
+                        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
+
+                        print(f"Check-in realizado no dia {checkin_formatado}")
+                        print(f"IDA: CONFIRMADA✅")
+                        print(f"Ponto de embarque: {user_cache['Ponto de embarque']}\n")
+                        user_cache["Horário"] = checkin_formatado
+                        print(f"STATUS VOLTA: NÃO AGENDADA/CANCELADA❌\n")
+
+                        input("\nPressione ENTER para voltar à página inicial...")
+                        screen.clear()
+                        
+                elif escolha_checkin == "2":
+                    screen.clear()
+                    cabecalho("CONFIRMAR PARTIDA (SOMENTE VOLTA)")
+
+                    print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
+                    for i, pontos in enumerate(pontodesembarque):
+                        print(f"\n[{i+1}] - {pontos}")
+
+                    escolha_volta = 0
+
+                    while not (1 <= escolha_volta <= len(pontodesembarque)):
+                        try:
+                            escolha_volta = int(input(f'\nEscolha o ponto de desembarque (1-{len(pontodesembarque)}): '))
+                            if not (1 <= escolha_volta <= len(pontodesembarque)):
+                                print("Opção inválida. Tente novamente.")
+                        except ValueError:
+                            print("Entrada inválida. Digite um número.")
+
+
+                    user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
+
+                    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
+                    if volta.startswith('s'):
+                        user_cache["Embarque na volta"] = "Sim"
+                    else:
+                        user_cache["Embarque na volta"] = "Não"
+                    
+                    
+                    user_cache["Embarque na ida"] = "Não"
+                    user_cache["Ponto de embarque"] = "" 
+
+                    screen.clear()
+
+                    if user_cache["Embarque na volta"] == "Não":
+                        cabecalho("CHECK-IN CANCELADO")
+                        print("Nenhum registro foi salvo.")
+
+                    else:
+                        checkin = datetime.now()
+                        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
+
+
+                        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
+
+                        print(f"Check-in realizado no dia {checkin_formatado}")
+                        print(f"STATUS IDA: NÃO AGENDADA/CANCELADA❌\n")
+                        print(f"VOLTA: CONFIRMADA✅")
+                        print(f"Ponto de desembarque: {user_cache['Ponto de desembarque']}\n")
+                        user_cache["Horário"] = checkin_formatado
+
+
+                        input("\nPressione ENTER para voltar à página inicial...")
+                        screen.clear()
+                
+
+                    escrever_lista(pontoembarque,"/unirota/UniRota/alunx/pontoembarque.txt" , separador="\n")
+                    escrever_dicionario(user_cache,"/unirota/UniRota/alunx/embarque.txt")
+                    escrever_dicionario(dados_aluno,"/unirota/UniRota/alunx/dados.txt")
+                elif escolha_checkin == 0:
+                    screen.clear()
+                    paginainicial()
+                    
+
+def dadospessoais():
+                dados_aluno=ler_txt_dicionario("/unirota/UniRota/alunx/dados.txt",separador=":")
+                screen.clear()
+                cabecalho("DADOS PESSOAIS")
+                for chave, valor in dados_aluno.items():
+                    print(f" {chave}: {valor}")
+                print()
+                input("\nPressione ENTER para voltar à página inicial...")
+                screen.clear()
+
+def avisos():
+                import os
+                pasta_do_aviso = os.path.dirname(os.path.abspath(__file__))
+                caminho_arquivo = os.path.join(pasta_do_aviso, "avisos.txt")
+                avisos = open(caminho_arquivo, "r", encoding="utf-8")
+                linhasavisos = avisos.read().splitlines()
+                avisos.close()         
+                for aviso in linhasavisos:
+                    print(aviso)
+                voltar = input("\nPressione ENTER para voltar...") 
+                screen.clear()
+
+def cancelarcheckin():
+                user_cache=ler_txt_dicionario("/unirota/UniRota/alunx/embarque.txt")
+                if user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim" and user_cache["Embarque na volta"] == "Sim":
+                    print(f"Olá, você tem um check-in IDA e VOLTA confirmados no dia {user_cache['Horário']}.")
+
+                    print("\nDeseja realizar alguma alteração?")
+
+                    print("\n[1] Cancelar apenas a IDA")
+                    print("[2] Cancelar apenas a VOLTA")
+                    print("[3] Cancelar AMBOS Ida e Volta")
+                    print("[0] Voltar")
+
+
+                    escolha_cancelar = str(input("\nEscolha uma opção(1-4): "))
+
+                    if escolha_cancelar == "1":
+                        screen.clear()
+                        user_cache["Embarque na ida"] = "Não"
+                        print("\nA IDA foi cancelada, a VOLTA permanece agendada.")
+                        input("\nPressione ENTER para voltar...") 
+                    elif escolha_cancelar == "2":
+                        screen.clear()
+                        user_cache["Embarque na volta"] = "Não"
+                        print("\nA VOLTA foi cancelada, a IDA permanace agendada.")
+                        input("\nPressione ENTER para voltar...") 
+                    elif escolha_cancelar == "3":
+                        screen.clear()
+                        user_cache["Embarque na ida"] = "Não" 
+                        user_cache["Embarque na volta"] = "Não"
+                        user_cache["Horário"] = ""
+                        print("\nIDA e VOLTA foram cancelados")
+                        input("\nPressione ENTER para voltar...") 
+                    elif escolha_cancelar == "0":
+                        screen.clear()
+                        print("\nNenhuma alteração foi feita.")
+                        input("\nPressione ENTER para voltar...") 
+                        
+                elif user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim":
+                            print(f"Olá, você tem um check-in somente IDA confirmado no dia {user_cache['Horário']}.")
+                            escolha = input("Deseja cancelar? [s/n]: ")
+                            if escolha == "s":
+                                user_cache["Horário"] = ""
+                                print("Seu check-in foi cancelado com sucesso!")
+                                input("\nPressione ENTER para voltar...") 
+                                screen.clear()
+                            elif escolha == "n":
+                                print("Certo! Voltando para o menu principal...")
+                                input("\nPressione ENTER para voltar...") 
+                                screen.clear()
+
+                elif user_cache["Horário"] != "" and user_cache["Embarque na volta"] == "Sim":
+                    print(f"Olá, você tem um check-in somente VOLTA confirmado no dia {user_cache['Horário']}.")
+                    escolha = input("Deseja cancelar? [s/n]: ")
+                    if escolha == "s":
+                     user_cache["Horário"] = ""
+                     print("Seu check-in foi cancelado com sucesso!")
+                     input("\nPressione ENTER para voltar...") 
+                     screen.clear()
+                    elif escolha == "n":
+                     print("Certo! Voltando para o menu principal...")
+                     input("\nPressione ENTER para voltar...") 
+                     screen.clear()
+                    else:
+                        print("\nOpção inválida.")
+
+                else:
+                    print("Você não tem nenhum check-in confirmado para cancelar.")
+                    input("\nPressione ENTER para voltar...")  
+                    screen.clear()
+
+def acompanharota():
+                import os
+                pasta_da_rota = os.path.dirname(os.path.abspath(__file__))
+                caminho_rota = os.path.join(pasta_da_rota, "rota.txt")
+                rota = open(caminho_rota, "r", encoding="utf-8")
+                linhasrotas = rota.read().splitlines()
+                rota.close()
+                for rota in linhasrotas:
+                    print(rota)
+                voltar = str(input("\nDigite ENTER para voltar..."))
+                screen.clear()
+
+                while True: 
+                    paginainicial()
+                    try:
+
+                        opcao01 = int(input("Insira a opção que deseja: "))
+
+                        if opcao01 == 1:
+                            screen.clear()
+                            confirmarpartida()
+
+                        elif opcao01 == 2:
+                            screen.clear()
+                            cabecalho("CANCELAR CHECK-IN")
+                            cancelarcheckin()
+
+
+                        elif opcao01 == 3:
+                            screen.clear()
+                            dadospessoais()
+                            cabecalho("DADOS PESSOAIS")
+
+                        elif opcao01 == 4:
+                            screen.clear()
+                            cabecalho("ACOMPANHAR ROTA")
+                            acompanharota()
+                            sleep(2)
+                            screen.clear()
+
+                        elif opcao01 == 5:
+                            screen.clear()
+                            cabecalho("AVISOS")
+                            avisos()
+
+                        elif opcao01 == 0:
+                            print("Saindo do sistema... Até logo.")
+                            sleep(1)
+                            screen.clear()
+                            break
+                        
+                        else:
+                            print("Opção inválida. Tente novamente.")
+                            sleep(1)
+                            screen.clear()
+
+                    except ValueError:
+                        print("Entrada inválida. Por favor, digite um número (1-4).")
+                        sleep(1)
+                        screen.clear()
+
+def ler_txt_simples(caminho):
+    """Retorna uma lista de strings, sendo cada item uma linha"""
+    linhas = []
+    try:
+        with open(caminho, 'r') as arquivo:
+            for linha in arquivo:
+                linhas.append(linha)
+    except FileNotFoundError:
+        print("Arquivo não encontrado.")
+        
+    return linhas
     
+def ler_txt_dicionario(caminho, separador=":"):
+    """Transforma cada linha em um item de um dicionario, depois retorna o dicionario de todos os itens"""
+    dicionario = {}
+    try:
+        with open(caminho, 'r') as arquivo:
+            for linha in arquivo:
+                partes = linha.split(separador)
+                if len(partes) != 2:
+                    print(f"Linha invalida \"{linha}\"")
+                else:
+                    dicionario[partes[0]] = partes[1]
+    except FileNotFoundError:
+        print("Arquivo não encontrado.")
+        
+    return dicionario
+
+def escrever_lista(lista, caminho, separador="\n"):
+    """Escreve a lista em um arquivo de texto"""
+    import os
+
+    # Garante que o diretório destino existe (se houver um diretório no caminho)
+    pasta = os.path.dirname(caminho) or "."
+    os.makedirs(pasta, exist_ok=True)
+
+    # Converte itens para string e escreve usando o separador fornecido
+    with open(caminho, "w", encoding="utf-8") as arquivo:
+        arquivo.write(separador.join(str(item) for item in lista))
+    
+def escrever_dicionario(dicionario, caminho, separador_dic=";", separador_lista="\n"):
+    """Escreve o dicionario em um arquivo de texto"""
+    # Transforma o dicionário em uma lista
+    lista = [f"{chave}{separador_dic}{valor}" for chave, valor in dicionario.items()]
+    # Escreve essa lista
+    escrever_lista(lista, caminho, separador=separador_lista)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #motoristas
 
