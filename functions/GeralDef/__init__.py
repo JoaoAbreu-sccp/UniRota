@@ -62,6 +62,35 @@ def CreateNotice():
         print("Aviso salvo com sucesso")
 
 
+def visualizar_usuários(tipo_de_usuario):
+    with open("logins.txt", "r", encoding="utf-8") as f:
+        linhas = f.read().splitlines()
+        linhas_limpa = [linha for linha in linhas if linha != ""]
+        alunos = []
+        motoristas = []
+        
+    i = 0
+    while i < len(linhas):
+
+        if linhas[i] == "aluno":
+            alunos.append(linhas[i+1 : i+10])
+            i += 10
+
+        elif linhas[i] == "motorista":
+            motoristas.append(linhas[i+1 : i+9])
+            i += 9
+        
+        else:
+            i += 1
+        
+    if tipo_de_usuario == "alunos":
+        for c, dados in enumerate(alunos):
+            print(f"{c+1}: {dados[2]}")
+
+    elif tipo_de_usuario == "motoristas":
+        for c, dados in enumerate(motoristas):
+            print(f"{c+1}: {dados[2]}")
+
 def Editar_usuário(tipo_de_usuario_editado):
     alteracao_aluno = False
     alteracao_motoristas = False
@@ -75,7 +104,7 @@ def Editar_usuário(tipo_de_usuario_editado):
 
         for c, linha in enumerate(linhas_limpa):
             if linha == "aluno":
-                alunos.append(linhas_limpa[c : c + 11])
+                alunos.append(linhas_limpa[c : c + 9])
             if linha == "motorista":
                 motoristas.append(linhas_limpa[c : c + 8])
 
@@ -88,47 +117,52 @@ def Editar_usuário(tipo_de_usuario_editado):
             nome = aluno[3]
             print(f"[{i+1}] - {nome}")
 
-        indice = int(input("\nDigite o número do aluno que deseja editar: ")) - 1
-        aluno = alunos[indice]
+        indice = input("\nDigite o número do aluno que deseja editar Digite [Sair] para cancelar: ")
+        if indice.lower()=="sair":
+            return 0
+        if indice.isdigit():
+            aluno = alunos[int(indice)-1]
 
-        cpf_formatado = f"{aluno[7][:3]}.{aluno[7][3:6]}.{aluno[7][6:9]}-{aluno[7][9:]}"
-        telefone_formatado = f"({aluno[8][:2]}){aluno[8][2:7]}-{aluno[8][7:]}"
-        data_formatada = f"{aluno[9][:2]}/{aluno[9][2:4]}/{aluno[9][4:]}"
+            cpf_formatado = f"{aluno[5][:3]}.{aluno[5][3:6]}.{aluno[5][6:9]}-{aluno[5][9:]}"
+            telefone_formatado = f"({aluno[6][:2]}){aluno[6][2:7]}-{aluno[6][7:]}"
+            data_formatada = f"{aluno[7][:2]}/{aluno[7][2:4]}/{aluno[7][4:]}"
 
-        print("\nInformações atuais:")
-        print(
+            print("\nInformações atuais:")
+            print(
             f"""1 - Nome: {aluno[3]}
 2 - Instituição: {aluno[4]}
-3 - Ponto de embarque: {aluno[5]}
-4 - Ponto de desembarque: {aluno[6]}
-5 - Cpf: {cpf_formatado}
-6 - Telefone: {telefone_formatado}
-7 - Data de nascimento {data_formatada}"""
+3 - Cpf: {cpf_formatado}
+4 - Telefone: {telefone_formatado}
+5 - Data de nascimento {data_formatada}"""
         )
 
-        campo = 0
-        lista = [
+            campo = 0
+            lista = [
             "nome",
             "Instituição",
-            "Ponto de Embarque",
-            "Ponto de Desembarque",
             "Cpf",
             "Telefone",
             "Data de nascimento",
         ]
-        while True:
-            try:
-                campo = int(input("\nQual campo deseja editar (1-7)? "))
-                if 1 <= campo <= 7:
-                    novo_valor = input(f"Digite o novo valor para {aluno[campo-1]}: ")
-                    aluno[campo + 2] = novo_valor
-                    alunos[indice] = aluno
-                    alteracao_aluno = True
+        
+            while True:
+                campo = input("\nQual campo deseja editar (1-5)? Digite [Sair] para cancelar: ")
+                if campo.lower() == "sair":
                     break
+
+                if campo.isdigit():
+                    campo = int(campo)
+                    if 1 <= campo <= 5:
+                        novo_valor = input(f"Digite o novo valor para {aluno[campo-1]}: ")
+                        aluno[campo + 2] = novo_valor
+                        alunos[indice] = aluno
+                        alteracao_aluno = True
+                        break
+                    else:
+                        print("Por favor insira um número entre 1 e 5!")
                 else:
-                    print("Por favor insira um número entre 1 e 7!")
-            except ValueError:
-                print("Por favor digite um número inteiro válido!")
+                    print("Entrada inválida! Digite um número ou 'sair'.")
+
 
     if tipo_de_usuario_editado == "motorista":
         if not motoristas:
@@ -139,63 +173,62 @@ def Editar_usuário(tipo_de_usuario_editado):
             nome = motorista[3]
             print(f"[{i+1}] - {nome}")
 
-        indice = int(input("\nDigite o número do motorista que deseja editar: ")) - 1
-        motorista = motoristas[indice]
+        indice = (input("\nDigite o número do motorista que deseja editar: [Sair] para cancelar: "))
+        if indice.lower()=="sair":
+            return 0
+        
+        if indice.isdigit():
+            motorista = motoristas[int(indice)-1]
 
-        cpf_formatado = f"{motorista[4][:3]}.{motorista[4][3:6]}.{motorista[4][6:9]}-{motorista[4][9:]}"
-        telefone_formatado = (
-            f"({motorista[5][:2]}){motorista[5][2:7]}-{motorista[5][7:]}"
-        )
-        data_formatada = f"{motorista[6][:2]}/{motorista[6][2:4]}/{motorista[6][4:]}"
+            cpf_formatado = f"{motorista[4][:3]}.{motorista[4][3:6]}.{motorista[4][6:9]}-{motorista[4][9:]}"
+            telefone_formatado = (
+                f"({motorista[5][:2]}){motorista[5][2:7]}-{motorista[5][7:]}"
+            )
+            data_formatada = f"{motorista[6][:2]}/{motorista[6][2:4]}/{motorista[6][4:]}"
 
-        print("\nInformações atuais:")
-        print(
-            f"""1 - Nome: {motorista[3]}
-2 - Cpf: {cpf_formatado}
-3 - Telefone: {telefone_formatado}
-4 - Data de Nascimento {data_formatada}"""
-        )
+            print("\nInformações atuais:")
+            print(
+                f"""1 - Nome: {motorista[3]}
+    2 - Cpf: {cpf_formatado}
+    3 - Telefone: {telefone_formatado}
+    4 - Data de Nascimento {data_formatada}"""
+            )
 
-        while True:
-            try:
-                campo = int(input("\nQual campo deseja editar (1-4)? "))
+            while True:
+                campo = (input("\nQual campo deseja editar (1-4)? [Sair] para cancelar: "))
 
-                if 1 <= campo <= 4:
-                    novo_valor = input(
-                        f"Digite o novo valor para {motorista[campo-1]}: "
-                    )
+                if campo.lower()=="sair":
+                    break
+
+                if 1 <= int(campo) <= 4:
+                    novo_valor = input(f"Digite o novo valor para {motorista[campo-1]}: ")
                     motorista[campo + 2] = novo_valor
                     motoristas[indice] = motorista
                     alteracao_motoristas = True
                     break
+                
                 else:
                     print("Por favor insira um número entre 1 e 4!")
-            except ValueError:
-                print("Por favor digite um número inteiro válido!")
 
     if alteracao_aluno:
         inicio = linhas_limpa.index(aluno[0])
         linhas_limpa[inicio : inicio + len(aluno)] = aluno
-
         with open("logins.txt", "w", encoding="utf-8") as f:
             for i, linha in enumerate(linhas_limpa):
                 f.write(linha + "\n")
                 if linha == "-":
                     f.write("\n")
-
             print("\nInformação atualizada com sucesso!")
         sleep(3)
 
     if alteracao_motoristas:
         inicio = linhas_limpa.index(motorista[0])
         linhas_limpa[inicio : inicio + len(motorista)] = motorista
-
         with open("logins.txt", "w", encoding="utf-8") as f:
             for i, linha in enumerate(linhas_limpa):
                 f.write(linha + "\n")
                 if linha == "-":
                     f.write("\n")
-
         print("\nInformação atualizada com sucesso!")
         sleep(3)
 
@@ -214,8 +247,6 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
     lista = [
         "nome",
         "Instituição",
-        "Ponto de Embarque",
-        "Ponto de Desembarque",
         "Cpf",
         "Telefone",
         "Data de nascimento",
@@ -235,10 +266,6 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         novo_usuario.append(nome)
         Instituição = input("Digite a instituição do aluno: ")
         novo_usuario.append(Instituição)
-        Ponto_de_Embarque = input("Digite o ponto de embarque do aluno: ")
-        novo_usuario.append(Ponto_de_Embarque)
-        Ponto_de_Desembarque = input("Digite o ponto de desembarque do aluno: ")
-        novo_usuario.append(Ponto_de_Desembarque)
         Cpf = input("Digite o cpf do aluno: ")
         novo_usuario.append(Cpf)
         Telefone = input("Digite o telefone do aluno: ")
@@ -246,13 +273,23 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         Data_de_nascimento = input("Digte a data de nascimento do aluno: ")
         novo_usuario.append(Data_de_nascimento)
         novo_usuario.append("-")
-        adicao_aluno = True
+        
+        confirma_adicao=input("Confirmar adição [s/n]: ")
+        while True:
+            if confirma_adicao=="s":
+                adicao_aluno = True
+            elif confirma_adicao=="n":
+                adicao_aluno = False
+                break
+            else:
+                print("Por favor digite [s] ou [n]")
+
 
     elif tipo_de_usuário_adicionado == "motorista":
 
         novo_usuario = []
         novo_usuario.append("motorista")
-        email = input("Digite o email do motorista")
+        email = input("Digite o email do motorista: ")
         novo_usuario.append(email)
         novo_usuario.append("moto123")
         nome = input("Digite o nome do motorista: ")
@@ -264,7 +301,17 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         Data_de_nascimento("Digite a da nascimento do motorista: ")
         novo_usuario.append(Data_de_nascimento)
         novo_usuario.append("-")
-        adicao_motorista = True
+        
+        confirma_adicao=input("Confirmar adição [s/n]: ")
+        while True:
+            if confirma_adicao=="s":
+                adicao_motorista = True
+            elif confirma_adicao=="n":
+                adicao_motorista = False
+                break
+            else:
+                print("Por favor digite [s] ou [n]")
+
 
     linhas_limpa.extend(novo_usuario)
 
@@ -338,16 +385,14 @@ def Sua_conta(tipo_de_login):
         linhas = [linha.strip() for linha in f.readlines()]
 
         indície = linhas.index(tipo_de_login)
-        print(
-            f"""
+        print(f"""
     Login {tipo_de_login}
 
 Nome: {linhas[indície+3]}
 Data de Nascimento: {linhas[indície+6]}
 Cpf: {linhas[indície+4]}
 Telefone: {linhas[indície+5]}
-              """
-        )
+              """)
         while True:
             opc = int(
                 input(
@@ -355,9 +400,7 @@ Telefone: {linhas[indície+5]}
 [1] Alterar Telefone
 [0] Voltar: 
                     
-Digite: """
-                )
-            )
+Digite: """))
 
             if opc == 1:
                 print("O código de acesso foi enviado para seu número")
