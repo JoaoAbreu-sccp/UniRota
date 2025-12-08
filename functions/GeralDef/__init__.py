@@ -339,7 +339,7 @@ def Excluir_usuario(tipo_de_usuário_excluido):
 
         for c, linha in enumerate(linhas_limpa):
             if linha == "aluno":
-                alunos.append(linhas_limpa[c : c + 11])
+                alunos.append(linhas_limpa[c : c + 9])
             if linha == "motorista":
                 motoristas.append(linhas_limpa[c : c + 8])
 
@@ -349,27 +349,38 @@ def Excluir_usuario(tipo_de_usuário_excluido):
         else:
             print("\nAlunos cadastrados:")
         for i, aluno in enumerate(alunos):
-            nome = aluno[3]
-            print(f"[{i+1}] - {nome}")
-
+            print(f"[{i+1}] - {aluno[3]}")   
         indice = int(input("\nDigite o número do aluno que deseja excluir: ")) - 1
-        num = linhas_limpa.index(nome)
-        for i in range(11):
-            linhas_limpa.pop(num + i - 3)
+        aluno_escolhido = alunos[indice]
+
+        nome = aluno_escolhido[3]          
+        pos_nome = linhas_limpa.index(nome)  
+
+        inicio_bloco = pos_nome - 3         
+
+        for _ in range(9):         
+            linhas_limpa.pop(inicio_bloco)
 
     if tipo_de_usuário_excluido == "motorista":
         if not motoristas:
             print("Não há nenhum motorista cadastrados!")
         else:
             print("\nMotoristas cadastrados:")
-        for i, motorista in enumerate(motoristas):
-            nome = motorista[3]
-            print(f"[{i+1}] - {nome}")
 
-        indice = int(input("\nDigite o número do motorista que deseja editar: ")) - 1
-        num = linhas_limpa.index(nome)
-        for i in range(8):
-            linhas_limpa.pop(num + i - 3)
+        for i, motorista in enumerate(motoristas):
+            print(f"[{i+1}] - {motorista[3]}")
+
+        indice = int(input("\nDigite o número do motorista que deseja excluir: ")) - 1
+        motorista_escolhido = motoristas[indice]
+
+        nome = motorista_escolhido[3]
+        pos_nome = linhas_limpa.index(nome)
+
+        inicio_bloco = pos_nome - 3
+
+        for _ in range(8):
+            linhas_limpa.pop(inicio_bloco)
+            
 
     with open("logins.txt", "w", encoding="utf-8") as f:
         for i, linha in enumerate(linhas_limpa):
