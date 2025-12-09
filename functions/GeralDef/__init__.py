@@ -813,6 +813,7 @@ Bem vindo ao painel do aluno
 
 def confirmarpartida():
                 
+                
                 from datetime import datetime
 
                 pontoembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
@@ -940,6 +941,25 @@ Deseja realizar o check-in?
                         input("\nPressione ENTER para voltar à página inicial...")
                         screen.clear()
 
+                    with open("listaalunos.txt", "a", encoding="utf-8") as arquivo:
+                        for chave, valor in user_cache.items():
+                            arquivo.write(f"{chave}: {valor}\n")
+
+
+                    with open("dados.txt", "a", encoding="utf-8") as arquivo:
+                        for chave, valor in dados_aluno.items():
+                            arquivo.write(f"{chave}: {valor}\n")
+
+
+
+                    with open("pontoembarque.txt", "w", encoding="utf-8") as arquivo:
+                        for item in pontoembarque:
+                            arquivo.write(item + "\n")
+
+
+
+
+
                 elif escolha_checkin == "1":
                     screen.clear()
                     cabecalho("CONFIRMAR PARTIDA (SOMENTE IDA)")
@@ -992,6 +1012,26 @@ Deseja realizar o check-in?
 
                         input("\nPressione ENTER para voltar à página inicial...")
                         screen.clear()
+
+                    with open("listaalunos.txt", "a", encoding="utf-8") as arquivo:
+                        for chave, valor in user_cache.items():
+                            arquivo.write(f"{chave}: {valor}\n")
+
+
+                    with open("dados.txt", "a", encoding="utf-8") as arquivo:
+                        for chave, valor in dados_aluno.items():
+                            arquivo.write(f"{chave}: {valor}\n")
+
+
+
+                    with open("pontoembarque.txt", "w", encoding="utf-8") as arquivo:
+                        for item in pontoembarque:
+                            arquivo.write(item + "\n")
+
+
+
+
+
                         
                 elif escolha_checkin == "2":
                     screen.clear()
@@ -1048,38 +1088,67 @@ Deseja realizar o check-in?
                         screen.clear()
                 
 
-                    escrever_lista(pontoembarque,"/unirota/UniRota/alunx/pontoembarque.txt" , separador="\n")
-                    escrever_dicionario(user_cache,"/unirota/UniRota/alunx/embarque.txt")
-                    escrever_dicionario(dados_aluno,"/unirota/UniRota/alunx/dados.txt")
+                
+
+                    with open("embarque.txt", "w", encoding="utf-8") as arquivo:
+                        for chave, valor in user_cache.items():
+                            arquivo.write(f"{chave}: {valor}\n")
+
+
+                    with open("dados.txt", "w", encoding="utf-8") as arquivo:
+                        for chave, valor in dados_aluno.items():
+                            arquivo.write(f"{chave}: {valor}\n")
+
+
+
+                    with open("pontoembarque.txt", "w", encoding="utf-8") as arquivo:
+                        for item in pontoembarque:
+                            arquivo.write(item + "\n")
+
+
+
+                    
                 elif escolha_checkin == 0:
                     screen.clear()
                     paginainicial()
                     
 
 def dadospessoais():
-                dados_aluno=ler_txt_dicionario("/unirota/UniRota/alunx/dados.txt",separador=":")
-                screen.clear()
-                cabecalho("DADOS PESSOAIS")
-                for chave, valor in dados_aluno.items():
-                    print(f" {chave}: {valor}")
+                with open("dados.txt", "r", encoding="utf-8") as arquivo:
+                    for linha in arquivo:
+                        print(linha.strip())                
+
+
+
+
+
+
+
+
+
+
+            
                 print()
                 input("\nPressione ENTER para voltar à página inicial...")
                 screen.clear()
 
 def avisos():
-                import os
-                pasta_do_aviso = os.path.dirname(os.path.abspath(__file__))
-                caminho_arquivo = os.path.join(pasta_do_aviso, "avisos.txt")
-                avisos = open(caminho_arquivo, "r", encoding="utf-8")
-                linhasavisos = avisos.read().splitlines()
-                avisos.close()         
-                for aviso in linhasavisos:
-                    print(aviso)
+                with open("avisos.txt", "r", encoding="utf-8") as arquivo:
+                    for linha in arquivo:
+                        print(linha.strip())
                 voltar = input("\nPressione ENTER para voltar...") 
                 screen.clear()
 
 def cancelarcheckin():
-                user_cache=ler_txt_dicionario("/unirota/UniRota/alunx/embarque.txt")
+                
+            
+                user_cache=carregar_user_cache("listaalunos.txt")
+
+
+
+
+            
+
                 if user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim" and user_cache["Embarque na volta"] == "Sim":
                     print(f"Olá, você tem um check-in IDA e VOLTA confirmados no dia {user_cache['Horário']}.")
 
@@ -1149,14 +1218,10 @@ def cancelarcheckin():
                     screen.clear()
 
 def acompanharota():
-                import os
-                pasta_da_rota = os.path.dirname(os.path.abspath(__file__))
-                caminho_rota = os.path.join(pasta_da_rota, "rota.txt")
-                rota = open(caminho_rota, "r", encoding="utf-8")
-                linhasrotas = rota.read().splitlines()
-                rota.close()
-                for rota in linhasrotas:
-                    print(rota)
+                
+                with open("rota.txt", "r", encoding="utf-8") as arquivo:
+                    for linha in arquivo:
+                        print(linha.strip())
                 voltar = str(input("\nDigite ENTER para voltar..."))
                 screen.clear()
 
@@ -1227,11 +1292,14 @@ def ler_txt_dicionario(caminho, separador=":"):
     try:
         with open(caminho, 'r') as arquivo:
             for linha in arquivo:
-                partes = linha.split(separador)
+                partes = linha.split(separador, 1)
                 if len(partes) != 2:
-                    print(f"Linha invalida \"{linha}\"")
+                    if linha.strip():
+                        print(f"Linha invalida \"{linha.strip()}\"")
                 else:
-                    dicionario[partes[0]] = partes[1]
+                    chave = partes[0].strip()
+                    valor = partes[1].strip()
+                    dicionario[chave] = valor
     except FileNotFoundError:
         print("Arquivo não encontrado.")
         
@@ -1256,6 +1324,30 @@ def escrever_dicionario(dicionario, caminho, separador_dic=";", separador_lista=
     # Escreve essa lista
     escrever_lista(lista, caminho, separador=separador_lista)
 
+def carregar_user_cache(caminho_arquivo):
+    user_cache = {
+        "Ponto de embarque": "",
+        "Embarque na ida": "Não",
+        "Ponto de desembarque": "",
+        "Embarque na volta": "Não",
+        "Horário": "",
+    }
+
+    with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
+        for linha in arquivo:
+            linha = linha.strip()
+
+            if not linha or ":" not in linha:
+                continue
+
+            chave, valor = linha.split(":", 1)
+            chave = chave.strip()
+            valor = valor.strip()
+
+            if chave in user_cache:
+                user_cache[chave] = valor
+
+    return user_cache
 
 
 

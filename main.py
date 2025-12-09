@@ -329,7 +329,7 @@ while True:
                     elif opcao01 == 5:
                         screen.clear()
                         cabecalho("AVISOS")
-                        avisos()
+                        GeralDef.avisos()
 
                     elif opcao01 == 0:
                         print("Saindo do sistema... Até logo.")
