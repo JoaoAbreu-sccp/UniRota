@@ -274,10 +274,11 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         novo_usuario.append(Data_de_nascimento)
         novo_usuario.append("-")
         
-        confirma_adicao=input("Confirmar adição [s/n]: ")
         while True:
+            confirma_adicao=input("Confirmar adição [s/n]: ")
             if confirma_adicao=="s":
                 adicao_aluno = True
+                break
             elif confirma_adicao=="n":
                 adicao_aluno = False
                 break
@@ -302,11 +303,12 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         novo_usuario.append(Data_de_nascimento)
         novo_usuario.append("-")
         
-        confirma_adicao=input("Confirmar adição [s/n]: ")
         while True:
-            if confirma_adicao=="s":
+            confirma_adicao=input("Confirmar adição [s/n]: ")
+            if confirma_adicao.lower().strip()=="s":
                 adicao_motorista = True
-            elif confirma_adicao=="n":
+                break
+            elif confirma_adicao.lower().strip()=="n":
                 adicao_motorista = False
                 break
             else:
