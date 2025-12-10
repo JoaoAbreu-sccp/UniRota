@@ -162,12 +162,17 @@ while True:
                         screen.clear()
                         opc_1 = screen.editar_usuário_menu("aluno")
                         if opc_1==1:
+                            screen.clear()
                             GeralDef.visualizar_usuários("alunos")
+                            sair=input("\n[ENTER] para voltar: ")
                         elif opc_1 == 2:
+                            screen.clear()
                             GeralDef.Adicionar_usuario("aluno")
                         elif opc_1 == 3:
+                            screen.clear()
                             GeralDef.Excluir_usuario("aluno")
                         elif opc_1 == 4:
+                            screen.clear()
                             GeralDef.Editar_usuário("aluno")
                         elif opc_1==0:
                             break
@@ -177,12 +182,17 @@ while True:
                         screen.clear()
                         opc_1 = screen.editar_usuário_menu("motorista")
                         if opc_1 == 1:
+                            screen.clear()
                             GeralDef.visualizar_usuários("motoristas")
+                            sair=input("\n[ENTER] para voltar: ")
                         elif opc_1 == 2:
+                            screen.clear()
                             GeralDef.Adicionar_usuario("motorista")
                         elif opc_1 == 3:
+                            screen.clear()
                             GeralDef.Excluir_usuario("motorista")
                         elif opc_1 == 4:
+                            screen.clear()
                             GeralDef.Editar_usuário("motorista")
                         elif opc_1 == 0:
                             break
