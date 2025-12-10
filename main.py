@@ -160,17 +160,18 @@ while True:
                 elif opc == 3:
                     while True:
                         screen.clear()
-                        GeralDef.visualizar_usuários("alunos")
                         buttom=input("\nDeseja editar [s/n]: ")
                         screen.clear()
                         
                         if buttom=="s":
                             opc_1 = screen.editar_usuário_menu("aluno")
-                            if opc_1 == 1:
-                                GeralDef.Adicionar_usuario("aluno")
+                            if opc_1==1:
+                                GeralDef.visualizar_usuários("alunos")
                             elif opc_1 == 2:
-                                GeralDef.Excluir_usuario("aluno")
+                                GeralDef.Adicionar_usuario("aluno")
                             elif opc_1 == 3:
+                                GeralDef.Excluir_usuario("aluno")
+                            elif opc_1 == 4:
                                 GeralDef.Editar_usuário("aluno")
                             elif opc_1==0:
                                 break
@@ -184,15 +185,16 @@ while True:
                 elif opc == 4:
                     while True:
                         screen.clear()
-                        GeralDef.visualizar_usuários("motoristas")
                         buttom=input("\nDeseja editar [s/n]: ")
                         if buttom=="s":
                             opc_1 = screen.editar_usuário_menu("motorista")
                             if opc_1 == 1:
-                                GeralDef.Adicionar_usuario("motorista")
+                                GeralDef.visualizar_usuários("motoristas")
                             elif opc_1 == 2:
-                                GeralDef.Excluir_usuario("motorista")
+                                GeralDef.Adicionar_usuario("motorista")
                             elif opc_1 == 3:
+                                GeralDef.Excluir_usuario("motorista")
+                            elif opc_1 == 4:
                                 GeralDef.Editar_usuário("motorista")
                             elif opc_1 == 0:
                                 break
@@ -203,6 +205,7 @@ while True:
                         else:
                             print('Por favor digite [s] ou [n]')
                             sleep(1)
+                            
                             
                 elif opc == 5:
                     screen.clear()
