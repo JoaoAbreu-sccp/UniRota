@@ -65,7 +65,6 @@ def CreateNotice():
 def visualizar_usuários(tipo_de_usuario):
     with open("logins.txt", "r", encoding="utf-8") as f:
         linhas = f.read().splitlines()
-        linhas_limpa = [linha for linha in linhas if linha != ""]
         alunos = []
         motoristas = []
         
@@ -273,7 +272,7 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         Data_de_nascimento = input("Digte a data de nascimento do aluno: ")
         novo_usuario.append(Data_de_nascimento)
         novo_usuario.append("-")
-        
+
         while True:
             confirma_adicao=input("Confirmar adição [s/n]: ")
             if confirma_adicao=="s":
@@ -389,7 +388,6 @@ def Excluir_usuario(tipo_de_usuário_excluido):
             f.write(linha + "\n")
             if linha == "-":
                 f.write("\n")
-
 
 def Sua_conta(tipo_de_login):
     from random import randint
