@@ -20,9 +20,9 @@ def menuADM():
 -------------------------
           
 [1]: Lista de Alunos
-[2]: Editar Universidades
-[3]: Editar Alunos
-[4]: Editar motoristas
+[2]: Gerenciar Universidades
+[3]: Gerenciar Alunos
+[4]: Gerenciar motoristas
 [5]: Rota
 [6]: Adicionar Aviso
 [7]: Sua conta
