@@ -94,6 +94,21 @@ def Editar_usuário(tipo_de_usuario_editado):
     alteracao_aluno = False
     alteracao_motoristas = False
     from time import sleep
+    
+    lista_a = [
+            "nome",
+            "Instituição",
+            "Cpf",
+            "Telefone",
+            "Data de nascimento",
+        ]
+    
+    lista_m = [
+            "nome",
+            "Cpf",
+            "Telefone",
+            "Data de nascimento",
+        ]
 
     with open("logins.txt", "r", encoding="utf-8") as f:
         linhas = f.read().splitlines()
@@ -136,13 +151,6 @@ def Editar_usuário(tipo_de_usuario_editado):
         )
 
             campo = 0
-            lista = [
-            "nome",
-            "Instituição",
-            "Cpf",
-            "Telefone",
-            "Data de nascimento",
-        ]
         
             while True:
                 campo = input("\nQual campo deseja editar (1-5)? Digite [Sair] para cancelar: ")
@@ -152,9 +160,9 @@ def Editar_usuário(tipo_de_usuario_editado):
                 if campo.isdigit():
                     campo = int(campo)
                     if 1 <= campo <= 5:
-                        novo_valor = input(f"Digite o novo valor para {aluno[campo-1]}: ")
+                        novo_valor = input(f"Digite o novo valor para {lista_a[campo-1]}: ")
                         aluno[campo + 2] = novo_valor
-                        alunos[indice] = aluno
+                        alunos[int(indice)-1] = aluno
                         alteracao_aluno = True
                         break
                     else:
@@ -180,17 +188,15 @@ def Editar_usuário(tipo_de_usuario_editado):
             motorista = motoristas[int(indice)-1]
 
             cpf_formatado = f"{motorista[4][:3]}.{motorista[4][3:6]}.{motorista[4][6:9]}-{motorista[4][9:]}"
-            telefone_formatado = (
-                f"({motorista[5][:2]}){motorista[5][2:7]}-{motorista[5][7:]}"
-            )
+            telefone_formatado = (f"({motorista[5][:2]}){motorista[5][2:7]}-{motorista[5][7:]}")
             data_formatada = f"{motorista[6][:2]}/{motorista[6][2:4]}/{motorista[6][4:]}"
 
             print("\nInformações atuais:")
             print(
                 f"""1 - Nome: {motorista[3]}
-    2 - Cpf: {cpf_formatado}
-    3 - Telefone: {telefone_formatado}
-    4 - Data de Nascimento {data_formatada}"""
+2 - Cpf: {cpf_formatado}
+3 - Telefone: {telefone_formatado}
+4 - Data de Nascimento {data_formatada}"""
             )
 
             while True:
@@ -200,9 +206,9 @@ def Editar_usuário(tipo_de_usuario_editado):
                     break
 
                 if 1 <= int(campo) <= 4:
-                    novo_valor = input(f"Digite o novo valor para {motorista[campo-1]}: ")
-                    motorista[campo + 2] = novo_valor
-                    motoristas[indice] = motorista
+                    novo_valor = input(f"Digite o novo valor para {lista_m[int(campo)-1]}: ")
+                    motorista[int(campo) + 2] = novo_valor
+                    motoristas[int(indice)-1] = motorista
                     alteracao_motoristas = True
                     break
                 
@@ -298,7 +304,7 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         novo_usuario.append(Cpf)
         Telefone = input("Digite o cpf do motorista: ")
         novo_usuario.append(Cpf)
-        Data_de_nascimento("Digite a da nascimento do motorista: ")
+        Data_de_nascimento=("Digite a da nascimento do motorista: ")
         novo_usuario.append(Data_de_nascimento)
         novo_usuario.append("-")
         
@@ -329,6 +335,7 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
                 f.write(linha + "\n")
                 if linha == "-":
                     f.write("\n")
+
 
 
 def Excluir_usuario(tipo_de_usuário_excluido):
