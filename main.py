@@ -226,17 +226,7 @@ while True:
                 elif opc == 6:
                     while True:
                         screen.clear()
-                        print(
-                            """
--------------------------
-     Adicionar Aviso 
--------------------------
-
-[1]: Criar Aviso
-[2]: Visualizar Avisos
-[0]: Voltar
-"""
-                            )
+                        screen.menuAVISO()
                         opc = int(input("opc = "))
                         if opc == 1:
                             GeralDef.CreateNotice()
@@ -247,7 +237,7 @@ while True:
                             screen.clear()
                             for aviso in linhasavisos:
                                 print(aviso)
-                            voltar = str(input("\nDigite [1] para voltar: "))
+                            voltar = str(input("\nDigite [0] para voltar: "))
                         elif opc == 0:
                             break
                         else:
@@ -451,11 +441,7 @@ while True:
                 elif opc == 3:
                     while True:
                         screen.clear()
-                        print('''
-[1]: Criar Aviso
-[2]: Visualizar Avisos
-[3]: Voltar
-''')
+                        screen.menuAVISO()
                         opc = int(input("opc = "))
                         if opc == 1:
                             GeralDef.CreateNotice()
@@ -466,8 +452,8 @@ while True:
                             screen.clear()
                             for aviso in linhasavisos:
                                 print(aviso)
-                            voltar = str(input("\nDigite [1] para voltar: "))
-                        elif opc == 3:
+                            voltar = str(input("\nDigite [0] para voltar: "))
+                        elif opc == 0:
                             break
                         else:
                             screen.clear()

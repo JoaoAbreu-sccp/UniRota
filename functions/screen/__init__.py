@@ -104,4 +104,14 @@ def menuMOT():
 [3]: Adicionar Aviso
 [4]: Sair''')
 
+def menuAVISO():
+    print(
+                            """
+-------------------------
+     Adicionar Aviso 
+-------------------------
 
+[1]: Criar Aviso
+[2]: Visualizar Avisos
+[0]: Voltar
+""")
