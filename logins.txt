@@ -8,36 +8,43 @@ Joao
 -
 
 aluno
-aluno@gmail.com
-aluno123
+luan.if@gmail.com
+luan4421
+Luan Cabral
+Unopar
+85214796325
+73998875431
+323233333
+-
+
+aluno
+edudu374@gmail.com
+edu123
 Eduardo
 IFBA
-ponto_de_embarque
-ponto_de_desembarque
-86243523412
-73948065421
-12031980
+73122456898
+73992012345
+05112018
+-
+
+aluno
+maria@gmail.com
+maria2024
+Maria Clara
+IFBA
+74896532147
+73998124567
+23052017
 -
 
 aluno
 aluno@gmail.com
-aluno123
-Pedro
+luan4421
+Luan Santos
 IFBA
-ponto_de_embarque
-ponto_de_desembarque
-86243523412
-73948065421
-12031980
--
-
-motorista
-motorista@gmail.com
-moto123
-Icaro
-86243523412
-73948065421
-12031980
+85214796325
+73998875431
+07102016
 -
 
 motorista
@@ -45,6 +52,24 @@ motorista@gmail.com
 moto123
 Jorvane
 86243523412
-73948065421
+73988079768
 12031980
+-
+
+motorista
+araujo.santos@gmail.com
+road998
+Samuel Araújo
+75412378965
+73992114587
+10111975
+-
+
+motorista
+transporte.ba@gmail.com
+motox212
+Rafael Nogueira
+69874512387
+73990051234
+dsa
 -
