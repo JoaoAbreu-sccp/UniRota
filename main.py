@@ -504,7 +504,6 @@ while True:
                             with open("rota.txt", "w", encoding="utf-8") as rota:
                                 rota.write("\n".join(arq))
                         
-                            voltar = str(input("\nDigite [1] para voltar: "))
                             sleep(0.5)
                             screen.clear()
 
