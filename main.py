@@ -310,6 +310,7 @@ while True:
                         elif opc_1 == 2:
                             GeralDef.Credenciais(tipo_de_usuario)
                         elif opc_1 == 0:
+                            screen.clear()
                             break
                         else:
                             print("Por favor insira uma opção valida! ")
