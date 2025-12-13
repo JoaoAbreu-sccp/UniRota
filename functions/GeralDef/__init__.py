@@ -1282,11 +1282,7 @@ def cancelarcheckin():
             alteracao_realizada = True
 
         elif escolha == "3":
-            aluno_encontrado["Embarque na ida"] = "Não"
-            aluno_encontrado["Ponto de embarque"] = ""
-            aluno_encontrado["Embarque na volta"] = "Não"
-            aluno_encontrado["Ponto de desembarque"] = ""
-            aluno_encontrado["Horário"] = "" 
+            lista_alunos.remove(aluno_encontrado)
             print("\n✅ IDA e VOLTA foram cancelados com sucesso.")
             alteracao_realizada = True
 
@@ -1299,9 +1295,7 @@ def cancelarcheckin():
         escolha = input("Deseja cancelar? [s/n]: ").lower()
         
         if escolha == "s":
-            aluno_encontrado["Embarque na ida"] = "Não"
-            aluno_encontrado["Ponto de embarque"] = ""
-            aluno_encontrado["Horário"] = ""
+            lista_alunos.remove(aluno_encontrado)
             print("\n✅ Check-in de IDA cancelado com sucesso!")
             alteracao_realizada = True
         else:
@@ -1313,9 +1307,7 @@ def cancelarcheckin():
         escolha = input("Deseja cancelar? [s/n]: ").lower()
         
         if escolha == "s":
-            aluno_encontrado["Embarque na volta"] = "Não"
-            aluno_encontrado["Ponto de desembarque"] = ""
-            aluno_encontrado["Horário"] = ""
+            lista_alunos.remove(aluno_encontrado)
             print("\n✅ Check-in de VOLTA cancelado com sucesso!")
             alteracao_realizada = True
         else:
@@ -1323,6 +1315,8 @@ def cancelarcheckin():
 
     else:
         print(f"\nO aluno {aluno_encontrado['Nome']} não possui embarques confirmados ativos.")
+        lista_alunos.remove(aluno_encontrado)
+        alteracao_realizada = True
 
    
     if alteracao_realizada:
@@ -1332,17 +1326,35 @@ def cancelarcheckin():
             print("Alterações salvas no sistema.")
         except Exception as e:
             print(f"Erro ao salvar alterações: {e}")
+    else:
+        print("\nNenhuma alteração foi feita.")
 
     input("\nPressione ENTER para voltar...")
     screen.clear()
 
 def acompanharota():
-                
-                with open("rota.txt", "r", encoding="utf-8") as arquivo:
-                    for linha in arquivo:
-                        print(linha.strip())
-                voltar = str(input("\nDigite ENTER para voltar..."))
                 screen.clear()
+    
+                with open("rota.txt", "r", encoding="utf-8") as arquivo:
+                    arq = arquivo.read().splitlines()
+
+                print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<25} | {'Endereço':<50}")
+                print("-" * 105)
+
+                for i in range(0, len(arq), 3):
+                    check = arq[i].strip()
+                    ponto = arq[i + 1].strip()
+                    end = arq[i + 2].strip()
+
+                    check_exibicao = check if check != "" else "/"
+
+                    print(f"{i // 3 + 1:<3} | {check_exibicao:<11} | {ponto:<25} | {end:<50}")
+
+                print()
+                input("Digite ENTER para voltar...")
+                screen.clear()
+                
+                
 
                 while True: 
                     paginainicial()
