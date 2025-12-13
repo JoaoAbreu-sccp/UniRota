@@ -202,7 +202,6 @@ while True:
                     opc=screen.rota()
                     if opc==1:
                         GeralDef.mostrar_rota()
-                        passar=input("Pressione [ENTER] para voltar\n")
                     elif opc==2:
                         GeralDef.adicionar_ponto()
                         print ("Rota alterado com sucesso")
