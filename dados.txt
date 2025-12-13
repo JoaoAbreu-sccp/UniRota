@@ -5,31 +5,4 @@ Faculdade: Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)
 CPF: 000.000.000-00
 RG: 0000000-00
 Telefone: +55 (73) 9 4002-8922
-Nome: Eduardo Moreira Santos Barreto
-Data de nascimento: 01/04/2005
-E-mail: 202511240025@ifba.edu.br
-Faculdade: Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)
-CPF: 000.000.000-00
-RG: 0000000-00
-Telefone: +55 (73) 9 4002-8922
-Nome: Eduardo Moreira Santos Barreto
-Data de nascimento: 01/04/2005
-E-mail: 202511240025@ifba.edu.br
-Faculdade: Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)
-CPF: 000.000.000-00
-RG: 0000000-00
-Telefone: +55 (73) 9 4002-8922
-Nome: Eduardo Moreira Santos Barreto
-Data de nascimento: 01/04/2005
-E-mail: 202511240025@ifba.edu.br
-Faculdade: Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)
-CPF: 000.000.000-00
-RG: 0000000-00
-Telefone: +55 (73) 9 4002-8922
-Nome: Eduardo Moreira Santos Barreto
-Data de nascimento: 01/04/2005
-E-mail: 202511240025@ifba.edu.br
-Faculdade: Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)
-CPF: 000.000.000-00
-RG: 0000000-00
-Telefone: +55 (73) 9 4002-8922
+

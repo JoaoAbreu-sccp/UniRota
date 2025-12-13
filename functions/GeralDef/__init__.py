@@ -1,6 +1,8 @@
 from time import sleep
-
 from functions import screen
+import json
+import os
+
 
 def PasswordReset(email):
     from random import randint
@@ -859,10 +861,14 @@ def confirmarpartida():
                 pontoembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
                 pontodesembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
 
+                ARQUIVO_BANCO = "banco_alunos.json"
+
                 user_cache = {
+                "Nome": "",
+                "Instituição": "",
                 "Ponto de embarque": "",
-                "Embarque na ida": "Não", 
                 "Ponto de desembarque": "",
+                "Embarque na ida": "Não", 
                 "Embarque na volta": "Não",
                 "Horário": "", 
             }
@@ -896,6 +902,12 @@ Deseja realizar o check-in?
                 escolha_checkin = str(input("\nEscolha uma opção: ")) 
 
                 if escolha_checkin == "3":
+
+                    nome = input("Digite seu nome: ")
+                    
+        
+                    inst = input("Instituição: ")
+
                     print("\nDefina o ponto de EMBARQUE (IDA): ")
                     for i, pontos in enumerate(pontoembarque):
                         print(f"\n[{i+1}] - {pontos}") 
@@ -957,6 +969,7 @@ Deseja realizar o check-in?
                         checkin = datetime.now()
                         checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
 
+                        
 
                         print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
 
@@ -977,24 +990,33 @@ Deseja realizar o check-in?
                         else:
                             print(f"STATUS VOLTA: CANCELADA❌\n")
 
+                        novo_aluno = {
+                        "Nome": nome,  
+                        "Instituição": inst, 
+                        "Ponto de embarque": user_cache["Ponto de embarque"], 
+                        "Ponto de desembarque": user_cache["Ponto de desembarque"], 
+                        "Embarque na ida": user_cache["Embarque na ida"],
+                        "Embarque na volta": user_cache["Embarque na volta"],
+                        "Horário": user_cache["Horário"]
+                            }
+                        
+                        lista_atual = []
+                        if os.path.exists(ARQUIVO_BANCO):
+                            with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                                try:
+                                    lista_atual = json.load(arquivo) 
+                                except:
+                                    lista_atual = []
+
+                        lista_atual.append(novo_aluno)
+                        with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
+                            json.dump(lista_atual, arquivo, indent=4, ensure_ascii=False)
+
 
                         input("\nPressione ENTER para voltar à página inicial...")
                         screen.clear()
 
-                    with open("listaalunos.txt", "a", encoding="utf-8") as arquivo:
-                        for chave, valor in user_cache.items():
-                            arquivo.write(f"{chave}: {valor}\n")
-
-
-                    with open("dados.txt", "a", encoding="utf-8") as arquivo:
-                        for chave, valor in dados_aluno.items():
-                            arquivo.write(f"{chave}: {valor}\n")
-
-
-
-                    with open("pontoembarque.txt", "w", encoding="utf-8") as arquivo:
-                        for item in pontoembarque:
-                            arquivo.write(item + "\n")
+                    
 
 
 
@@ -1003,6 +1025,9 @@ Deseja realizar o check-in?
                 elif escolha_checkin == "1":
                     screen.clear()
                     cabecalho("CONFIRMAR PARTIDA (SOMENTE IDA)")
+
+                    nome = input("Digite seu nome: ")
+                    inst = input("Instituição: ")
 
                     print("\nDefina o ponto de EMBARQUE (IDA): ")
                     for i, pontos in enumerate(pontoembarque):
@@ -1050,24 +1075,32 @@ Deseja realizar o check-in?
                         user_cache["Horário"] = checkin_formatado
                         print(f"STATUS VOLTA: NÃO AGENDADA/CANCELADA❌\n")
 
+                        novo_aluno = {
+                        "Nome": nome,
+                        "Instituição": inst,
+                        "Ponto de embarque": user_cache["Ponto de embarque"],
+                        "Ponto de desembarque": "", 
+                        "Embarque na ida": user_cache["Embarque na ida"],
+                        "Embarque na volta": "Não",
+                        "Horário": user_cache["Horário"]
+                            }
+                        
+                        lista_atual = []
+                        if os.path.exists(ARQUIVO_BANCO):
+                            try:
+                                with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                                    lista_atual = json.load(arquivo)
+                            except:
+                                lista_atual = []
+
+                        lista_atual.append(novo_aluno)
+                        with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
+                            json.dump(lista_atual, arquivo, indent=4, ensure_ascii=False)
+
                         input("\nPressione ENTER para voltar à página inicial...")
                         screen.clear()
 
-                    with open("listaalunos.txt", "a", encoding="utf-8") as arquivo:
-                        for chave, valor in user_cache.items():
-                            arquivo.write(f"{chave}: {valor}\n")
-
-
-                    with open("dados.txt", "a", encoding="utf-8") as arquivo:
-                        for chave, valor in dados_aluno.items():
-                            arquivo.write(f"{chave}: {valor}\n")
-
-
-
-                    with open("pontoembarque.txt", "w", encoding="utf-8") as arquivo:
-                        for item in pontoembarque:
-                            arquivo.write(item + "\n")
-
+                    
 
 
 
@@ -1076,6 +1109,9 @@ Deseja realizar o check-in?
                 elif escolha_checkin == "2":
                     screen.clear()
                     cabecalho("CONFIRMAR PARTIDA (SOMENTE VOLTA)")
+
+                    nome = input("Digite seu nome: ")
+                    inst = input("Instituição: ")
 
                     print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
                     for i, pontos in enumerate(pontodesembarque):
@@ -1124,27 +1160,33 @@ Deseja realizar o check-in?
                         user_cache["Horário"] = checkin_formatado
 
 
+                        novo_aluno = {
+                            "Nome": nome,
+                            "Instituição": inst,
+                            "Ponto de embarque": "", 
+                            "Ponto de desembarque": user_cache["Ponto de desembarque"],
+                            "Embarque na ida": "Não",
+                            "Embarque na volta": user_cache["Embarque na volta"],
+                            "Horário": user_cache["Horário"]
+                                 }
+                        lista_atual = []
+                        if os.path.exists(ARQUIVO_BANCO):
+                            try:
+                                with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                                    lista_atual = json.load(arquivo)
+                            except:
+                                lista_atual = []
+                        lista_atual.append(novo_aluno)
+                        with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
+                            json.dump(lista_atual, arquivo, indent=4, ensure_ascii=False)
+
                         input("\nPressione ENTER para voltar à página inicial...")
                         screen.clear()
                 
 
                 
 
-                    with open("embarque.txt", "w", encoding="utf-8") as arquivo:
-                        for chave, valor in user_cache.items():
-                            arquivo.write(f"{chave}: {valor}\n")
-
-
-                    with open("dados.txt", "w", encoding="utf-8") as arquivo:
-                        for chave, valor in dados_aluno.items():
-                            arquivo.write(f"{chave}: {valor}\n")
-
-
-
-                    with open("pontoembarque.txt", "w", encoding="utf-8") as arquivo:
-                        for item in pontoembarque:
-                            arquivo.write(item + "\n")
-
+                    
 
 
                     
@@ -1177,85 +1219,122 @@ def avisos():
                     for linha in arquivo:
                         print(linha.strip())
                 voltar = input("\nPressione ENTER para voltar...") 
-                screen.clear()
+                screen.clear()               
 
 def cancelarcheckin():
-                
-            
-                user_cache=carregar_user_cache("listaalunos.txt")
+    ARQUIVO_BANCO = "banco_alunos.json"
+    screen.clear()
+    cabecalho("CANCELAMENTO DE CHECK-IN")
+    lista_alunos = []
+    if os.path.exists(ARQUIVO_BANCO):
+        try:
+            with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                lista_alunos = json.load(arquivo)
+        except:
+            print("Erro ao ler o banco de dados.")
+            return   
+    if not lista_alunos:
+        print("Não há nenhum check-in registrado no sistema.")
+        input("\nPressione ENTER para voltar...")
+        return
+    
+    nome_busca = input("Digite o NOME completo para buscar seu check-in: ").strip()
+    aluno_encontrado = None
 
+    for aluno in lista_alunos:
+        if aluno.get("Nome", "").lower() == nome_busca.lower():
+            aluno_encontrado = aluno
+            break
+    
+    if not aluno_encontrado:
+        print(f"\n❌ Check-in não encontrado para: {nome_busca}")
+        input("\nPressione ENTER para voltar...")
+        return
 
+    alteracao_realizada = False 
 
+    ida_sim = aluno_encontrado.get("Embarque na ida") == "Sim"
+    volta_sim = aluno_encontrado.get("Embarque na volta") == "Sim"
 
-            
+    
+    if ida_sim and volta_sim:
+        print(f"\nOlá {aluno_encontrado['Nome']}, você tem IDA e VOLTA confirmados.")
+        print(f"Horário do registro: {aluno_encontrado.get('Horário', '--')}")
+        
+        print("\nDeseja realizar alguma alteração?")
+        print("[1] Cancelar apenas a IDA")
+        print("[2] Cancelar apenas a VOLTA")
+        print("[3] Cancelar AMBOS (Ida e Volta)")
+        print("[0] Voltar")
 
-                if user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim" and user_cache["Embarque na volta"] == "Sim":
-                    print(f"Olá, você tem um check-in IDA e VOLTA confirmados no dia {user_cache['Horário']}.")
+        escolha = input("\nEscolha uma opção: ")
 
-                    print("\nDeseja realizar alguma alteração?")
+        if escolha == "1":
+            aluno_encontrado["Embarque na ida"] = "Não"
+            aluno_encontrado["Ponto de embarque"] = "" 
+            print("\n✅ A IDA foi cancelada. A VOLTA permanece agendada.")
+            alteracao_realizada = True
 
-                    print("\n[1] Cancelar apenas a IDA")
-                    print("[2] Cancelar apenas a VOLTA")
-                    print("[3] Cancelar AMBOS Ida e Volta")
-                    print("[0] Voltar")
+        elif escolha == "2":
+            aluno_encontrado["Embarque na volta"] = "Não"
+            aluno_encontrado["Ponto de desembarque"] = "" 
+            print("\n✅ A VOLTA foi cancelada. A IDA permanece agendada.")
+            alteracao_realizada = True
 
+        elif escolha == "3":
+            aluno_encontrado["Embarque na ida"] = "Não"
+            aluno_encontrado["Ponto de embarque"] = ""
+            aluno_encontrado["Embarque na volta"] = "Não"
+            aluno_encontrado["Ponto de desembarque"] = ""
+            aluno_encontrado["Horário"] = "" 
+            print("\n✅ IDA e VOLTA foram cancelados com sucesso.")
+            alteracao_realizada = True
 
-                    escolha_cancelar = str(input("\nEscolha uma opção(1-4): "))
+        elif escolha == "0":
+            print("\nNenhuma alteração realizada.")
 
-                    if escolha_cancelar == "1":
-                        screen.clear()
-                        user_cache["Embarque na ida"] = "Não"
-                        print("\nA IDA foi cancelada, a VOLTA permanece agendada.")
-                        input("\nPressione ENTER para voltar...") 
-                    elif escolha_cancelar == "2":
-                        screen.clear()
-                        user_cache["Embarque na volta"] = "Não"
-                        print("\nA VOLTA foi cancelada, a IDA permanace agendada.")
-                        input("\nPressione ENTER para voltar...") 
-                    elif escolha_cancelar == "3":
-                        screen.clear()
-                        user_cache["Embarque na ida"] = "Não" 
-                        user_cache["Embarque na volta"] = "Não"
-                        user_cache["Horário"] = ""
-                        print("\nIDA e VOLTA foram cancelados")
-                        input("\nPressione ENTER para voltar...") 
-                    elif escolha_cancelar == "0":
-                        screen.clear()
-                        print("\nNenhuma alteração foi feita.")
-                        input("\nPressione ENTER para voltar...") 
-                        
-                elif user_cache["Horário"] != "" and user_cache["Embarque na ida"] == "Sim":
-                            print(f"Olá, você tem um check-in somente IDA confirmado no dia {user_cache['Horário']}.")
-                            escolha = input("Deseja cancelar? [s/n]: ")
-                            if escolha == "s":
-                                user_cache["Horário"] = ""
-                                print("Seu check-in foi cancelado com sucesso!")
-                                input("\nPressione ENTER para voltar...") 
-                                screen.clear()
-                            elif escolha == "n":
-                                print("Certo! Voltando para o menu principal...")
-                                input("\nPressione ENTER para voltar...") 
-                                screen.clear()
+    
+    elif ida_sim:
+        print(f"\nOlá {aluno_encontrado['Nome']}, você tem somente IDA confirmada.")
+        escolha = input("Deseja cancelar? [s/n]: ").lower()
+        
+        if escolha == "s":
+            aluno_encontrado["Embarque na ida"] = "Não"
+            aluno_encontrado["Ponto de embarque"] = ""
+            aluno_encontrado["Horário"] = ""
+            print("\n✅ Check-in de IDA cancelado com sucesso!")
+            alteracao_realizada = True
+        else:
+            print("\nMantendo check-in...")
 
-                elif user_cache["Horário"] != "" and user_cache["Embarque na volta"] == "Sim":
-                    print(f"Olá, você tem um check-in somente VOLTA confirmado no dia {user_cache['Horário']}.")
-                    escolha = input("Deseja cancelar? [s/n]: ")
-                    if escolha == "s":
-                     user_cache["Horário"] = ""
-                     print("Seu check-in foi cancelado com sucesso!")
-                     input("\nPressione ENTER para voltar...") 
-                     screen.clear()
-                    elif escolha == "n":
-                     print("Certo! Voltando para o menu principal...")
-                     input("\nPressione ENTER para voltar...") 
-                     screen.clear()
-                    else:
-                        print("\nOpção inválida.")
+    
+    elif volta_sim:
+        print(f"\nOlá {aluno_encontrado['Nome']}, você tem somente VOLTA confirmada.")
+        escolha = input("Deseja cancelar? [s/n]: ").lower()
+        
+        if escolha == "s":
+            aluno_encontrado["Embarque na volta"] = "Não"
+            aluno_encontrado["Ponto de desembarque"] = ""
+            aluno_encontrado["Horário"] = ""
+            print("\n✅ Check-in de VOLTA cancelado com sucesso!")
+            alteracao_realizada = True
+        else:
+            print("\nMantendo check-in...")
 
-                else:
-                    print("Você não tem nenhum check-in confirmado para cancelar.")
-                    input("\nPressione ENTER para voltar...")  
-                    screen.clear()
+    else:
+        print(f"\nO aluno {aluno_encontrado['Nome']} não possui embarques confirmados ativos.")
+
+   
+    if alteracao_realizada:
+        try:
+            with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
+                json.dump(lista_alunos, arquivo, indent=4, ensure_ascii=False)
+            print("Alterações salvas no sistema.")
+        except Exception as e:
+            print(f"Erro ao salvar alterações: {e}")
+
+    input("\nPressione ENTER para voltar...")
+    screen.clear()
 
 def acompanharota():
                 

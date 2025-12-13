@@ -2,6 +2,7 @@ from functions import GeralDef, screen
 from time import sleep
 from datetime import datetime
 import csv
+import json
 import os
 import sys
 
@@ -11,6 +12,8 @@ csv_gerado = False
 
 
 while True:
+
+    ARQUIVO_BANCO = "banco_alunos.json"
     tipo_de_usuario=None
     logins = open("logins.txt")
     linhas = logins.read().splitlines()
@@ -73,29 +76,40 @@ while True:
                 tipo_de_usuario == ""
                 screen.clear()
                 screen.menuADM()
-                opc = int(input("opc = "))
+                opc = int(input("\nEscolha uma opção: "))
                 if opc == 1:
                     screen.clear()
-                    listaalunos = open("listaalunos.txt")
-                    linhasalunos = listaalunos.read().splitlines()
-                    listaalunos.close()
-                    print("Lista de Alunos:")
-                    print(
-                        f"{'#':3}{'Nome':21}{'Instituição':21}  {'P. Embarque':21}  {'P. Desembarque':21}  {'Conf. Ida':21}  {'Conf. Volta':21}"
-                    )
-                    index = 0
-                    for c, info in enumerate(linhasalunos):
-                        if c % 7 == 0 or c == 0:
-                            if info != "":
+                    if not os.path.exists(ARQUIVO_BANCO):
+                        print("Nenhum banco de dados encontrado. Cadastre alguém primeiro!")
+                    else:
+                        with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                            banco_de_dados_alunos = json.load(arquivo)
+                            print("\n" + "="*140)
+                            print(f"{'LISTA DE ALUNOS':^140}")
+                            print("="*140)
+                            print(f"{'#':<3} {'Nome':<25} {'Instituição':<20} {'P. Embarque':<20} {'P. Desembarque':<20} {'Ida':<6} {'Volta':<6}")
+                            print("-" * 140)
+
+                            index = 0
+                            for info_aluno in banco_de_dados_alunos:
                                 index += 1
-                                print(f"{index}. {info:18}", end=" | ")
-                            else:
-                                print()
-                        else:
-                            if info != "":
-                                print(f"{info:20}", end=" | ")
-                            else:
-                                print()
+                                n = info_aluno.get('Nome', '-')
+                                i = info_aluno.get('Instituição', '-')
+                                pe = info_aluno.get('Ponto de embarque', '-')
+                                pd = info_aluno.get('Ponto de desembarque', '-')
+                                
+                                verif_ida = info_aluno.get('Embarque na ida', 'Não')
+                                if verif_ida == "Sim":
+                                    status_ida = "✅"
+                                else:
+                                    status_ida = "❌"
+                                verif_volta = info_aluno.get('Embarque na volta', 'Não')
+                                if verif_volta == "Sim":
+                                    status_volta = "✅"
+                                else:
+                                    status_volta = "❌"
+                                print(f"{index:<3} {n:<25} {i:<20} {pe:<20} {pd:<20} {status_ida:<6} {status_volta:<6}")
+                            print("-" * 140)
                         csv_gerado = False
                     while True:
                         if not csv_gerado:
@@ -107,27 +121,29 @@ while True:
                         if opc_1 == 1:
                             screen.clear()
                             print("Exportando...")
-                            sleep(0.2)
-                            with open(
-                                "alunos_exportados.csv", "w", newline="", encoding="cp1252"
-                            ) as csvfile:
-                                writer = csv.writer(csvfile)
-                                writer.writerow(
-                                    [
-                                        "Nome",
-                                        "Instituição",
-                                        "P. Embarque",
-                                        "P. Desembarque",
-                                        "Conf. Ida",
-                                        "Conf. Volta",
-                                    ]
-                                )
-                                for i in range(0, len(linhasalunos), 7):
-                                    bloco = linhasalunos[i : i + 7]
-                                    if len(bloco) >= 6:
-                                        writer.writerow(bloco[:6])
-                                print("Exportado com sucesso para 'alunos_exportados.csv'!")
-                                csv_gerado = True
+                            NOME_ARQUIVO_CSV = "Relatorio_Alunos.csv"
+                            try:
+                                with open(NOME_ARQUIVO_CSV, mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
+                                    escritor = csv.writer(arquivo_csv, delimiter=';')
+                                    escritor.writerow(["Nome", "Instituição", "Ponto Embarque", "Ponto Desembarque", "Ida", "Volta"])              
+                                    for aluno in banco_de_dados_alunos:
+                                        escritor.writerow([
+                                        aluno.get("Nome", ""),
+                                        aluno.get("Instituição", ""),
+                                        aluno.get("Ponto de embarque", ""),
+                                        aluno.get("Ponto de desembarque", ""),
+                                        aluno.get("Embarque na ida", "Não"),
+                                        aluno.get("Embarque na volta", "Não"),
+                                        ])
+            
+                                    print(f"\n✅ Sucesso! O arquivo '{NOME_ARQUIVO_CSV}' foi criado.")
+                                    print("Você pode abri-lo no Excel.")
+                                    csv_gerado = True
+
+                            except Exception as e:
+                                print(f"\n❌ Erro ao criar arquivo: {e}")
+
+                                input("\nPressione Enter para continuar...")
                                 sleep(1)
                         elif opc_1 == 0:
                             print("Saindo...")
@@ -385,24 +401,37 @@ while True:
                 opc = int(input("opc = "))
                 if opc == 1:
                     screen.clear()
-                    listaalunos = open("listaalunos.txt")
-                    linhasalunos = listaalunos.read().splitlines()
-                    listaalunos.close()
-                    print("Lista de Alunos:")
-                    print(f"{'#':3}{'Nome':21}{'Instituição':21}  {'P. Embarque':21}  {'P. Desembarque':21}  {'Conf. Ida':21}  {'Conf. Volta':21}")
-                    index = 0
-                    for c, info in enumerate(linhasalunos):
-                        if c % 7 == 0 or c == 0:
-                            if info != "":
+                    if not os.path.exists(ARQUIVO_BANCO):
+                        print("Nenhum banco de dados encontrado. Cadastre alguém primeiro!")
+                    else:
+                        with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                            banco_de_dados_alunos = json.load(arquivo)
+                            print("\n" + "="*140)
+                            print(f"{'LISTA DE ALUNOS':^140}")
+                            print("="*140)
+                            print(f"{'#':<3} {'Nome':<25} {'Instituição':<20} {'P. Embarque':<20} {'P. Desembarque':<20} {'Ida':<6} {'Volta':<6}")
+                            print("-" * 140)
+
+                            index = 0
+                            for info_aluno in banco_de_dados_alunos:
                                 index += 1
-                                print(f"{index}. {info:18}", end=' | ')
-                            else:
-                                print()
-                        else:
-                            if info != "":
-                                print(f"{info:20}", end=' | ')
-                            else:
-                                    print()
+                                n = info_aluno.get('Nome', '-')
+                                i = info_aluno.get('Instituição', '-')
+                                pe = info_aluno.get('Ponto de embarque', '-')
+                                pd = info_aluno.get('Ponto de desembarque', '-')
+                                
+                                verif_ida = info_aluno.get('Embarque na ida', 'Não')
+                                if verif_ida == "Sim":
+                                    status_ida = "✅"
+                                else:
+                                    status_ida = "❌"
+                                verif_volta = info_aluno.get('Embarque na volta', 'Não')
+                                if verif_volta == "Sim":
+                                    status_volta = "✅"
+                                else:
+                                    status_volta = "❌"
+                                print(f"{index:<3} {n:<25} {i:<20} {pe:<20} {pd:<20} {status_ida:<6} {status_volta:<6}")
+                            print("-" * 140)
                     opc = int(input("\nDigite [1] para voltar:  "))
                     sleep(0.5)
                     screen.clear()

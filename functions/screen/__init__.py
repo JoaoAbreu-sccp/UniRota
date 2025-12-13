@@ -44,10 +44,11 @@ def menuADM_sua_conta():
 def editar_usuário_menu(tipo_de_usuário):
     print(f"""-------------------------
     Editar {tipo_de_usuário}  
--------------------------          
-[1]: adicionar {tipo_de_usuário}
-[2]: remover {tipo_de_usuário}
-[3]: editar {tipo_de_usuário}
+-------------------------       
+[1]: visualizar {tipo_de_usuário}   
+[2]: adicionar {tipo_de_usuário}
+[3]: remover {tipo_de_usuário}
+[4]: editar {tipo_de_usuário}
 [0]: Voltar
 """)
     opc=int(input("Por favor selecione uma opção: "))
