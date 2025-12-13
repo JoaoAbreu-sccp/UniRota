@@ -75,6 +75,18 @@ def rota():
     opc=int(input("Por favor selecione uma opção: "))
     return opc
 
+def menuAVISO():
+    print(
+                            """
+-------------------------
+     Adicionar Aviso 
+-------------------------
+
+[1]: Criar Aviso
+[2]: Visualizar Avisos
+[3]: Editar / Excluir Aviso
+[0]: Voltar
+""")
 #ALUNO
 def cabecalho(texto="página inicial"):
     print(f"------------------------------{texto}------------------------------")
@@ -104,14 +116,3 @@ def menuMOT():
 [3]: Adicionar Aviso
 [4]: Sair''')
 
-def menuAVISO():
-    print(
-                            """
--------------------------
-     Adicionar Aviso 
--------------------------
-
-[1]: Criar Aviso
-[2]: Visualizar Avisos
-[0]: Voltar
-""")

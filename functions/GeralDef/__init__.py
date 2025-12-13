@@ -61,6 +61,39 @@ def CreateNotice():
 
         print("Aviso salvo com sucesso")
 
+def EditarAviso(index, texto, caminho="avisos.txt"):
+    with open(caminho, "r", encoding="utf-8") as arq:
+        avisos = arq.readlines()
+
+    if 0 <= index < len(avisos):
+        linha_original = avisos[index].rstrip("\n")
+        prefixo = linha_original[:22]
+        avisos[index] = f"{prefixo}[EDITADO] {texto}\n"
+
+        with open(caminho, "w", encoding="utf-8") as arq:
+            arq.writelines(avisos)
+
+        return True
+
+    return False
+
+def ExcluirAviso(index, caminho="avisos.txt"):
+    """Exclui o aviso no índice informado."""
+    try:
+        with open(caminho, "r", encoding="utf-8") as arq:
+            avisos = arq.readlines()
+    except FileNotFoundError:
+        return False
+
+    if 0 <= index < len(avisos):
+        avisos.pop(index)
+
+        with open(caminho, "w", encoding="utf-8") as arq:
+            arq.writelines(avisos)
+
+        return True 
+
+    return False
 
 def visualizar_usuários(tipo_de_usuario):
     with open("logins.txt", "r", encoding="utf-8") as f:

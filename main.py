@@ -238,6 +238,47 @@ while True:
                             for aviso in linhasavisos:
                                 print(aviso)
                             voltar = str(input("\nDigite [0] para voltar: "))
+                        elif opc == 3:
+                            avisos = open("avisos.txt", "r", encoding="utf-8")
+                            linhasavisos = avisos.read().splitlines()
+                            avisos.close()
+                            screen.clear()
+                            indice = 0
+                            for aviso in linhasavisos:
+                                indice += 1
+                                print(f"[{indice}] {aviso}")
+                                
+                            print()
+                            print("[1] Para Editar Aviso")
+                            print("[2] Para Excluir Aviso")
+                            print("[0] Para voltar")
+                            opcaviso = int(input("opc = "))
+                            if opcaviso == 1:
+                                index = int(input("Digite o número do aviso que deseja EDITAR [0 para cancelar]: "))
+                                if index == 0:
+                                    continue
+                                elif index > indice or index < 1:
+                                    print("Opção invalida...")
+                                    sleep(0.5)
+                                    continue
+                                print("Digite a nova versão do aviso:")
+                                texto = str(input("-> "))
+                                GeralDef.EditarAviso(index-1, texto)
+                                print("Aviso editado com successo!")
+                                sleep(0.5)
+                            elif opcaviso == 2:
+                                index = int(input("Digite o número do aviso que deseja EXCLUIR [0 para cancelar]: "))
+                                if index == 0:
+                                    continue
+                                elif index > indice or index < 1:
+                                    print("Opção invalida...")
+                                    sleep(0.5)
+                                    continue
+                                GeralDef.ExcluirAviso(index-1)
+                                print("Aviso Excluido com sucesso!")
+                                sleep(0.5)
+
+                                
                         elif opc == 0:
                             break
                         else:
