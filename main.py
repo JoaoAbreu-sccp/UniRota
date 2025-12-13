@@ -386,41 +386,9 @@ while True:
                 screen.menuMOT()
                 opc = int(input("opc = "))
                 if opc == 1:
-                    screen.clear()
-                    if not os.path.exists(ARQUIVO_BANCO):
-                        print("Nenhum banco de dados encontrado. Cadastre alguém primeiro!")
-                    else:
-                        with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-                            banco_de_dados_alunos = json.load(arquivo)
-                            print("\n" + "="*140)
-                            print(f"{'LISTA DE ALUNOS':^140}")
-                            print("="*140)
-                            print(f"{'#':<3} {'Nome':<25} {'Instituição':<20} {'P. Embarque':<20} {'P. Desembarque':<20} {'Ida':<6} {'Volta':<6}")
-                            print("-" * 140)
-
-                            index = 0
-                            for info_aluno in banco_de_dados_alunos:
-                                index += 1
-                                n = info_aluno.get('Nome', '-')
-                                i = info_aluno.get('Instituição', '-')
-                                pe = info_aluno.get('Ponto de embarque', '-')
-                                pd = info_aluno.get('Ponto de desembarque', '-')
-                                
-                                verif_ida = info_aluno.get('Embarque na ida', 'Não')
-                                if verif_ida == "Sim":
-                                    status_ida = "✅"
-                                else:
-                                    status_ida = "❌"
-                                verif_volta = info_aluno.get('Embarque na volta', 'Não')
-                                if verif_volta == "Sim":
-                                    status_volta = "✅"
-                                else:
-                                    status_volta = "❌"
-                                print(f"{index:<3} {n:<25} {i:<20} {pe:<20} {pd:<20} {status_ida:<6} {status_volta:<6}")
-                            print("-" * 140)
-                    opc = int(input("\nDigite [1] para voltar:  "))
-                    sleep(0.5)
-                    screen.clear()
+                    GeralDef.printar_lista("banco_alunos.json")
+                    voltar=input("Pressione [ENTER] para voltar")
+                    
                 elif opc == 2:
                     screen.clear()
                     print("Rota")
