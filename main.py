@@ -72,6 +72,7 @@ while True:
     if tipo_de_usuario is not None:
 
         if tipo_de_usuario == "administrador":
+            csv_gerado = False
             while True:
                 tipo_de_usuario == ""
                 screen.clear()
@@ -80,7 +81,6 @@ while True:
                 if opc == 1:
                     screen.clear()
                     GeralDef.printar_lista("banco_alunos.json")
-                    csv_gerado = False
                     while True:
                         if not csv_gerado:
                             opc_1 = int(
@@ -88,6 +88,7 @@ while True:
                             )
                         else:
                             opc_1 = int(input("\n[0]: Sair\n\nDigite: "))
+
                         if opc_1 == 1:
                             screen.clear()
                             print("Exportando...")
@@ -116,13 +117,12 @@ while True:
 
                                 print(f"\n✅ Sucesso! O arquivo '{NOME_ARQUIVO_CSV}' foi criado.")
                                 print("Você pode abri-lo no Excel.")
+                                ent=input("Pressione [ENTER] para voltar")
+                                sleep(0.5)
                                 csv_gerado = True
 
                             except Exception as e:
                                 print(f"Erro ao gerar o CSV: {e}")
-
-                            sleep(0.5)
-                            input("\nPressione Enter para continuar...")
 
                         elif opc_1 == 0:
                             print("Saindo...")
@@ -328,48 +328,49 @@ while True:
 
                     opcao01 = int(input("Insira a opção que deseja: "))
 
-                    if opcao01 == 1:
-                        screen.clear()
-                        GeralDef.confirmarpartida()
-
-                    elif opcao01 == 2:
-                        screen.clear()
-                        cabecalho("CANCELAR CHECK-IN")
-                        GeralDef.cancelarcheckin()
-
-
-                    elif opcao01 == 3:
-                        screen.clear()
-                        GeralDef.dadospessoais()
-                        cabecalho("DADOS PESSOAIS")
-
-                    elif opcao01 == 4:
-                        screen.clear()
-                        cabecalho("ACOMPANHAR ROTA")
-                        GeralDef.acompanharota()
-                        sleep(2)
-                        screen.clear()
-
-                    elif opcao01 == 5:
-                        screen.clear()
-                        cabecalho("AVISOS")
-                        GeralDef.avisos()
-
-                    elif opcao01 == 0:
-                        print("Saindo do sistema... Até logo.")
-                        sleep(1)
-                        screen.clear()
-                        break 
-                    
-                    else:
-                        print("Opção inválida. Tente novamente.")
-                        sleep(1)
-                        screen.clear()
-
                 except ValueError:
-                    print("Entrada inválida. Por favor, digite um número (1-4).")
+                    print("Entrada inválida. Por favor, digite um número (0-5).")
                     sleep(1)
                     screen.clear()
+
+                if opcao01 == 1:
+                    screen.clear()
+                    GeralDef.confirmarpartida()
+
+                elif opcao01 == 2:
+                    screen.clear()
+                    cabecalho("CANCELAR CHECK-IN")
+                    GeralDef.cancelarcheckin()
+
+
+                elif opcao01 == 3:
+                    screen.clear()
+                    GeralDef.dadospessoais()
+                    cabecalho("DADOS PESSOAIS")
+
+                elif opcao01 == 4:
+                    screen.clear()
+                    cabecalho("ACOMPANHAR ROTA")
+                    GeralDef.acompanharota()
+                    sleep(2)
+                    screen.clear()
+
+                elif opcao01 == 5:
+                    screen.clear()
+                    cabecalho("AVISOS")
+                    GeralDef.avisos()
+
+                elif opcao01 == 0:
+                    print("Saindo do sistema... Até logo.")
+                    sleep(1)
+                    screen.clear()
+                    break 
+                    
+                else:
+                    print("Opção inválida. Tente novamente.")
+                    sleep(1)
+                    screen.clear()
+
 
 
 
@@ -519,5 +520,6 @@ while True:
                 else:
                     print("Opção inválida :(")
                     print("Tente novamente")
+                    sleep(1)
         else:
             print("")
