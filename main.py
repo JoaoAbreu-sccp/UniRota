@@ -12,6 +12,7 @@ csv_gerado = False
 
 
 while True:
+    GeralDef.gerar_lista_confirmacao_json()
 
     ARQUIVO_BANCO = "banco_alunos.json"
     tipo_de_usuario=None
@@ -166,12 +167,15 @@ while True:
                         elif opc_1 == 2:
                             screen.clear()
                             GeralDef.Adicionar_usuario("aluno")
+                            GeralDef.gerar_lista_confirmacao_json()
                         elif opc_1 == 3:
                             screen.clear()
                             GeralDef.Excluir_usuario("aluno")
+                            GeralDef.gerar_lista_confirmacao_json()
                         elif opc_1 == 4:
                             screen.clear()
                             GeralDef.Editar_usuário("aluno")
+                            GeralDef.gerar_lista_confirmacao_json()
                         elif opc_1==0:
                             break
 
