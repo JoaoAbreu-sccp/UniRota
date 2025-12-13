@@ -11,10 +11,9 @@ screen.clear()
 csv_gerado = False
 
 
+
 while True:
     GeralDef.gerar_lista_confirmacao_json()
-
-    ARQUIVO_BANCO = "banco_alunos.json"
     tipo_de_usuario=None
     logins = open("logins.txt")
     linhas = logins.read().splitlines()
@@ -78,12 +77,10 @@ while True:
                 screen.clear()
                 screen.menuADM()
                 opc = int(input("\nEscolha uma opção: "))
-
                 if opc == 1:
                     screen.clear()
                     GeralDef.printar_lista("banco_alunos.json")
                     csv_gerado = False
-
                     while True:
                         if not csv_gerado:
                             opc_1 = int(
@@ -95,11 +92,12 @@ while True:
                             screen.clear()
                             print("Exportando...")
                             NOME_ARQUIVO_CSV = "Relatorio_Alunos.csv"
+
                             try:
                                 with open(NOME_ARQUIVO_CSV, mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
                                     escritor = csv.writer(arquivo_csv, delimiter=';')
-                                    escritor.writerow(["Nome", "Instituição", "Ponto Embarque", "Ponto Desembarque", "Ida", "Volta"])              
-                                   
+                                    escritor.writerow(["Nome", "Instituição", "Ponto Embarque", "Ponto Desembarque", "Ida", "Volta"])
+
                                     for aluno in banco_de_dados_alunos:
                                         ida = aluno.get("Embarque na ida", "Não")
                                         volta = aluno.get("Embarque na volta", "Não")
@@ -115,27 +113,26 @@ while True:
                                             ida,
                                             volta,
                                         ])
-            
+
                                 print(f"\n✅ Sucesso! O arquivo '{NOME_ARQUIVO_CSV}' foi criado.")
                                 print("Você pode abri-lo no Excel.")
                                 csv_gerado = True
 
                             except Exception as e:
-                                print(f"\n❌ Erro ao criar arquivo: {e}")
-                                
+                                print(f"Erro ao gerar o CSV: {e}")
+
                             sleep(0.5)
                             input("\nPressione Enter para continuar...")
-                            
+
                         elif opc_1 == 0:
                             print("Saindo...")
                             sleep(0.5)
                             break
-                            
                         else:
                             print("Opção inválida! Tente novamente.")
                     sleep(0.5)
                     screen.clear()
-                    
+
                 elif opc == 2:
                     screen.clear()
                     while True:
@@ -296,7 +293,6 @@ while True:
                         elif opc_1 == 2:
                             GeralDef.Credenciais(tipo_de_usuario)
                         elif opc_1 == 0:
-                            screen.clear()
                             break
                         else:
                             print("Por favor insira uma opção valida! ")
@@ -374,7 +370,6 @@ while True:
                     print("Entrada inválida. Por favor, digite um número (1-4).")
                     sleep(1)
                     screen.clear()
-#final do bloco de código do aluno------------------------------------------------------------
 
 
 
@@ -383,12 +378,13 @@ while True:
 
             while True:
                 screen.clear()
+                print(f"Bem vindo, {linhas[posicao_senha+1]}")
                 screen.menuMOT()
                 opc = int(input("opc = "))
                 if opc == 1:
                     GeralDef.printar_lista("banco_alunos.json")
                     voltar=input("Pressione [ENTER] para voltar")
-                    
+
                 elif opc == 2:
                     screen.clear()
                     print("Rota")
