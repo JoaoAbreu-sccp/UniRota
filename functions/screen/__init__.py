@@ -51,6 +51,7 @@ def editar_usuário_menu(tipo_de_usuário):
 [4]: editar {tipo_de_usuário}
 [0]: Voltar
 """)
+    
     opc=int(input("Por favor selecione uma opção: "))
     return opc
 
