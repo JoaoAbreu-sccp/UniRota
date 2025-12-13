@@ -1437,57 +1437,7 @@ def acompanharota():
                 print()
                 input("Digite ENTER para voltar...")
                 screen.clear()
-                
-                
 
-                while True: 
-                    paginainicial()
-                    try:
-
-                        opcao01 = int(input("Insira a opção que deseja: "))
-
-                        if opcao01 == 1:
-                            screen.clear()
-                            confirmarpartida()
-
-                        elif opcao01 == 2:
-                            screen.clear()
-                            cabecalho("CANCELAR CHECK-IN")
-                            cancelarcheckin()
-
-
-                        elif opcao01 == 3:
-                            screen.clear()
-                            dadospessoais()
-                            cabecalho("DADOS PESSOAIS")
-
-                        elif opcao01 == 4:
-                            screen.clear()
-                            cabecalho("ACOMPANHAR ROTA")
-                            acompanharota()
-                            sleep(2)
-                            screen.clear()
-
-                        elif opcao01 == 5:
-                            screen.clear()
-                            cabecalho("AVISOS")
-                            avisos()
-
-                        elif opcao01 == 0:
-                            print("Saindo do sistema... Até logo.")
-                            sleep(1)
-                            screen.clear()
-                            break
-                        
-                        else:
-                            print("Opção inválida. Tente novamente.")
-                            sleep(1)
-                            screen.clear()
-
-                    except ValueError:
-                        print("Entrada inválida. Por favor, digite um número (1-4).")
-                        sleep(1)
-                        screen.clear()
 
 def ler_txt_simples(caminho):
     """Retorna uma lista de strings, sendo cada item uma linha"""
