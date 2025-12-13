@@ -364,6 +364,7 @@ while True:
                     print("Saindo do sistema... Até logo.")
                     sleep(1)
                     screen.clear()
+                    tipo_de_usuario=""
                     break 
                     
                 else:
