@@ -41,7 +41,7 @@ aluno
 luan.if@gmail.com
 luan4421
 Luan Santos
-IFBA
+Unopar
 85214796325
 73998875431
 07102016
@@ -72,4 +72,149 @@ Rafael Nogueira
 69874512387
 73990051234
 25071982
+-
+
+aluno
+rafael.faes@gmail.com
+rafael321
+Rafael Costa
+FAES
+21345678901
+73990112233
+12042016
+-
+
+aluno
+juliana.pitagoras@gmail.com
+jupita22
+Juliana Rocha
+Pitagoras
+32456789012
+73990223344
+08092015
+-
+
+aluno
+leonardo.faes@gmail.com
+leo789
+Leonardo Martins
+FAES
+43567890123
+73990334455
+17062017
+-
+
+aluno
+patricia.pitagoras@gmail.com
+paty2021
+Patrícia Gomes
+Pitagoras
+54678901234
+73990445566
+29102016
+-
+
+aluno
+andre.unesc@gmail.com
+andreun
+André Figueiredo
+UNESC
+65789012345
+73990556677
+03032015
+-
+
+aluno
+fernanda.faes@gmail.com
+ferfaes
+Fernanda Lopes
+FAES
+76890123456
+73990667788
+14112017
+-
+
+aluno
+caio.pitagoras@gmail.com
+caiofit
+Caio Nunes
+Pitagoras
+87901234567
+73990778899
+25072016
+-
+
+aluno
+roberta.unopar@gmail.com
+robertauno
+Roberta Macedo
+Unopar
+98012345678
+73990889900
+19042015
+-
+
+aluno
+vinicius.unesc@gmail.com
+vini2023
+Vinícius Barros
+UNESC
+10923456789
+73990990011
+06092017
+-
+
+aluno
+aline.faes@gmail.com
+alinefaes
+Aline Carvalho
+FAES
+21034567890
+73991001122
+28122016
+-
+
+motorista
+rota.faes@gmail.com
+faesbus
+Hélio Batista
+33124567890
+73992001133
+15081978
+-
+
+motorista
+trans.pitagoras@gmail.com
+pita998
+Maurício Andrade
+44235678901
+73992112244
+04101981
+-
+
+motorista
+linha.unesc@gmail.com
+unesc77
+Paulo Sérgio
+55346789012
+73992223355
+22111976
+-
+
+motorista
+faes.viagem@gmail.com
+faes202
+Cláudio Rezende
+66457890123
+73992334466
+09071983
+-
+
+motorista
+pitagoras.rota@gmail.com
+rota515
+Nelson Guimarães
+77568901234
+73992445577
+30101979
 -
