@@ -397,7 +397,6 @@ while True:
 
             while True:
                 screen.clear()
-                print(f"Bem vindo, {linhas[posicao_senha+1]}")
                 screen.menuMOT()
                 opc = int(input("opc = "))
                 if opc == 1:
@@ -564,7 +563,7 @@ while True:
                                 sleep(0.5)
                         elif opc == 0:
                                 break
-                elif opc == 4:
+                elif opc == 0:
                     screen.clear()
                     break
                 else:

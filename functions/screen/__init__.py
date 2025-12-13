@@ -116,5 +116,5 @@ def menuMOT():
 [1]: Lista de Alunos
 [2]: Atualizar Rota
 [3]: Adicionar Aviso
-[4]: Sair''')
+[0]: Sair''')
 
