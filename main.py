@@ -77,40 +77,12 @@ while True:
                 screen.clear()
                 screen.menuADM()
                 opc = int(input("\nEscolha uma opção: "))
+
                 if opc == 1:
                     screen.clear()
-                    if not os.path.exists(ARQUIVO_BANCO):
-                        print("Nenhum banco de dados encontrado. Cadastre alguém primeiro!")
-                    else:
-                        with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-                            banco_de_dados_alunos = json.load(arquivo)
-                            print("\n" + "="*140)
-                            print(f"{'LISTA DE ALUNOS':^140}")
-                            print("="*140)
-                            print(f"{'#':<3} {'Nome':<25} {'Instituição':<20} {'P. Embarque':<20} {'P. Desembarque':<20} {'Ida':<6} {'Volta':<6}")
-                            print("-" * 140)
+                    GeralDef.printar_lista("banco_alunos.json")
+                    csv_gerado = False
 
-                            index = 0
-                            for info_aluno in banco_de_dados_alunos:
-                                index += 1
-                                n = info_aluno.get('Nome', '-')
-                                i = info_aluno.get('Instituição', '-')
-                                pe = info_aluno.get('Ponto de embarque', '-')
-                                pd = info_aluno.get('Ponto de desembarque', '-')
-                                
-                                verif_ida = info_aluno.get('Embarque na ida', 'Não')
-                                if verif_ida == "Sim":
-                                    status_ida = "✅"
-                                else:
-                                    status_ida = "❌"
-                                verif_volta = info_aluno.get('Embarque na volta', 'Não')
-                                if verif_volta == "Sim":
-                                    status_volta = "✅"
-                                else:
-                                    status_volta = "❌"
-                                print(f"{index:<3} {n:<25} {i:<20} {pe:<20} {pd:<20} {status_ida:<6} {status_volta:<6}")
-                            print("-" * 140)
-                        csv_gerado = False
                     while True:
                         if not csv_gerado:
                             opc_1 = int(
@@ -126,33 +98,43 @@ while True:
                                 with open(NOME_ARQUIVO_CSV, mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
                                     escritor = csv.writer(arquivo_csv, delimiter=';')
                                     escritor.writerow(["Nome", "Instituição", "Ponto Embarque", "Ponto Desembarque", "Ida", "Volta"])              
+                                   
                                     for aluno in banco_de_dados_alunos:
+                                        ida = aluno.get("Embarque na ida", "Não")
+                                        volta = aluno.get("Embarque na volta", "Não")
+
+                                        if ida != "Sim" and volta != "Sim":
+                                            continue
+                                        
                                         escritor.writerow([
-                                        aluno.get("Nome", ""),
-                                        aluno.get("Instituição", ""),
-                                        aluno.get("Ponto de embarque", ""),
-                                        aluno.get("Ponto de desembarque", ""),
-                                        aluno.get("Embarque na ida", "Não"),
-                                        aluno.get("Embarque na volta", "Não"),
+                                            aluno.get("Nome", ""),
+                                            aluno.get("Instituição", ""),
+                                            aluno.get("Ponto de embarque", ""),
+                                            aluno.get("Ponto de desembarque", ""),
+                                            ida,
+                                            volta,
                                         ])
             
-                                    print(f"\n✅ Sucesso! O arquivo '{NOME_ARQUIVO_CSV}' foi criado.")
-                                    print("Você pode abri-lo no Excel.")
-                                    csv_gerado = True
+                                print(f"\n✅ Sucesso! O arquivo '{NOME_ARQUIVO_CSV}' foi criado.")
+                                print("Você pode abri-lo no Excel.")
+                                csv_gerado = True
 
                             except Exception as e:
                                 print(f"\n❌ Erro ao criar arquivo: {e}")
-
-                                input("\nPressione Enter para continuar...")
-                                sleep(1)
+                                
+                            sleep(0.5)
+                            input("\nPressione Enter para continuar...")
+                            
                         elif opc_1 == 0:
                             print("Saindo...")
                             sleep(0.5)
                             break
+                            
                         else:
                             print("Opção inválida! Tente novamente.")
                     sleep(0.5)
                     screen.clear()
+                    
                 elif opc == 2:
                     screen.clear()
                     while True:
