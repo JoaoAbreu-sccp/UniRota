@@ -438,6 +438,7 @@ def Editar_usuário(tipo_de_usuario_editado):
 
 
 def Adicionar_usuario(tipo_de_usuário_adicionado):
+    from random import randint
 
     adicao_aluno = False
     adicao_motorista = False
@@ -460,12 +461,12 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
         for posição in linhas_limpa:
             posição == "motorista"
             indice = linhas_limpa.index(posição)
-
+        cod=randint(100,999)
         novo_usuario = []
         novo_usuario.append("aluno")
         email = input("Digite o email do aluno: ")
         novo_usuario.append(email)
-        novo_usuario.append("aluno123")
+        novo_usuario.append(f"aluno{cod}")
         nome = input("Digite o nome do aluno: ")
         novo_usuario.append(nome)
         Instituição = input("Digite a instituição do aluno: ")
@@ -492,16 +493,17 @@ def Adicionar_usuario(tipo_de_usuário_adicionado):
 
     elif tipo_de_usuário_adicionado == "motorista":
 
+        cod=randint(100,999)
         novo_usuario = []
         novo_usuario.append("motorista")
         email = input("Digite o email do motorista: ")
         novo_usuario.append(email)
-        novo_usuario.append("moto123")
+        novo_usuario.append(f"moto{cod}")
         nome = input("Digite o nome do motorista: ")
         novo_usuario.append(nome)
         Cpf = input("Digite o cpf do motorista: ")
         novo_usuario.append(Cpf)
-        Telefone = input("Digite o cpf do motorista: ")
+        Telefone = input("Digite o telefone do motorista: ")
         novo_usuario.append(Cpf)
         Data_de_nascimento=("Digite a da nascimento do motorista: ")
         novo_usuario.append(Data_de_nascimento)
@@ -1593,23 +1595,6 @@ def carregar_user_cache(caminho_arquivo):
                 user_cache[chave] = valor
 
     return user_cache
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
