@@ -8,13 +8,13 @@ Joao
 -
 
 aluno
-aluno@gmail.com
-aluno123
-Pedro
-IFBA
-86243523412
-73948065421
-13072019
+aline.faes@gmail.com
+alinefaes
+Aline Carvalho
+Unopar
+21034567890
+73991001122
+28122016
 -
 
 aluno
@@ -164,16 +164,6 @@ UNESC
 06092017
 -
 
-aluno
-aline.faes@gmail.com
-alinefaes
-Aline Carvalho
-FAES
-21034567890
-73991001122
-28122016
--
-
 motorista
 rota.faes@gmail.com
 faesbus
@@ -184,8 +174,8 @@ Hélio Batista
 -
 
 motorista
-trans.pitagoras@gmail.com
-pita998
+trans.pitonico@gmail.com
+pitocino
 Maurício Andrade
 44235678901
 73992112244
@@ -193,8 +183,8 @@ Maurício Andrade
 -
 
 motorista
-linha.unesc@gmail.com
-unesc77
+linha.bradesco@gmail.com
+bradesco
 Paulo Sérgio
 55346789012
 73992223355
@@ -202,8 +192,8 @@ Paulo Sérgio
 -
 
 motorista
-faes.viagem@gmail.com
-faes202
+faes.churras@gmail.com
+Churrinha
 Cláudio Rezende
 66457890123
 73992334466
@@ -218,3 +208,4 @@ Nelson Guimarães
 73992445577
 30101979
 -
+
