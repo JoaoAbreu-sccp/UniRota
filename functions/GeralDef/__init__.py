@@ -1,1596 +1,525 @@
+from functions import GeralDef, screen
 from time import sleep
-from functions import screen
+from datetime import datetime
+import csv
 import json
 import os
+import sys
 
 
-def PasswordReset(email):
-    from random import randint
+screen.clear()
+csv_gerado = False
 
+
+
+while True:
+    GeralDef.gerar_lista_confirmacao_json()
+    tipo_de_usuario=None
     logins = open("logins.txt")
     linhas = logins.read().splitlines()
     logins.close()
 
-    if email in linhas:
-        codigo_reset = f"{randint(0, 999999):06}"
-
-        reset = open("codigo.txt", "w")
-        reset.write(codigo_reset + "\n")
-        reset.close()
-
-        reset = open("codigo.txt", "r")
-        codigoreset = reset.read().splitlines()
-        reset.close()
-
-        print("Se esse email estiver cadastrado, ensira o código que foi enviado")
-        codigo = input("Digite o código de reset: ")
-
-        if codigo == codigoreset[0]:
-            posicao_senha = linhas.index(email) + 1
-            linhas[posicao_senha] = input("Digite a nova senha: ")
-            logins = open("logins.txt", "w")
-            logins.writelines([linha + "\n" for linha in linhas])
-            logins.close()
-            print("Senha alterada com sucesso!")
-        else:
-            print("Código incorreto!")
-    else:
-        print("Se esse email estiver cadastrado, ensira o código que foi enviado")
-        codigo = input("Digite o código de reset: ")
-        print("Código incorreto!")
-
-import json
-
-def gerar_lista_confirmacao_json():
-    with open("logins.txt", "r", encoding="utf-8") as f:
-        linhas = [l for l in f.read().splitlines() if l.strip()]
-
-    alunos = []
-
-    for i, linha in enumerate(linhas):
-        if linha == "aluno":
-            bloco = linhas[i:i+9]
-            alunos.append({
-                "Email": bloco[1],
-                "Nome": bloco[3],
-                "Instituição": bloco[4]
-            })
-
-    try:
-        with open("banco_alunos.json", "r", encoding="utf-8") as f:
-            lista_antiga = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        lista_antiga = []
-
-    mapa_antigo = {}
-    for a in lista_antiga:
-        chave = f'{a["Nome"]}'.lower()
-        mapa_antigo[chave] = a
-
-    nova_lista = []
-
-    for aluno in alunos:
-        nome_atual = aluno["Nome"]
-        chave = nome_atual.lower()
-
-        if chave in mapa_antigo:
-            item = mapa_antigo[chave]
-            item["Nome"] = aluno["Nome"]
-            item["Instituição"] = aluno["Instituição"]
-            nova_lista.append(item)
-        else:
-            nova_lista.append({
-                "Nome": aluno["Nome"],
-                "Instituição": aluno["Instituição"],
-                "Ponto de embarque": "-",
-                "Ponto de desembarque": "-",
-                "Embarque na ida": "Não",
-                "Embarque na volta": "Não",
-                "Horário": "-"
-            })
-
-    with open("banco_alunos.json", "w", encoding="utf-8") as f:
-        json.dump(nova_lista, f, ensure_ascii=False, indent=4)
-
-
-
-
-def printar_lista(ARQUIVO_BANCO):
-    screen.clear()
-    if not os.path.exists(ARQUIVO_BANCO):
-        print("Nenhum banco de dados encontrado. Cadastre alguém primeiro!")
-    else:
-        with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-            banco_de_dados_alunos = json.load(arquivo)
-            print("\n" + "="*110)
-            print(f"{'LISTA DE ALUNOS':^110}")
-            print("="*110)
-            print(f"{'#':<3} {'Nome':<25} {'Instituição':<20} {'P. Embarque':<20} {'P. Desembarque':<20} {'Ida':<6} {'Volta':<6}")
-            print("-" * 110)
-
-        index = 0
-        for info_aluno in banco_de_dados_alunos:
-            n = info_aluno.get('Nome', '-')
-            i = info_aluno.get('Instituição', '-')
-            pe = info_aluno.get('Ponto de embarque', '-')
-            pd = info_aluno.get('Ponto de desembarque', '-')
-                                
-            verif_ida = info_aluno.get('Embarque na ida', 'Não')
-            if verif_ida == "Sim":
-                status_ida = "✅"
-            else:
-                status_ida = "❌"
-            verif_volta = info_aluno.get('Embarque na volta', 'Não')
-            if verif_volta == "Sim":
-                status_volta = "✅"
-            else:
-                status_volta = "❌"
-
-            if verif_ida== "Sim" or verif_volta == "Sim":
-                index+=1
-                print(f"{index:<3} {n:<25} {i:<20} {pe:<20} {pd:<20} {status_ida:<6} {status_volta:<6}")
-        print("-" * 110)
-
-#admnistrador
-
-def CreateNotice():
-    from datetime import datetime
-
+    screen.menu()
     while True:
-        print("Digite o Aviso [SAIR para encerrar]:")
-        text = str(input("-> "))
-        if text.upper() == "SAIR":
-            break
-        date = datetime.now()
-        date_time = date.strftime("%d/%m/%Y %H:%M:%S")
-        novo_aviso = f"[{date_time}] {text}\n"
-
-        arquivo = open("avisos.txt", "r", encoding="utf-8")
-        conteudo_antigo = arquivo.read()
-        arquivo.close()
-
-        avisos = open("avisos.txt", "w", encoding="utf-8")
-        avisos.write(novo_aviso + conteudo_antigo)
-        avisos.close()
-
-        print("Aviso salvo com sucesso")
-
-def EditarAviso(index, texto, caminho="avisos.txt"):
-    with open(caminho, "r", encoding="utf-8") as arq:
-        avisos = arq.readlines()
-
-    if 0 <= index < len(avisos):
-        linha_original = avisos[index].rstrip("\n")
-        prefixo = linha_original[:22]
-        avisos[index] = f"{prefixo}[EDITADO] {texto}\n"
-
-        with open(caminho, "w", encoding="utf-8") as arq:
-            arq.writelines(avisos)
-
-        return True
-
-    return False
-
-def ExcluirAviso(index, caminho="avisos.txt"):
-    """Exclui o aviso no índice informado."""
-    try:
-        with open(caminho, "r", encoding="utf-8") as arq:
-            avisos = arq.readlines()
-    except FileNotFoundError:
-        return False
-
-    if 0 <= index < len(avisos):
-        avisos.pop(index)
-
-        with open(caminho, "w", encoding="utf-8") as arq:
-            arq.writelines(avisos)
-
-        return True 
-
-    return False
-
-def visualizar_usuários(tipo_de_usuario):
-    with open("logins.txt", "r", encoding="utf-8") as f:
-        linhas = [l for l in f.read().splitlines() if l.strip()]
-
-    usuarios = {}
-    ordem = []
-
-    i = 0
-    while i < len(linhas):
-        if tipo_de_usuario == "alunos" and linhas[i] == "aluno":
-            bloco = linhas[i+1:i+9]
-            email = bloco[0]
-            if email not in usuarios:
-                ordem.append(email)
-            usuarios[email] = bloco
-            i += 9
-
-        elif tipo_de_usuario == "motoristas" and linhas[i] == "motorista":
-            bloco = linhas[i+1:i+8]
-            email = bloco[0]
-            if email not in usuarios:
-                ordem.append(email)
-            usuarios[email] = bloco
-            i += 8
-
-        else:
-            i += 1
-
-    lista_final = [usuarios[email] for email in ordem]
-
-    def formatar_cpf(cpf):
-        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}" if len(cpf) == 11 else cpf
-
-    def formatar_telefone(tel):
-        return f"({tel[:2]}){tel[2:7]}-{tel[7:]}" if len(tel) == 11 else tel
-
-    def formatar_data(data):
-        return f"{data[:2]}/{data[2:4]}/{data[4:]}" if len(data) == 8 else data
-
-    for i, u in enumerate(lista_final):
-        print(f"[{i+1}] - {u[2]}")
-
-    escolha = input("\nSelecione um usuário para ver as informações ([0] para sair): ")
-    if not escolha.isdigit() or int(escolha) == 0:
-        return
-
-    u = lista_final[int(escolha) - 1]
-
-    if tipo_de_usuario == "alunos":
-        print(f"""
-Nome: {u[2]}
-Email: {u[0]}
-Instituição: {u[3]}
-CPF: {formatar_cpf(u[4])}
-Telefone: {formatar_telefone(u[5])}
-Data de nascimento: {formatar_data(u[6])}
-""")
-
-    elif tipo_de_usuario == "motoristas":
-        print(f"""
-Nome: {u[2]}
-Email: {u[0]}
-CPF: {formatar_cpf(u[3])}
-Telefone: {formatar_telefone(u[4])}
-Data de nascimento: {formatar_data(u[5])}
-""")
-
-def Editar_usuário(tipo_de_usuario_editado):
-
-    def limpar_numero(valor):
-        return "".join(filter(str.isdigit, valor))
-
-    def formatar_cpf(cpf):
-        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}" if len(cpf) == 11 else cpf
-
-    def formatar_telefone(tel):
-        return f"({tel[:2]}){tel[2:7]}-{tel[7:]}" if len(tel) == 11 else tel
-
-    def formatar_data(data):
-        return f"{data[:2]}/{data[2:4]}/{data[4:]}" if len(data) == 8 else data
-
-    lista_a = ["Nome", "Instituição", "CPF", "Telefone", "Data de nascimento"]
-    lista_m = ["Nome", "CPF", "Telefone", "Data de nascimento"]
-
-    with open("logins.txt", "r", encoding="utf-8") as f:
-        linhas = f.read().splitlines()
-        linhas_limpa = [linha for linha in linhas if linha != ""]
-
-    alunos = []
-    motoristas = []
-
-    for i, linha in enumerate(linhas_limpa):
-        if linha == "aluno":
-            alunos.append(linhas_limpa[i:i+9])
-        elif linha == "motorista":
-            motoristas.append(linhas_limpa[i:i+8])
-
-    if tipo_de_usuario_editado == "aluno":
-        if not alunos:
-            print("Não há alunos cadastrados!")
-            sleep(2)
-            return
-
-        print("\nAlunos cadastrados:")
-        for i, aluno in enumerate(alunos):
-            print(f"[{i+1}] - {aluno[3]}")
-
-        indice = input("\nDigite o número do aluno ([0] para sair): ")
-        if not indice.isdigit() or int(indice) == 0:
-            return
-
-        indice = int(indice) - 1
-        aluno = alunos[indice]
-
-        print("\nInformações atuais:")
-        print(f"""1 - Nome: {aluno[3]}
-2 - Instituição: {aluno[4]}
-3 - CPF: {formatar_cpf(aluno[5])}
-4 - Telefone: {formatar_telefone(aluno[6])}
-5 - Data de nascimento: {formatar_data(aluno[7])}""")
-
-        campo = input("\nQual campo deseja editar (1-5) [0 para sair]: ")
-        if not campo.isdigit() or int(campo) == 0:
-            return
-
-        campo = int(campo)
-        lista_de_caracteres=[": ", ": ", ": ", ", digite com o (DDD): ", ": "]
-        if 1 <= campo <= 5:
-            while True:
-                novo_valor = input(f"Novo valor para {lista_a[campo-1]}{lista_de_caracteres[campo]}")
-
-                if lista_a[campo-1] == "CPF":
-                    valor = limpar_numero(novo_valor)
-                    if len(valor) not in (11, 14):
-                        print("CPF invalido")
-                        input("")
-                        continue
-                    novo_valor = valor
-
-                if lista_a[campo-1] == "Telefone":
-                    valor = limpar_numero(novo_valor)
-                    if len(valor) not in (10, 11, 13, 14):
-                        print("Telefone invalido")
-                        input("")
-                        continue
-                    novo_valor = valor
-
-                if lista_a[campo-1] == "Data de nascimento":
-                    valor = limpar_numero(novo_valor)
-                    if len(valor) not in (8, 10):
-                        print("Data de nascimento invalida")
-                        input("")
-                        continue
-                    novo_valor = valor
-
-                break
-
-            aluno[campo + 2] = novo_valor
-
-            contador = -1
-            for i, linha in enumerate(linhas_limpa):
-                if linha == "aluno":
-                    contador += 1
-                    if contador == indice:
-                        linhas_limpa[i:i+9] = aluno
-                        break
-
-    if tipo_de_usuario_editado == "motorista":
-        if not motoristas:
-            print("Não há motoristas cadastrados!")
-            sleep(2)
-            return
-
-        print("\nMotoristas cadastrados:")
-        for i, motorista in enumerate(motoristas):
-            print(f"[{i+1}] - {motorista[3]}")
-
-        indice = input("\nDigite o número do motorista ([0] para sair): ")
-        if not indice.isdigit() or int(indice) == 0:
-            return
-
-        indice = int(indice) - 1
-        motorista = motoristas[indice]
-
-        print("\nInformações atuais:")
-        print(f"""1 - Nome: {motorista[3]}
-2 - CPF: {formatar_cpf(motorista[4])}
-3 - Telefone: {formatar_telefone(motorista[5])}
-4 - Data de nascimento: {formatar_data(motorista[6])}""")
-
-        campo = input("\nQual campo deseja editar (1-4) [0 para sair]: ")
-        if not campo.isdigit() or int(campo) == 0:
-            return
-
-        campo = int(campo)
-        lista_de_caracteres2=[": ", ": ", ": ", ", digite com o (DDD): ", ": "]
-        if 1 <= campo <= 4:
-            while True:
-                novo_valor = input(f"Novo valor para {lista_m[campo-1]}{lista_de_caracteres2[campo]}")
-
-                if lista_m[campo-1] == "CPF":
-                    valor = limpar_numero(novo_valor)
-                    if len(valor) not in (11, 14):
-                        print("CPF invalido")
-                        print("")
-                        continue
-                    novo_valor = valor
-
-                if lista_m[campo-1] == "Telefone":
-                    valor = limpar_numero(novo_valor)
-                    if len(valor) not in (10, 11, 13, 14):
-                        print("Telefone invalido")
-                        print("")
-                        continue
-                    novo_valor = valor
-
-                if lista_m[campo-1] == "Data de nascimento":
-                    valor = limpar_numero(novo_valor)
-                    if len(valor) not in (8, 10):
-                        print("Data de nascimento invalida")
-                        print("")
-                        continue
-                    novo_valor = valor
-
-                break
-
-            motorista[campo + 2] = novo_valor
-
-            contador = -1
-            for i, linha in enumerate(linhas_limpa):
-                if linha == "motorista":
-                    contador += 1
-                    if contador == indice:
-                        linhas_limpa[i:i+8] = motorista
-                        break
-
-    with open("logins.txt", "w", encoding="utf-8") as f:
-        for linha in linhas_limpa:
-            f.write(linha + "\n")
-            if linha == "-":
-                f.write("\n")
-
-    print("\n✅ Informação atualizada com sucesso!")
-    sleep(2)
-
-
-
-
-def Adicionar_usuario(tipo_de_usuário_adicionado):
-
-    adicao_aluno = False
-    adicao_motorista = False
-
-    with open("logins.txt", "r", encoding="utf-8") as f:
-        linhas = f.read().splitlines()
-        linhas_limpa = [linha for linha in linhas if linha != ""]
-        alunos = []
-        motoristas = []
-
-    lista = [
-        "nome",
-        "Instituição",
-        "Cpf",
-        "Telefone",
-        "Data de nascimento",
-    ]
-
-    if tipo_de_usuário_adicionado == "aluno":
-        for posição in linhas_limpa:
-            posição == "motorista"
-            indice = linhas_limpa.index(posição)
-
-        novo_usuario = []
-        novo_usuario.append("aluno")
-        email = input("Digite o email do aluno: ")
-        novo_usuario.append(email)
-        novo_usuario.append("aluno123")
-        nome = input("Digite o nome do aluno: ")
-        novo_usuario.append(nome)
-        Instituição = input("Digite a instituição do aluno: ")
-        novo_usuario.append(Instituição)
-        Cpf = input("Digite o cpf do aluno: ")
-        novo_usuario.append(Cpf)
-        Telefone = input("Digite o telefone do aluno: ")
-        novo_usuario.append(Telefone)
-        Data_de_nascimento = input("Digte a data de nascimento do aluno: ")
-        novo_usuario.append(Data_de_nascimento)
-        novo_usuario.append("-")
-
-        while True:
-            confirma_adicao=input("Confirmar adição [s/n]: ")
-            if confirma_adicao=="s":
-                adicao_aluno = True
-                break
-            elif confirma_adicao=="n":
-                adicao_aluno = False
+        try:
+            opc = int(input("\nEscolha uma opção: "))
+            if 0 <= opc <= 6:
                 break
             else:
-                print("Por favor digite [s] ou [n]")
+                print("\nPor favor, insira uma opção valida!")
+                input("\nPressione ENTER para voltar...") 
 
-
-    elif tipo_de_usuário_adicionado == "motorista":
-
-        novo_usuario = []
-        novo_usuario.append("motorista")
-        email = input("Digite o email do motorista: ")
-        novo_usuario.append(email)
-        novo_usuario.append("moto123")
-        nome = input("Digite o nome do motorista: ")
-        novo_usuario.append(nome)
-        Cpf = input("Digite o cpf do motorista: ")
-        novo_usuario.append(Cpf)
-        Telefone = input("Digite o cpf do motorista: ")
-        novo_usuario.append(Cpf)
-        Data_de_nascimento=("Digite a da nascimento do motorista: ")
-        novo_usuario.append(Data_de_nascimento)
-        novo_usuario.append("-")
+        except ValueError:
+            print("Por favor digite um número inteiro!")
+    screen.clear()
         
-        while True:
-            confirma_adicao=input("Confirmar adição [s/n]: ")
-            if confirma_adicao.lower().strip()=="s":
-                adicao_motorista = True
-                break
-            elif confirma_adicao.lower().strip()=="n":
-                adicao_motorista = False
-                break
+    if opc == 1:
+        email = input("Digite o Email de Login: ").strip()
+        senha = input("Digite a senha de acesso: ").strip()
+        if email in linhas:
+            posicao_senha = linhas.index(email) + 1
+            if linhas[posicao_senha] == senha:
+                posicao_tipo = linhas.index(email) - 1
+                tipo_de_usuario = linhas[posicao_tipo]
+                nome_usuario=linhas.index(email) - 2
             else:
-                print("Por favor digite [s] ou [n]")
-
-
-    linhas_limpa.extend(novo_usuario)
-
-    if adicao_aluno:
-        with open("logins.txt", "w", encoding="utf-8") as f:
-            for i, linha in enumerate(linhas_limpa):
-                f.write(linha + "\n")
-                if linha == "-":
-                    f.write("\n")
-
-    if adicao_motorista:
-        with open("logins.txt", "w", encoding="utf-8") as f:
-            for i, linha in enumerate(linhas_limpa):
-                f.write(linha + "\n")
-                if linha == "-":
-                    f.write("\n")
-
-
-
-def Excluir_usuario(tipo_de_usuário_excluido):
-    with open("logins.txt", "r", encoding="utf-8") as f:
-        linhas = f.read().splitlines()
-        linhas_limpa = [linha for linha in linhas if linha != ""]
-        alunos = []
-        motoristas = []
-
-        for c, linha in enumerate(linhas_limpa):
-            if linha == "aluno":
-                alunos.append(linhas_limpa[c : c + 9])
-            if linha == "motorista":
-                motoristas.append(linhas_limpa[c : c + 8])
-
-    if tipo_de_usuário_excluido == "aluno":
-        if not alunos:
-            print("Não há nenhum aluno cadastrados!")
+                print("Email ou senha incorretos...")
+                sleep(2)
+                screen.clear()
         else:
-            print("\nAlunos cadastrados:")
-        for i, aluno in enumerate(alunos):
-            print(f"[{i+1}] - {aluno[3]}")   
-        indice = int(input("\nDigite o número do aluno que deseja excluir: ")) - 1
-        aluno_escolhido = alunos[indice]
-
-        nome = aluno_escolhido[3]          
-        pos_nome = linhas_limpa.index(nome)  
-
-        inicio_bloco = pos_nome - 3         
-
-        for _ in range(9):         
-            linhas_limpa.pop(inicio_bloco)
-
-    if tipo_de_usuário_excluido == "motorista":
-        if not motoristas:
-            print("Não há nenhum motorista cadastrados!")
+            print("Email ou senha incorretos...")
+            sleep(2)
+            screen.clear()
+    elif opc == 2:
+        email = input("Digite o email cadastrado: ")
+        if email.endswith("@gmail.com"):
+            GeralDef.PasswordReset(email)
         else:
-            print("\nMotoristas cadastrados:")
+            print("Insira um email válido")
+        sleep(2)
+        screen.clear()
+    elif opc == 0:
+        print("Saindo do sistema... Até logo!")
+        sys.exit()
+        
+    
+    else:
+        print("Selecione uma opção válida!")
+        input("\nPressione ENTER para voltar...")
+        screen.clear()
+        
+    
+    if tipo_de_usuario is not None:
 
-        for i, motorista in enumerate(motoristas):
-            print(f"[{i+1}] - {motorista[3]}")
+        if tipo_de_usuario == "administrador":
+            csv_gerado = False
+            while True:
+                tipo_de_usuario == ""
+                screen.clear()
+                screen.menuADM()
+                opc = int(input("\nEscolha uma opção: "))
+                if opc == 1:
+                    screen.clear()
+                    GeralDef.printar_lista("banco_alunos.json")
+                    while True:
+                        if not csv_gerado:
+                            opc_1 = int(
+                                input("""\n[1]: Exportar para CSV\n[0]: Sair\n\nDigite: """)
+                            )
+                        else:
+                            opc_1 = int(input("\n[0]: Sair\n\nDigite: "))
 
-        indice = int(input("\nDigite o número do motorista que deseja excluir: ")) - 1
-        motorista_escolhido = motoristas[indice]
+                        if opc_1 == 1:
+                            screen.clear()
+                            print("Exportando...")
+                            NOME_ARQUIVO_CSV = "Relatorio_Alunos.csv"
 
-        nome = motorista_escolhido[3]
-        pos_nome = linhas_limpa.index(nome)
+                            try:
+                                with open(NOME_ARQUIVO_CSV, mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
+                                    escritor = csv.writer(arquivo_csv, delimiter=';')
+                                    escritor.writerow(["Nome", "Instituição", "Ponto Embarque", "Ponto Desembarque", "Ida", "Volta"])
 
-        inicio_bloco = pos_nome - 3
+                                    for aluno in banco_de_dados_alunos:
+                                        ida = aluno.get("Embarque na ida", "Não")
+                                        volta = aluno.get("Embarque na volta", "Não")
 
-        for _ in range(8):
-            linhas_limpa.pop(inicio_bloco)
+                                        if ida != "Sim" and volta != "Sim":
+                                            continue
+                                        
+                                        escritor.writerow([
+                                            aluno.get("Nome", ""),
+                                            aluno.get("Instituição", ""),
+                                            aluno.get("Ponto de embarque", ""),
+                                            aluno.get("Ponto de desembarque", ""),
+                                            ida,
+                                            volta,
+                                        ])
+
+                                print(f"\n✅ Sucesso! O arquivo '{NOME_ARQUIVO_CSV}' foi criado.")
+                                print("Você pode abri-lo no Excel.")
+                                ent=input("Pressione [ENTER] para voltar")
+                                sleep(0.5)
+                                csv_gerado = True
+
+                            except Exception as e:
+                                print(f"Erro ao gerar o CSV: {e}")
+
+                        elif opc_1 == 0:
+                            print("Saindo...")
+                            sleep(0.5)
+                            break
+                        else:
+                            print("Opção inválida! Tente novamente.")
+                    sleep(0.5)
+                    screen.clear()
+
+                elif opc == 2:
+                    screen.clear()
+                    while True:
+                        screen.clear()
+                        screen.menuUniversidades()
+                        subopc = input("Opção: ")
+                        if subopc == "1":
+                            GeralDef.cadastrar_universidade()
+                        elif subopc == "2":
+                            GeralDef.listar_universidades()
+                        elif subopc == "3":
+                            GeralDef.editar_universidade()
+                        elif subopc == "4":
+                            GeralDef.excluir_universidade()
+                        elif subopc == "0":
+                            break
+                        else:
+                            print("Opção inválida!")
+                            sleep(1)
+                            
+                elif opc == 3:
+                    while True:
+                        screen.clear()
+                        opc_1 = screen.editar_usuário_menu("aluno")
+                        if opc_1==1:
+                            screen.clear()
+                            GeralDef.visualizar_usuários("alunos")
+                            sair=input("\n[ENTER] para voltar: ")
+                        elif opc_1 == 2:
+                            screen.clear()
+                            GeralDef.Adicionar_usuario("aluno")
+                            GeralDef.gerar_lista_confirmacao_json()
+                        elif opc_1 == 3:
+                            screen.clear()
+                            GeralDef.Excluir_usuario("aluno")
+                            GeralDef.gerar_lista_confirmacao_json()
+                        elif opc_1 == 4:
+                            screen.clear()
+                            GeralDef.Editar_usuário("aluno")
+                            GeralDef.gerar_lista_confirmacao_json()
+                        elif opc_1==0:
+                            break
+
+                elif opc == 4:
+                    while True:
+                        screen.clear()
+                        opc_1 = screen.editar_usuário_menu("motorista")
+                        if opc_1 == 1:
+                            screen.clear()
+                            GeralDef.visualizar_usuários("motoristas")
+                            sair=input("\n[ENTER] para voltar: ")
+                        elif opc_1 == 2:
+                            screen.clear()
+                            GeralDef.Adicionar_usuario("motorista")
+                        elif opc_1 == 3:
+                            screen.clear()
+                            GeralDef.Excluir_usuario("motorista")
+                        elif opc_1 == 4:
+                            screen.clear()
+                            GeralDef.Editar_usuário("motorista")
+                        elif opc_1 == 0:
+                            break
+                            
+                            
+                elif opc == 5:
+                    screen.clear()
+                    opc=screen.rota()
+                    if opc==1:
+                        GeralDef.mostrar_rota()
+                    elif opc==2:
+                        GeralDef.adicionar_ponto()
+                        print ("Rota alterado com sucesso")
+                        sleep(0.5)
+                        print("Imprimindo nova rota")
+                        sleep(0.7)
+                        screen.clear()
+                        sleep(0.3)
+                        GeralDef.mostrar_rota()
+                    elif opc==3:
+                        GeralDef.remover_ponto()
+                        print ("Rota alterado com sucesso")
+                        sleep(0.5)
+                        print("Imprimindo nova rota")
+                        sleep(0.7)
+                        screen.clear()
+                        sleep(0.3)
+                        GeralDef.mostrar_rota()
+                    
+                elif opc == 6:
+                    while True:
+                        screen.clear()
+                        screen.menuAVISO()
+                        opc = int(input("opc = "))
+                        if opc == 1:
+                            GeralDef.CreateNotice()
+                        elif opc == 2:
+                            avisos = open("avisos.txt", "r", encoding="utf-8")
+                            linhasavisos = avisos.read().splitlines()
+                            avisos.close()
+                            screen.clear()
+                            for aviso in linhasavisos:
+                                print(aviso)
+                            voltar = str(input("\nDigite [0] para voltar: "))
+                        elif opc == 3:
+                            avisos = open("avisos.txt", "r", encoding="utf-8")
+                            linhasavisos = avisos.read().splitlines()
+                            avisos.close()
+                            screen.clear()
+                            indice = 0
+                            for aviso in linhasavisos:
+                                indice += 1
+                                print(f"[{indice}] {aviso}")
+                                
+                            print()
+                            print("[1] Para Editar Aviso")
+                            print("[2] Para Excluir Aviso")
+                            print("[0] Para voltar")
+                            opcaviso = int(input("opc = "))
+                            if opcaviso == 1:
+                                index = int(input("Digite o número do aviso que deseja EDITAR [0 para cancelar]: "))
+                                if index == 0:
+                                    continue
+                                elif index > indice or index < 1:
+                                    print("Opção invalida...")
+                                    sleep(0.5)
+                                    continue
+                                print("Digite a nova versão do aviso:")
+                                texto = str(input("-> "))
+                                GeralDef.EditarAviso(index-1, texto)
+                                print("Aviso editado com successo!")
+                                sleep(0.5)
+                            elif opcaviso == 2:
+                                index = int(input("Digite o número do aviso que deseja EXCLUIR [0 para cancelar]: "))
+                                if index == 0:
+                                    continue
+                                elif index > indice or index < 1:
+                                    print("Opção invalida...")
+                                    sleep(0.5)
+                                    continue
+                                GeralDef.ExcluirAviso(index-1)
+                                print("Aviso Excluido com sucesso!")
+                                sleep(0.5)
+
+                                
+                        elif opc == 0:
+                            break
+                        else:
+                            screen.clear()
+                            print("Selecione uma opção valida...")
+                            sleep(2)
+                elif opc == 7:
+                    while True:
+                        screen.clear()
+                        opc_1 = screen.menuADM_sua_conta()
+                        if opc_1 == 1:
+                            GeralDef.Sua_conta(tipo_de_usuario)
+                        elif opc_1 == 2:
+                            GeralDef.Credenciais(tipo_de_usuario)
+                        elif opc_1 == 0:
+                            break
+                        else:
+                            print("Por favor insira uma opção valida! ")
+                    break
+                elif opc==0:
+                    print("saindo...")
+                    sleep(2)
+                    screen.clear()
+                    break
+                else:
+                    screen.clear()
+                    print("Selecione uma opção valida...")
+                    sleep(2)
+
+
+
+
+#início do bloco de códigos do aluno----------------------------------------------------------
+        elif linhas[posicao_tipo] == "aluno":
+            screen.clear()
             
 
-    with open("logins.txt", "w", encoding="utf-8") as f:
-        for i, linha in enumerate(linhas_limpa):
-            f.write(linha + "\n")
-            if linha == "-":
-                f.write("\n")
-
-def Sua_conta(tipo_de_login):
-    from random import randint
-
-    with open("logins.txt", "r+", encoding="utf-8") as f:
-        linhas = [linha.strip() for linha in f.readlines()]
-
-        indície = linhas.index(tipo_de_login)
-        print(f"""
-    Login {tipo_de_login}
-
-Nome: {linhas[indície+3]}
-Data de Nascimento: {linhas[indície+6]}
-Cpf: {linhas[indície+4]}
-Telefone: {linhas[indície+5]}
-              """)
-        while True:
-            opc = int(
-                input(
-                    """
-[1] Alterar Telefone
-[0] Voltar: 
-                    
-Digite: """))
-
-            if opc == 1:
-                print("O código de acesso foi enviado para seu número")
-                codigo_reset = f"{randint(0, 999999):06}"
-
-                with open("codigo.txt", "w", encoding="utf-8") as reset:
-                    reset.write(codigo_reset + "\n")
-
-                with open("codigo.txt", "r", encoding="utf-8") as reset:
-                    codigoreset = reset.read().strip()
-
-                codigo = input("Digte: ")
-                if codigo == codigoreset:
-                    linhas[indície + 5] = input("Digite seu novo telefone: ")
-
-                    with open("logins.txt", "w", encoding="utf-8") as logins:
-                        logins.writelines([linha + "\n" for linha in linhas])
-
-                    print("Telefone alteraqdo com sucesso! ")
-                else:
-                    print("Codigo incorreto! ")
-            elif opc == 0:
-                break
-
-
-def Credenciais(tipo_de_login):
-    with open("logins.txt", "r+", encoding="utf-8") as f:
-        linhas = [linha.strip() for linha in f.readlines()]
-
-        indície = linhas.index(tipo_de_login)
-
-        senha = linhas[indície + 2]
-        while True:
-            confirmar_senha = input(
-                "Por favor insira sua senha para entrar neste campo: "
-            )
-            if confirmar_senha == senha:
-                print(f"Senha atual: {senha}")
-                opc = int(
-                    input(
-                        """
-[1] Alterar senha
-[0] Voltar
-
-Digite: """
-                    )
-                )
-                if opc == 1:
-                    PasswordReset(linhas[indície + 1])
-                if opc == 0:
-                    break
-            else:
-                print("Senha incorreta! ")
-
-
-
-def carregar_universidades():
-    
-    import os
-    lista_universidades = []
-    
-    if not os.path.exists("lista_universidades.txt"):
-        return lista_universidades
-
-    with open("lista_universidades.txt", "r") as f:
-        conteudo = f.read().strip()
-
-    if not conteudo:
-        return lista_universidades
-
-    blocos = conteudo.split("---")
-
-    for bloco in blocos:
-        linhas = [x.strip() for x in bloco.splitlines() if x.strip()]
-        if len(linhas) >= 3:
-            lista_universidades.append({
-                "nome": linhas[0],
-                "cnpj": linhas[1],
-                "endereco": linhas[2]})
-
-    return lista_universidades
-
-def salvar_universidades(lista_universidades):
-    with open("lista_universidades.txt", "w") as f:
-        for u in lista_universidades:
-            f.write(f"{u['nome']}\n{u['cnpj']}\n{u['endereco']}\n---\n")
-
-def cadastrar_universidade():
-    nome = input("Nome: ").strip()
-    cnpj = input("CNPJ: ").strip()
-    endereco = input("Endereço: ").strip()
-
-    if not nome or not cnpj or not endereco:
-        print("Todos os campos são obrigatórios.")
-        sleep(2)
-        return
-
-    lista_universidades = carregar_universidades()
-
-    lista_universidades.append({
-        "nome": nome,
-        "cnpj": cnpj,
-        "endereco": endereco})
-
-    salvar_universidades(lista_universidades)
-
-    print(f"\n:Universidade '{nome}' cadastrada com sucesso!")
-    sleep(2)
-
-
-def listar_universidades():
-    screen.clear()
-    lista_universidades = carregar_universidades()
-
-    print('''\n---------------------------
- UNIVERSIDADES CADASTRADAS
----------------------------\n''')
-
-    if not lista_universidades:
-        print("Nenhuma universidade cadastrada.")
-        input("\nPressione ENTER para continuar...")
-        return
-    for i, u in enumerate(lista_universidades, 1):
-        print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
-
-    input("\nPressione ENTER para continuar...")
-def editar_universidade():
-    lista_universidades = carregar_universidades()
-
-    if not lista_universidades:
-        print("Nenhuma universidade cadastrada.")
-        sleep(2)
-        return
-
-    listar_universidades()
-
-    entrada = input("\nDigite o número da universidade: ").strip()
-
-    if not entrada.isdigit():
-        print("Entrada inválida.")
-        sleep(2)
-        return
-
-    i = int(entrada) - 1
-    if not (0 <= i < len(lista_universidades)):
-        print("Número inválido.")
-        sleep(2)
-        return
-
-    u = lista_universidades[i]
-
-    novo_nome = input(f"Novo nome ({u['nome']}): ").strip() or u['nome']
-    novo_cnpj = input(f"Novo CNPJ ({u['cnpj']}): ").strip() or u['cnpj']
-    novo_endereco = input(f"Novo Endereço ({u['endereco']}): ").strip() or u['endereco']
-
-    lista_universidades[i] = {
-        "nome": novo_nome,
-        "cnpj": novo_cnpj,
-        "endereco": novo_endereco}
-    salvar_universidades(lista_universidades)
-
-    print("Universidade atualizada com sucesso!")
-    sleep(2)
-
-def excluir_universidade():
-    lista_universidades = carregar_universidades()
-    if not lista_universidades:
-        print("Nenhuma universidade cadastrada.")
-        sleep(2)
-        return
-
-    listar_universidades()
-
-    entrada = input("\nDigite o número para excluir: ").strip()
-    if not entrada.isdigit():
-        print("Entrada inválida.")
-        sleep(2)
-        return
-
-    i = int(entrada) - 1
-
-    if not (0 <= i < len(lista_universidades)):
-        print("Número inválido.")
-        sleep(2)
-        return
-
-    confirm = input(f"Excluir '{lista_universidades[i]['nome']}'? (s/n): ").lower()
-
-    if confirm == "s":
-        nome = lista_universidades[i]["nome"]
-        del lista_universidades[i]
-        salvar_universidades(lista_universidades)
-        print(f"'{nome}' excluída com sucesso!")
-
-    sleep(2)
-    
-def mostrar_rota():
-    screen.clear()
-    print("Rota\n")
-
-    with open("rota.txt", "r", encoding="utf-8") as arquivo:
-        arq = arquivo.read().splitlines()
-
-    print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<25} | {'Endereço':<50}")
-    print("-" * 105)
-
-    for i in range(0, len(arq), 3):
-        check = arq[i].strip()
-        ponto = arq[i + 1].strip()
-        end = arq[i + 2].strip()
-
-        check_exibicao = check if check != "" else "/"
-
-        print(f"{i // 3 + 1:<3} | {check_exibicao:<11} | {ponto:<25} | {end:<50}")
-
-    print()
-    input("Digite ENTER para voltar...")
-    screen.clear()
-
-def adicionar_ponto():
-    screen.clear()
-    print("Adicionar novo ponto à rota\n")
-
-    check = "False"
-    ponto = input("Nome do ponto de parada: ").strip()
-    endereco = input("Endereço do ponto: ").strip()
-
-    try:
-        with open("rota.txt", "r", encoding="utf-8") as arquivo:
-            conteudo = arquivo.read()
-    except FileNotFoundError:
-        conteudo = ""
-
-    with open("rota.txt", "a", encoding="utf-8") as arquivo:
-        if len(conteudo) > 0 and not conteudo.endswith("\n"):
-            arquivo.write("\n")
-
-        arquivo.write(f"{check}\n{ponto}\n{endereco}\n")
-
-    print("\nPonto adicionado com sucesso!")
-    screen.clear()
-
-
-def remover_ponto():
-    screen.clear()
-    print("Remover ponto da rota\n")
-
-    with open("rota.txt", "r", encoding="utf-8") as arquivo:
-        arq = arquivo.read().splitlines()
-
-    print(f"{'#':<3} | {'Ponto de Parada':<25} | {'Endereço':<50}")
-    print("-" * 90)
-
-    pontos = []
-    for i in range(0, len(arq), 3):
-        check = arq[i]
-        ponto = arq[i+1]
-        end = arq[i+2]
-        index = i // 3 + 1
-        pontos.append((index, ponto, end))
-        print(f"{index:<3} | {ponto:<25} | {end:<50}")
-
-    try:
-        escolha = int(input("\nNúmero do ponto para remover: "))
-    except:
-        print("Entrada inválida.")
-        input("Voltar...")
-        return
-
-    if escolha <= 0 or escolha > len(pontos):
-        print("Ponto inexistente.")
-        input("Voltar...")
-        return
-
-    inicio = (escolha - 1) * 3
-    fim = inicio + 3
-    del arq[inicio:fim]
-
-    with open("rota.txt", "w", encoding="utf-8") as arquivo:
-        for linha in arq:
-            arquivo.write(linha + "\n")
-
-    print("\nPonto removido com sucesso!")
-    screen.clear()
-
-
-#alunos
-
-def confirmarpartida(pontoembarque):
-    screen.clear()
-    screen.cabecalho("CONFIRMAR PARTIDA")
-    
-
-    print("\nDefina o ponto de EMBARQUE (IDA): ")
-    for i, pontos in enumerate(pontoembarque):
-        print(f"[{i+1}] - {pontos}") 
-    
-    escolha_ida = 0
-    
-    while not (1 <= escolha_ida <= len(pontoembarque)):
-        try:
-            escolha_ida = int(input(f'\nEscolha o ponto de embarque (1-{len(pontoembarque)}): '))
-            if not (1 <= escolha_ida <= len(pontoembarque)):
-                print("Opção inválida. Tente novamente.")
-        except ValueError:
-            print("Entrada inválida. Digite um número.")
-    
-    
-    user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] # -1 para ajustar o índice
-    
-    ida = input(f"Deseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
-    if ida.startswith('s'):
-        user_cache["Embarque na ida"] = "Sim"
-    else:
-        user_cache["Embarque na ida"] = "Não"
-
-    clear()
-    cabecalho("CONFIRMAR PARTIDA")
-
-    
-    print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
-    for i, pontos in enumerate(pontodesembarque):
-        print(f"[{i+1}] - {pontos}")
-
-    escolha_volta = 0
-    
-    while not (1 <= escolha_volta <= len(pontodesembarque)):
-        try:
-            escolha_volta = int(input(f'\nEscolha o ponto de desembarque (1-{len(pontodesembarque)}): '))
-            if not (1 <= escolha_volta <= len(pontodesembarque)):
-                print("Opção inválida. Tente novamente.")
-        except ValueError:
-            print("Entrada inválida. Digite um número.")
-
-    
-    user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
-    
-    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
-    if volta.startswith('s'):
-        user_cache["Embarque na volta"] = "Sim"
-    else:
-        user_cache["Embarque na volta"] = "Não"
-
-    clear()
-
-
-
-    if user_cache["Embarque na ida"] == "Não" and user_cache["Embarque na volta"] == "Não":
-        cabecalho("CHECK-IN CANCELADO")
-        print("Você não confirmou a ida nem a volta.")
-        print("Nenhum registro foi salvo.")
-    
-    else:
-        
-        checkin = datetime.now()
-        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
-        
-        
-        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
-      
-        print(f"Check-in realizado no dia {checkin_formatado}")
-
-        if user_cache["Embarque na ida"] == "Sim":
-            print(f"IDA: CONFIRMADA✅")
-            print(f"Ponto de embarque: {user_cache['Ponto de embarque']}\n")
-            user_cache["Horário"] = checkin_formatado
-        else:
-            print(f"STATUS IDA: CANCELADA❌\n")
-
-        
-        if user_cache["Embarque na volta"] == "Sim":
-            print(f"VOLTA: CONFIRMADA✅")
-            print(f"Ponto de desembarque: {user_cache['Ponto de desembarque']}\n")
-            user_cache["Horário"] = checkin_formatado
-        else:
-            print(f"STATUS VOLTA: CANCELADA❌\n")
-
-    
-    input("\nPressione ENTER para voltar à página inicial...")
-    clear()
-
-
-
-def cabecalho(texto="página inicial"):
+            def cabecalho(texto="página inicial"):
                 print(f"------------------------------{texto}------------------------------")
                 print()
 
-def paginainicial():
-                print('''
-Bem vindo ao painel do aluno
-
-[1]: Confirmar Check-in
-[2]: Cancelar Check-in          
-[3]: Dados pessoais
-[4]: Acompanhar rota
-[5]: Visualizar Avisos          
-[0]: Sair      
-                      ''')
-
-def confirmarpartida():
-                
-                
-                from datetime import datetime
-
-                pontoembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
-                pontodesembarque = ["São sebastião", "Centro de Cultura", "Banco do Brasil", "Posto Pajet", "Garagem Brasileiro"]
-
-                ARQUIVO_BANCO = "banco_alunos.json"
-
-                user_cache = {
-                "Nome": "",
-                "Instituição": "",
-                "Ponto de embarque": "",
-                "Ponto de desembarque": "",
-                "Embarque na ida": "Não", 
-                "Embarque na volta": "Não",
-                "Horário": "", 
-            }
-                
-                dados_aluno = {
-                "Nome": "Eduardo Moreira Santos Barreto",
-                "Data de nascimento": "01/04/2005",
-                "E-mail": "202511240025@ifba.edu.br",
-                "Faculdade":"Institudo Federal de Educação Ciência e Tecnologia da Bahia (IFBA)",
-                "CPF": "000.000.000-00",
-                "RG": "0000000-00",
-                "Telefone": "+55 (73) 9 4002-8922"
-            }
-
-
-
-
-
-
-                screen.clear()
-                cabecalho("CONFIRMAR PARTIDA")
-                print('''
-Deseja realizar o check-in?
-
-[1]: Confirmar Check-in somente IDA
-[2]: Confirmar Check-in somente VOLTA      
-[3]: Confirmar Check-in IDA e VOLTA
-[0]: Voltar                      
-                      ''')
-
-                escolha_checkin = str(input("\nEscolha uma opção: ")) 
-
-                if escolha_checkin == "3":
-
-                    nome = input("Digite seu nome: ")
-                    
-        
-                    inst = input("Instituição: ")
-
-                    print("\nDefina o ponto de EMBARQUE (IDA): ")
-                    for i, pontos in enumerate(pontoembarque):
-                        print(f"\n[{i+1}] - {pontos}") 
-
-                    escolha_ida = 0
-
-                    while not (1 <= escolha_ida <= len(pontoembarque)):
-                        try:
-                            escolha_ida = int(input(f'\nEscolha o ponto de embarque (1-{len(pontoembarque)}): '))
-                            if not (1 <= escolha_ida <= len(pontoembarque)):
-                                print("Opção inválida. Tente novamente.")
-                        except ValueError:
-                            print("Entrada inválida. Digite um número.")
-
-
-                    user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] 
-
-                    ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
-                    if ida.startswith('s'):
-                        user_cache["Embarque na ida"] = "Sim"
-                    else:
-                        user_cache["Embarque na ida"] = "Não"
-
-                    screen.clear()
-                    cabecalho("CONFIRMAR PARTIDA")
-
-
-                    print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
-                    for i, pontos in enumerate(pontodesembarque):
-                        print(f"\n[{i+1}] - {pontos}")
-
-                    escolha_volta = 0
-
-                    while not (1 <= escolha_volta <= len(pontodesembarque)):
-                        try:
-                            escolha_volta = int(input(f'\nEscolha o ponto de desembarque (1-{len(pontodesembarque)}): '))
-                            if not (1 <= escolha_volta <= len(pontodesembarque)):
-                                print("Opção inválida. Tente novamente.")
-                        except ValueError:
-                            print("Entrada inválida. Digite um número.")
-
-
-                    user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
-
-                    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
-                    if volta.startswith('s'):
-                        user_cache["Embarque na volta"] = "Sim"
-                    else:
-                        user_cache["Embarque na volta"] = "Não"
-                    screen.clear()
-
-
-
-                    if user_cache["Embarque na ida"] == "Não" and user_cache["Embarque na volta"] == "Não":
-                        cabecalho("CHECK-IN CANCELADO")
-                        print("Nenhum registro foi salvo.")
-
-                    else:
-                        checkin = datetime.now()
-                        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
-
-                        
-
-                        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
-
-                        print(f"Check-in realizado no dia {checkin_formatado}")
-
-                        if user_cache["Embarque na ida"] == "Sim":
-                            print(f"IDA: CONFIRMADA✅")
-                            print(f"Ponto de embarque: {user_cache['Ponto de embarque']}\n")
-                            user_cache["Horário"] = checkin_formatado
-                        else:
-                            print(f"STATUS IDA: CANCELADA❌\n")
-
-
-                        if user_cache["Embarque na volta"] == "Sim":
-                            print(f"VOLTA: CONFIRMADA✅")
-                            print(f"Ponto de desembarque: {user_cache['Ponto de desembarque']}\n")
-                            user_cache["Horário"] = checkin_formatado
-                        else:
-                            print(f"STATUS VOLTA: CANCELADA❌\n")
-
-                        novo_aluno = {
-                        "Nome": nome,  
-                        "Instituição": inst, 
-                        "Ponto de embarque": user_cache["Ponto de embarque"], 
-                        "Ponto de desembarque": user_cache["Ponto de desembarque"], 
-                        "Embarque na ida": user_cache["Embarque na ida"],
-                        "Embarque na volta": user_cache["Embarque na volta"],
-                        "Horário": user_cache["Horário"]
-                            }
-                        
-                        lista_atual = []
-                        if os.path.exists(ARQUIVO_BANCO):
-                            with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-                                try:
-                                    lista_atual = json.load(arquivo) 
-                                except:
-                                    lista_atual = []
-
-                        lista_atual.append(novo_aluno)
-                        with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
-                            json.dump(lista_atual, arquivo, indent=4, ensure_ascii=False)
-
-
-                        input("\nPressione ENTER para voltar à página inicial...")
-                        screen.clear()
-
-                    
-
-
-
-
-
-                elif escolha_checkin == "1":
-                    screen.clear()
-                    cabecalho("CONFIRMAR PARTIDA (SOMENTE IDA)")
-
-                    nome = input("Digite seu nome: ")
-                    inst = input("Instituição: ")
-
-                    print("\nDefina o ponto de EMBARQUE (IDA): ")
-                    for i, pontos in enumerate(pontoembarque):
-                        print(f"\n[{i+1}] - {pontos}") 
-
-                    escolha_ida = 0
-
-                    while not (1 <= escolha_ida <= len(pontoembarque)):
-                        try:
-                            escolha_ida = int(input(f'\nEscolha o ponto de embarque (1-{len(pontoembarque)}): '))
-                            if not (1 <= escolha_ida <= len(pontoembarque)):
-                                print("Opção inválida. Tente novamente.")
-                        except ValueError:
-                            print("Entrada inválida. Digite um número.")
-
-
-                    user_cache["Ponto de embarque"] = pontoembarque[escolha_ida - 1] 
-
-                    ida = input(f"\nDeseja confirmar o embarque na IDA no ponto {user_cache['Ponto de embarque']}? [s/n]: ").lower()
-                    if ida.startswith('s'):
-                        user_cache["Embarque na ida"] = "Sim"
-                    else:
-                        user_cache["Embarque na ida"] = "Não"
-                    
-                    
-                    user_cache["Embarque na volta"] = "Não"
-                    user_cache["Ponto de desembarque"] = "" 
-
-                    screen.clear()
-
-                    if user_cache["Embarque na ida"] == "Não":
-                        cabecalho("CHECK-IN CANCELADO")
-                        print("Nenhum registro foi salvo.")
-
-                    else:
-                        checkin = datetime.now()
-                        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
-
-
-                        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
-
-                        print(f"Check-in realizado no dia {checkin_formatado}")
-                        print(f"IDA: CONFIRMADA✅")
-                        print(f"Ponto de embarque: {user_cache['Ponto de embarque']}\n")
-                        user_cache["Horário"] = checkin_formatado
-                        print(f"STATUS VOLTA: NÃO AGENDADA/CANCELADA❌\n")
-
-                        novo_aluno = {
-                        "Nome": nome,
-                        "Instituição": inst,
-                        "Ponto de embarque": user_cache["Ponto de embarque"],
-                        "Ponto de desembarque": "", 
-                        "Embarque na ida": user_cache["Embarque na ida"],
-                        "Embarque na volta": "Não",
-                        "Horário": user_cache["Horário"]
-                            }
-                        
-                        lista_atual = []
-                        if os.path.exists(ARQUIVO_BANCO):
-                            try:
-                                with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-                                    lista_atual = json.load(arquivo)
-                            except:
-                                lista_atual = []
-
-                        lista_atual.append(novo_aluno)
-                        with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
-                            json.dump(lista_atual, arquivo, indent=4, ensure_ascii=False)
-
-                        input("\nPressione ENTER para voltar à página inicial...")
-                        screen.clear()
-
-                    
-
-
-
-
-                        
-                elif escolha_checkin == "2":
-                    screen.clear()
-                    cabecalho("CONFIRMAR PARTIDA (SOMENTE VOLTA)")
-
-                    nome = input("Digite seu nome: ")
-                    inst = input("Instituição: ")
-
-                    print("\nDefina o ponto de DESEMBARQUE (VOLTA): ")
-                    for i, pontos in enumerate(pontodesembarque):
-                        print(f"\n[{i+1}] - {pontos}")
-
-                    escolha_volta = 0
-
-                    while not (1 <= escolha_volta <= len(pontodesembarque)):
-                        try:
-                            escolha_volta = int(input(f'\nEscolha o ponto de desembarque (1-{len(pontodesembarque)}): '))
-                            if not (1 <= escolha_volta <= len(pontodesembarque)):
-                                print("Opção inválida. Tente novamente.")
-                        except ValueError:
-                            print("Entrada inválida. Digite um número.")
-
-
-                    user_cache["Ponto de desembarque"] = pontodesembarque[escolha_volta - 1]
-
-                    volta = input(f"Deseja confirmar o embarque na VOLTA no ponto {user_cache['Ponto de desembarque']}? [s/n]: ").lower()
-                    if volta.startswith('s'):
-                        user_cache["Embarque na volta"] = "Sim"
-                    else:
-                        user_cache["Embarque na volta"] = "Não"
-                    
-                    
-                    user_cache["Embarque na ida"] = "Não"
-                    user_cache["Ponto de embarque"] = "" 
-
-                    screen.clear()
-
-                    if user_cache["Embarque na volta"] == "Não":
-                        cabecalho("CHECK-IN CANCELADO")
-                        print("Nenhum registro foi salvo.")
-
-                    else:
-                        checkin = datetime.now()
-                        checkin_formatado = checkin.strftime("%d/%m/%Y às %H:%M")
-
-
-                        print(f"---INFORMAÇÕES GERAIS DO EMBARQUE---\n")
-
-                        print(f"Check-in realizado no dia {checkin_formatado}")
-                        print(f"STATUS IDA: NÃO AGENDADA/CANCELADA❌\n")
-                        print(f"VOLTA: CONFIRMADA✅")
-                        print(f"Ponto de desembarque: {user_cache['Ponto de desembarque']}\n")
-                        user_cache["Horário"] = checkin_formatado
-
-
-                        novo_aluno = {
-                            "Nome": nome,
-                            "Instituição": inst,
-                            "Ponto de embarque": "", 
-                            "Ponto de desembarque": user_cache["Ponto de desembarque"],
-                            "Embarque na ida": "Não",
-                            "Embarque na volta": user_cache["Embarque na volta"],
-                            "Horário": user_cache["Horário"]
-                                 }
-                        lista_atual = []
-                        if os.path.exists(ARQUIVO_BANCO):
-                            try:
-                                with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-                                    lista_atual = json.load(arquivo)
-                            except:
-                                lista_atual = []
-                        lista_atual.append(novo_aluno)
-                        with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
-                            json.dump(lista_atual, arquivo, indent=4, ensure_ascii=False)
-
-                        input("\nPressione ENTER para voltar à página inicial...")
-                        screen.clear()
-                
-
-                
-
-                    
-
-
-                    
-                elif escolha_checkin == 0:
-                    screen.clear()
-                    paginainicial()
-                    
-
-def dadospessoais():
-                with open("dados.txt", "r", encoding="utf-8") as arquivo:
-                    for linha in arquivo:
-                        print(linha.strip())                
-
-
-
-
-
-
-
-
-
 
             
-                print()
-                input("\nPressione ENTER para voltar à página inicial...")
-                screen.clear()
 
-def avisos():
-                with open("avisos.txt", "r", encoding="utf-8") as arquivo:
-                    for linha in arquivo:
-                        print(linha.strip())
-                voltar = input("\nPressione ENTER para voltar...") 
-                screen.clear()               
+            while True: 
+                GeralDef.paginainicial()
+                try:
 
-def cancelarcheckin():
-    ARQUIVO_BANCO = "banco_alunos.json"
-    screen.clear()
-    cabecalho("CANCELAMENTO DE CHECK-IN")
-    lista_alunos = []
-    if os.path.exists(ARQUIVO_BANCO):
-        try:
-            with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
-                lista_alunos = json.load(arquivo)
-        except:
-            print("Erro ao ler o banco de dados.")
-            return   
-    if not lista_alunos:
-        print("Não há nenhum check-in registrado no sistema.")
-        input("\nPressione ENTER para voltar...")
-        return
-    
-    nome_busca = input("Digite o NOME completo para buscar seu check-in: ").strip()
-    aluno_encontrado = None
+                    opcao01 = int(input("Insira a opção que deseja: "))
 
-    for aluno in lista_alunos:
-        if aluno.get("Nome", "").lower() == nome_busca.lower():
-            aluno_encontrado = aluno
-            break
-    
-    if not aluno_encontrado:
-        print(f"\n❌ Check-in não encontrado para: {nome_busca}")
-        input("\nPressione ENTER para voltar...")
-        return
+                except ValueError:
+                    print("Entrada inválida. Por favor, digite um número (0-5).")
+                    sleep(1)
+                    screen.clear()
 
-    alteracao_realizada = False 
+                if opcao01 == 1:
+                    screen.clear()
+                    GeralDef.confirmarpartida()
 
-    ida_sim = aluno_encontrado.get("Embarque na ida") == "Sim"
-    volta_sim = aluno_encontrado.get("Embarque na volta") == "Sim"
-
-    
-    if ida_sim and volta_sim:
-        print(f"\nOlá {aluno_encontrado['Nome']}, você tem IDA e VOLTA confirmados.")
-        print(f"Horário do registro: {aluno_encontrado.get('Horário', '--')}")
-        
-        print("\nDeseja realizar alguma alteração?")
-        print("[1] Cancelar apenas a IDA")
-        print("[2] Cancelar apenas a VOLTA")
-        print("[3] Cancelar AMBOS (Ida e Volta)")
-        print("[0] Voltar")
-
-        escolha = input("\nEscolha uma opção: ")
-
-        if escolha == "1":
-            aluno_encontrado["Embarque na ida"] = "Não"
-            aluno_encontrado["Ponto de embarque"] = "" 
-            print("\n✅ A IDA foi cancelada. A VOLTA permanece agendada.")
-            alteracao_realizada = True
-
-        elif escolha == "2":
-            aluno_encontrado["Embarque na volta"] = "Não"
-            aluno_encontrado["Ponto de desembarque"] = "" 
-            print("\n✅ A VOLTA foi cancelada. A IDA permanece agendada.")
-            alteracao_realizada = True
-
-        elif escolha == "3":
-            lista_alunos.remove(aluno_encontrado)
-            print("\n✅ IDA e VOLTA foram cancelados com sucesso.")
-            alteracao_realizada = True
-
-        elif escolha == "0":
-            print("\nNenhuma alteração realizada.")
-
-    
-    elif ida_sim:
-        print(f"\nOlá {aluno_encontrado['Nome']}, você tem somente IDA confirmada.")
-        escolha = input("Deseja cancelar? [s/n]: ").lower()
-        
-        if escolha == "s":
-            lista_alunos.remove(aluno_encontrado)
-            print("\n✅ Check-in de IDA cancelado com sucesso!")
-            alteracao_realizada = True
-        else:
-            print("\nMantendo check-in...")
-
-    
-    elif volta_sim:
-        print(f"\nOlá {aluno_encontrado['Nome']}, você tem somente VOLTA confirmada.")
-        escolha = input("Deseja cancelar? [s/n]: ").lower()
-        
-        if escolha == "s":
-            lista_alunos.remove(aluno_encontrado)
-            print("\n✅ Check-in de VOLTA cancelado com sucesso!")
-            alteracao_realizada = True
-        else:
-            print("\nMantendo check-in...")
-
-    else:
-        print(f"\nO aluno {aluno_encontrado['Nome']} não possui embarques confirmados ativos.")
-        lista_alunos.remove(aluno_encontrado)
-        alteracao_realizada = True
-
-   
-    if alteracao_realizada:
-        try:
-            with open(ARQUIVO_BANCO, "w", encoding="utf-8") as arquivo:
-                json.dump(lista_alunos, arquivo, indent=4, ensure_ascii=False)
-            print("Alterações salvas no sistema.")
-        except Exception as e:
-            print(f"Erro ao salvar alterações: {e}")
-    else:
-        print("\nNenhuma alteração foi feita.")
-
-    input("\nPressione ENTER para voltar...")
-    screen.clear()
-
-def acompanharota():
-                screen.clear()
-    
-                with open("rota.txt", "r", encoding="utf-8") as arquivo:
-                    arq = arquivo.read().splitlines()
-
-                print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<25} | {'Endereço':<50}")
-                print("-" * 105)
-
-                for i in range(0, len(arq), 3):
-                    check = arq[i].strip()
-                    ponto = arq[i + 1].strip()
-                    end = arq[i + 2].strip()
-
-                    check_exibicao = check if check != "" else "/"
-
-                    print(f"{i // 3 + 1:<3} | {check_exibicao:<11} | {ponto:<25} | {end:<50}")
-
-                print()
-                input("Digite ENTER para voltar...")
-                screen.clear()
+                elif opcao01 == 2:
+                    screen.clear()
+                    cabecalho("CANCELAR CHECK-IN")
+                    GeralDef.cancelarcheckin()
 
 
-def ler_txt_simples(caminho):
-    """Retorna uma lista de strings, sendo cada item uma linha"""
-    linhas = []
-    try:
-        with open(caminho, 'r') as arquivo:
-            for linha in arquivo:
-                linhas.append(linha)
-    except FileNotFoundError:
-        print("Arquivo não encontrado.")
-        
-    return linhas
-    
-def ler_txt_dicionario(caminho, separador=":"):
-    """Transforma cada linha em um item de um dicionario, depois retorna o dicionario de todos os itens"""
-    dicionario = {}
-    try:
-        with open(caminho, 'r') as arquivo:
-            for linha in arquivo:
-                partes = linha.split(separador, 1)
-                if len(partes) != 2:
-                    if linha.strip():
-                        print(f"Linha invalida \"{linha.strip()}\"")
+                elif opcao01 == 3:
+                    screen.clear()
+                    GeralDef.dadospessoais()
+                    cabecalho("DADOS PESSOAIS")
+
+                elif opcao01 == 4:
+                    screen.clear()
+                    cabecalho("ACOMPANHAR ROTA")
+                    GeralDef.acompanharota()
+                    sleep(2)
+                    screen.clear()
+
+                elif opcao01 == 5:
+                    screen.clear()
+                    cabecalho("AVISOS")
+                    GeralDef.avisos()
+
+                elif opcao01 == 0:
+                    print("Saindo do sistema... Até logo.")
+                    sleep(1)
+                    screen.clear()
+                    tipo_de_usuario=""
+                    break 
+                    
                 else:
-                    chave = partes[0].strip()
-                    valor = partes[1].strip()
-                    dicionario[chave] = valor
-    except FileNotFoundError:
-        print("Arquivo não encontrado.")
-        
-    return dicionario
+                    print("Opção inválida. Tente novamente.")
+                    sleep(1)
+                    screen.clear()
 
-def escrever_lista(lista, caminho, separador="\n"):
-    """Escreve a lista em um arquivo de texto"""
-    import os
 
-    # Garante que o diretório destino existe (se houver um diretório no caminho)
-    pasta = os.path.dirname(caminho) or "."
-    os.makedirs(pasta, exist_ok=True)
 
-    # Converte itens para string e escreve usando o separador fornecido
-    with open(caminho, "w", encoding="utf-8") as arquivo:
-        arquivo.write(separador.join(str(item) for item in lista))
-    
-def escrever_dicionario(dicionario, caminho, separador_dic=";", separador_lista="\n"):
-    """Escreve o dicionario em um arquivo de texto"""
-    # Transforma o dicionário em uma lista
-    lista = [f"{chave}{separador_dic}{valor}" for chave, valor in dicionario.items()]
-    # Escreve essa lista
-    escrever_lista(lista, caminho, separador=separador_lista)
 
-def carregar_user_cache(caminho_arquivo):
-    user_cache = {
-        "Ponto de embarque": "",
-        "Embarque na ida": "Não",
-        "Ponto de desembarque": "",
-        "Embarque na volta": "Não",
-        "Horário": "",
-    }
 
-    with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
-        for linha in arquivo:
-            linha = linha.strip()
+        elif linhas[posicao_tipo] == "motorista":
 
-            if not linha or ":" not in linha:
-                continue
+            while True:
+                screen.clear()
+                print(f"Bem vindo, {linhas[posicao_senha+1]}")
+                screen.menuMOT()
+                opc = int(input("opc = "))
+                if opc == 1:
+                    GeralDef.printar_lista("banco_alunos.json")
+                    voltar=input("Pressione [ENTER] para voltar")
 
-            chave, valor = linha.split(":", 1)
-            chave = chave.strip()
-            valor = valor.strip()
+                elif opc == 2:
+                    screen.clear()
+                    print("Rota")
+                    print()
+                    with open("rota.txt","r", encoding="utf-8") as arquivo:
+                        arq = arquivo.read().splitlines()
 
-            if chave in user_cache:
-                user_cache[chave] = valor
+                    while True:
+                        print(f"{'#':<3} | {'Check':<11} | {'Ponto de Parada':<30} | {'Endereço':<40}")
+                        print("-" * 130)
+                        
+                        for i in range(0, len(arq), 3):
+                            ponto = arq[i + 1].strip()
+                            end = arq[i + 2]
+                            check = arq[i].strip()
+                        
+                            print(f"{i // 3 + 1:<3} | {check:<11} | {ponto:<30} | {end:<40}")
+                            print("-" * 130)
 
-    return user_cache
-#motoristas
+                        print()
+                        
+                        print("[1]: Dar Check ✅\n[2]: Remover Check ❌\n[3]: Sair 🚪")
+                        print("=" * 50)
+                        try:
+                            opcao = int(input("Escolha uma opção (1-3): "))
+                        except ValueError:
+                            print("Entrada inválida. Digite um número inteiro")
+                            sleep(0.5)
+                            screen.clear()
+                        else:
+                            if opcao == 1:
+                                print("=" * 50)
+                                try:
+                                    check_novo = int(input("Digite o número do ponto para dar check: "))
+                                except ValueError:
+                                    print("Digite um número inteiro válido.")
+                                else:
+                                    print("=" * 50)
+                                    comfirm = input("Tem certeza? [s/n] ")
+                                    if comfirm == "s":
+                                        arq[(check_novo - 1) * 3] = "✅"
+                                        print("\nRota atualizada com sucesso")
+                                    
+                            
+                            elif opcao == 2:
+                                print("=" * 50)
+                                try:
+                                    check_novo = int(input("Digite o número do ponto para remover o check: "))
+                                    print("=" * 50)
+                                except ValueError:
+                                    print("Entrada inválida. Digite um número inteiro")
+                                else:
+                                    comfirm = input("Tem certeza? [s/n] ")
+                                    if comfirm == "s":
+                                        arq[(check_novo - 1) * 3] = "❌"
+                                        print("\nRota atualizada com sucesso")
+                                        
+
+                            elif opcao == 3:
+                                sleep(0.5)
+                                screen.clear()
+                                break
+                            
+                            else:
+                                print("Opção inválida! Tente novamente.")
+
+                            with open("rota.txt", "w", encoding="utf-8") as rota:
+                                rota.write("\n".join(arq))
+                        
+                            sleep(0.5)
+                            screen.clear()
+
+                elif opc == 3:
+                    while True:
+                        screen.clear()
+                        screen.menuAVISO()
+                        opc = int(input("opc = "))
+                        if opc == 1:
+                            GeralDef.CreateNotice()
+                        elif opc == 2:
+                            avisos = open("avisos.txt", "r", encoding="utf-8")
+                            linhasavisos = avisos.read().splitlines()
+                            avisos.close()
+                            screen.clear()
+                            for aviso in linhasavisos:
+                                print(aviso)
+                            voltar = str(input("\nDigite [0] para voltar: "))
+                        elif opc == 3:
+                            avisos = open("avisos.txt", "r", encoding="utf-8")
+                            linhasavisos = avisos.read().splitlines()
+                            avisos.close()
+                            screen.clear()
+                            indice = 0
+                            for aviso in linhasavisos:
+                                indice += 1
+                                print(f"[{indice}] {aviso}")
+                                
+                            print()
+                            print("[1] Para Editar Aviso")
+                            print("[2] Para Excluir Aviso")
+                            print("[0] Para voltar")
+                            opcaviso = int(input("opc = "))
+                            if opcaviso == 1:
+                                index = int(input("Digite o número do aviso que deseja EDITAR [0 para cancelar]: "))
+                                if index == 0:
+                                    continue
+                                elif index > indice or index < 1:
+                                    print("Opção invalida...")
+                                    sleep(0.5)
+                                    continue
+                                print("Digite a nova versão do aviso:")
+                                texto = str(input("-> "))
+                                GeralDef.EditarAviso(index-1, texto)
+                                print("Aviso editado com successo!")
+                                sleep(0.5)
+                            elif opcaviso == 2:
+                                index = int(input("Digite o número do aviso que deseja EXCLUIR [0 para cancelar]: "))
+                                if index == 0:
+                                    continue
+                                elif index > indice or index < 1:
+                                    print("Opção invalida...")
+                                    sleep(0.5)
+                                    continue
+                                GeralDef.ExcluirAviso(index-1)
+                                print("Aviso Excluido com sucesso!")
+                                sleep(0.5)
+                        elif opc == 0:
+                                break
+                elif opc == 0:
+                    screen.clear()
+                    break
+                else:
+                    print("Opção inválida :(")
+                    print("Tente novamente")
+                    sleep(1)
+        else:
+            print("")
