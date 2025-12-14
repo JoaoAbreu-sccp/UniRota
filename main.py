@@ -14,6 +14,7 @@ csv_gerado = False
 
 while True:
     GeralDef.gerar_lista_confirmacao_json()
+    ARQUIVO_BANCO = "banco_alunos.json"
     tipo_de_usuario=None
     logins = open("logins.txt")
     linhas = logins.read().splitlines()
@@ -90,6 +91,12 @@ while True:
                             opc_1 = int(input("\n[0]: Sair\n\nDigite: "))
 
                         if opc_1 == 1:
+                            if not os.path.exists(ARQUIVO_BANCO):
+                                print("Nenhum banco de dados encontrado. Cadastre alguém primeiro!")
+                            else:
+                                with open(ARQUIVO_BANCO, "r", encoding="utf-8") as arquivo:
+                                    banco_de_dados_alunos = json.load(arquivo)
+
                             screen.clear()
                             print("Exportando...")
                             NOME_ARQUIVO_CSV = "Relatorio_Alunos.csv"
