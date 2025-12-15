@@ -740,12 +740,30 @@ def listar_universidades():
 
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
-        input("\nPressione ENTER para continuar...")
+        input("\nPressione ENTER para Voltar...")
         return
     for i, u in enumerate(lista_universidades, 1):
         print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
 
-    input("\nPressione ENTER para continuar...")
+    input("\nPressione ENTER para Voltar...")
+
+def listar_universidades_selecao():
+    screen.clear()
+    lista_universidades = carregar_universidades()
+
+    print('''\n---------------------------
+ UNIVERSIDADES CADASTRADAS
+---------------------------\n''')
+
+    if not lista_universidades:
+        print("Nenhuma universidade cadastrada.")
+        return False
+
+    for i, u in enumerate(lista_universidades, 1):
+        print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
+
+    return True
+
 def editar_universidade():
     lista_universidades = carregar_universidades()
 
@@ -754,7 +772,7 @@ def editar_universidade():
         sleep(2)
         return
 
-    listar_universidades()
+    listar_universidades_selecao()
 
     entrada = input("\nDigite o número da universidade: ").strip()
 
@@ -791,9 +809,9 @@ def excluir_universidade():
         sleep(2)
         return
 
-    listar_universidades()
+    listar_universidades_selecao()
 
-    entrada = input("\nDigite o número para excluir: ").strip()
+    entrada = input("\nDigite o número para excluir ou deixa em branco para cancela: ").strip()
     if not entrada.isdigit():
         print("Entrada inválida.")
         sleep(2)
