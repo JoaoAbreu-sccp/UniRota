@@ -415,44 +415,54 @@ while True:
                         print()
                         
                         print("[1]: Dar Check ✅\n[2]: Remover Check ❌\n[3]: Sair 🚪")
-                        print("=" * 50)
                         try:
+                            print("=" * 50)
                             opcao = int(input("Escolha uma opção (1-3): "))
                         except ValueError:
+                            print("=" * 50)
                             print("Entrada inválida. Digite um número inteiro")
-                            sleep(0.5)
+                            sleep(1)
                             screen.clear()
                         else:
                             if opcao == 1:
-                                print("=" * 50)
                                 try:
+                                    print("=" * 50)
                                     check_novo = int(input("Digite o número do ponto para dar check: "))
+                                    print("=" * 50)
                                 except ValueError:
+                                    print("=" * 50)
                                     print("Digite um número inteiro válido.")
                                 else:
-                                    print("=" * 50)
-                                    comfirm = input("Tem certeza? [s/n] ")
-                                    if comfirm == "s":
-                                        arq[(check_novo - 1) * 3] = "✅"
-                                        print("\nRota atualizada com sucesso")
+                                    if check_novo in [1, 2, 3, 4, 5, 6]:
+                                        comfirm = input("Tem certeza? [s/n] ")
+                                        if comfirm == "s":
+                                            arq[(check_novo - 1) * 3] = "✅"
+                                            print("\nRota atualizada com sucesso")
                                     
+                                    else:
+                                        print("Erro! Ponto informado desconhecido.")
                             
                             elif opcao == 2:
-                                print("=" * 50)
                                 try:
+                                    print("=" * 50)
                                     check_novo = int(input("Digite o número do ponto para remover o check: "))
                                     print("=" * 50)
                                 except ValueError:
-                                    print("Entrada inválida. Digite um número inteiro")
+                                    print("=" * 50)
+                                    print("Entrada inválida. Digite um número inteiro.")
                                 else:
-                                    comfirm = input("Tem certeza? [s/n] ")
-                                    if comfirm == "s":
-                                        arq[(check_novo - 1) * 3] = "❌"
-                                        print("\nRota atualizada com sucesso")
+                                    if check_novo in [1, 2, 3, 4, 5, 6]:
+                                        comfirm = input("Tem certeza? [s/n] ")
+                                        if comfirm == "s":
+                                            arq[(check_novo - 1) * 3] = "❌"
+                                            print("\nRota atualizada com sucesso")
+                                    
+                                    else:
+                                        print("Erro! Ponto informado desconhecido.")
                                         
 
                             elif opcao == 3:
-                                sleep(0.5)
+                                sleep(1)
                                 screen.clear()
                                 break
                             
@@ -462,7 +472,7 @@ while True:
                             with open("rota.txt", "w", encoding="utf-8") as rota:
                                 rota.write("\n".join(arq))
                         
-                            sleep(0.5)
+                            sleep(1)
                             screen.clear()
 
                 elif opc == 3:
