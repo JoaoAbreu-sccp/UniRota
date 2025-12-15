@@ -543,52 +543,71 @@ def Excluir_usuario(tipo_de_usuário_excluido):
     with open("logins.txt", "r", encoding="utf-8") as f:
         linhas = f.read().splitlines()
         linhas_limpa = [linha for linha in linhas if linha != ""]
-        alunos = []
-        motoristas = []
 
-        for c, linha in enumerate(linhas_limpa):
-            if linha == "aluno":
-                alunos.append(linhas_limpa[c : c + 9])
-            if linha == "motorista":
-                motoristas.append(linhas_limpa[c : c + 8])
+    alunos = []
+    motoristas = []
+
+    for c, linha in enumerate(linhas_limpa):
+        if linha == "aluno":
+            alunos.append(linhas_limpa[c:c + 9])
+        elif linha == "motorista":
+            motoristas.append(linhas_limpa[c:c + 8])
 
     if tipo_de_usuário_excluido == "aluno":
         if not alunos:
-            print("Não há nenhum aluno cadastrados!")
-        else:
-            print("\nAlunos cadastrados:")
-        for i, aluno in enumerate(alunos):
-            print(f"[{i+1}] - {aluno[3]}")   
-        indice = int(input("\nDigite o número do aluno que deseja excluir: ")) - 1
-        aluno_escolhido = alunos[indice]
+            print("Não há nenhum aluno cadastrado!")
+            return
 
-        nome = aluno_escolhido[3]          
-        pos_nome = linhas_limpa.index(nome)  
+        print("\nAlunos cadastrados:")
+        for i, aluno in enumerate(alunos, start=1):
+            print(f"[{i}] - {aluno[3]}")
 
-        inicio_bloco = pos_nome - 3         
+        indice = input("\nDigite o número do aluno que deseja excluir: ")
 
-        for _ in range(9):         
+        if not indice.isdigit() or not (1 <= int(indice) <= len(alunos)):
+            print("Selecione uma opção válida!")
+            return
+
+        aluno_escolhido = alunos[int(indice) - 1]
+        nome = aluno_escolhido[3]
+        pos_nome = linhas_limpa.index(nome)
+        inicio_bloco = pos_nome - 3
+
+        for _ in range(9):
             linhas_limpa.pop(inicio_bloco)
 
-    if tipo_de_usuário_excluido == "motorista":
+    elif tipo_de_usuário_excluido == "motorista":
         if not motoristas:
-            print("Não há nenhum motorista cadastrados!")
-        else:
-            print("\nMotoristas cadastrados:")
+            print("Não há nenhum motorista cadastrado!")
+            return
 
-        for i, motorista in enumerate(motoristas):
-            print(f"[{i+1}] - {motorista[3]}")
+        print("\nMotoristas cadastrados:")
+        for i, motorista in enumerate(motoristas, start=1):
+            print(f"[{i}] - {motorista[3]}")
 
-        indice = int(input("\nDigite o número do motorista que deseja excluir: ")) - 1
-        motorista_escolhido = motoristas[indice]
+        indice = input("\nDigite o número do motorista que deseja excluir (ou 'sair'): ")
 
+        if indice.lower() == "sair":
+            return
+
+        if not indice.isdigit() or not (1 <= int(indice) <= len(motoristas)):
+            print("Selecione uma opção válida!")
+            return
+
+        motorista_escolhido = motoristas[int(indice) - 1]
         nome = motorista_escolhido[3]
         pos_nome = linhas_limpa.index(nome)
-
         inicio_bloco = pos_nome - 3
 
         for _ in range(8):
             linhas_limpa.pop(inicio_bloco)
+
+    with open("logins.txt", "w", encoding="utf-8") as f:
+        for linha in linhas_limpa:
+            f.write(linha + "\n")
+
+
+
             
 
     with open("logins.txt", "w", encoding="utf-8") as f:
@@ -675,6 +694,45 @@ Digite: """
                 print("Senha incorreta! ")
 
 
+def printar_uni():
+    screen.clear()
+    universidades = []
+
+    with open("lista_universidades.txt", "r", encoding="utf-8", errors="ignore") as f:
+        bloco = []
+        for linha in f:
+            linha = linha.strip()
+
+            if linha == "---":
+                if len(bloco) == 3:
+                    universidades.append({
+                        "nome": bloco[0],
+                        "cnpj": bloco[1],
+                        "endereco": bloco[2]
+                    })
+                bloco = []
+            elif linha:
+                bloco.append(linha)
+
+    print("=== LISTA DE UNIVERSIDADES ===")
+    for i, uni in enumerate(universidades, start=1):
+        print(f"[{i}] {uni['nome']}")
+
+    try:
+        escolha = int(input("\nEscolha o número da universidade: "))
+        if 1 <= escolha <= len(universidades):
+            uni = universidades[escolha - 1]
+            print("\n=== DADOS DA UNIVERSIDADE ===")
+            print(f"Nome     : {uni['nome']}")
+            print(f"CNPJ     : {uni['cnpj']}")
+            print(f"Endereço : {uni['endereco']}")
+        else:
+            print("Opção inválida.")
+    except ValueError:
+        print("Digite apenas números.")
+    input("[ENTER] para voltar")
+
+
 
 def carregar_universidades():
     
@@ -718,7 +776,7 @@ def cadastrar_universidade():
         return
 
     lista_universidades = carregar_universidades()
-
+    
     lista_universidades.append({
         "nome": nome,
         "cnpj": cnpj,
@@ -729,6 +787,16 @@ def cadastrar_universidade():
     print(f"\n:Universidade '{nome}' cadastrada com sucesso!")
     sleep(2)
 
+def cad_uni(arquivo="lista_universidades.txt"):
+    nome = input("Nome da universidade: ").strip()
+    cnpj = input("CNPJ: ").strip()
+    endereco = input("Endereço: ").strip()
+
+    with open(arquivo, "a", encoding="utf-8") as f:
+        f.write(f"{nome}\n")
+        f.write(f"{cnpj}\n")
+        f.write(f"{endereco}\n")
+        f.write("---\n")
 
 def listar_universidades():
     screen.clear()
@@ -740,30 +808,12 @@ def listar_universidades():
 
     if not lista_universidades:
         print("Nenhuma universidade cadastrada.")
-        input("\nPressione ENTER para Voltar...")
+        input("\nPressione ENTER para continuar...")
         return
     for i, u in enumerate(lista_universidades, 1):
         print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
 
-    input("\nPressione ENTER para Voltar...")
-
-def listar_universidades_selecao():
-    screen.clear()
-    lista_universidades = carregar_universidades()
-
-    print('''\n---------------------------
- UNIVERSIDADES CADASTRADAS
----------------------------\n''')
-
-    if not lista_universidades:
-        print("Nenhuma universidade cadastrada.")
-        return False
-
-    for i, u in enumerate(lista_universidades, 1):
-        print(f"[{i}] {u['nome']} | {u['cnpj']} | {u['endereco']}")
-
-    return True
-
+    input("\nPressione ENTER para continuar...")
 def editar_universidade():
     lista_universidades = carregar_universidades()
 
@@ -772,7 +822,7 @@ def editar_universidade():
         sleep(2)
         return
 
-    listar_universidades_selecao()
+    listar_universidades()
 
     entrada = input("\nDigite o número da universidade: ").strip()
 
@@ -809,9 +859,9 @@ def excluir_universidade():
         sleep(2)
         return
 
-    listar_universidades_selecao()
+    listar_universidades()
 
-    entrada = input("\nDigite o número para excluir ou deixa em branco para cancela: ").strip()
+    entrada = input("\nDigite o número para excluir: ").strip()
     if not entrada.isdigit():
         print("Entrada inválida.")
         sleep(2)
