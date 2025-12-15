@@ -147,9 +147,9 @@ while True:
                         screen.menuUniversidades()
                         subopc = input("Opção: ")
                         if subopc == "1":
-                            GeralDef.cadastrar_universidade()
+                            GeralDef.cad_uni()
                         elif subopc == "2":
-                            GeralDef.listar_universidades()
+                            GeralDef.printar_uni()
                         elif subopc == "3":
                             GeralDef.editar_universidade()
                         elif subopc == "4":
