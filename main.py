@@ -433,14 +433,12 @@ while True:
                                     print("=" * 50)
                                     print("Digite um número inteiro válido.")
                                 else:
-                                    if check_novo in [1, 2, 3, 4, 5, 6]:
-                                        comfirm = input("Tem certeza? [s/n] ")
-                                        if comfirm == "s":
-                                            arq[(check_novo - 1) * 3] = "✅"
-                                            print("\nRota atualizada com sucesso")
+                                    comfirm = input("Tem certeza? [s/n] ")
+                                    if comfirm == "s":
+                                        arq[(check_novo - 1) * 3] = "✅"
+                                        print("\nRota atualizada com sucesso")
+                                
                                     
-                                    else:
-                                        print("Erro! Ponto informado desconhecido.")
                             
                             elif opcao == 2:
                                 try:
@@ -451,15 +449,12 @@ while True:
                                     print("=" * 50)
                                     print("Entrada inválida. Digite um número inteiro.")
                                 else:
-                                    if check_novo in [1, 2, 3, 4, 5, 6]:
-                                        comfirm = input("Tem certeza? [s/n] ")
-                                        if comfirm == "s":
-                                            arq[(check_novo - 1) * 3] = "❌"
-                                            print("\nRota atualizada com sucesso")
-                                    
-                                    else:
-                                        print("Erro! Ponto informado desconhecido.")
-                                        
+                                    comfirm = input("Tem certeza? [s/n] ")
+                                    if comfirm == "s":
+                                        arq[(check_novo - 1) * 3] = "❌"
+                                        print("\nRota atualizada com sucesso")
+                                
+                                   
 
                             elif opcao == 3:
                                 sleep(1)
